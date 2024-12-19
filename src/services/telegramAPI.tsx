@@ -3,11 +3,9 @@ import { API_END_POINT } from "../utils/constants";
 
 
 export const LoginApiTelegram = async (phone: any) => {
-    // console.log("phone:", phone)
     const payload = { telegram: { phone } };
-    console.log("payload 2: " , payload);
     try {
-        const res = await axios.post(`${API_END_POINT}/login`, payload)
+        const res = await axios.post(`${API_END_POINT}/login`, payload, { withCredentials: true })
         return res.data
     } catch (error) {
         console.error('Error While Login with Telegram:', error);
@@ -31,7 +29,6 @@ export const SubmitApiTelegram = async (userData) => {
 }
 
 export const LogoutApiTelegram = async (phone: any) => {
-    console.log("phone user: ", phone)
     try {
         const res = await axios.post(`${API_END_POINT}/logout`, { phone })
         return res.data
