@@ -1,11 +1,12 @@
 import { FieldTimeOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, ConfigProvider, Input, Menu, Modal, Popover, Form, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LoginApiTelegram, LogoutApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { clearTelegramData, setTelegramUser } from "../../app/slices/telegramSlice";
-import { RootState } from "../../app/store";
+import { clearTelegramData } from "../../app/slices/telegramSlice";
+import { AppDispatch, RootState } from "../../app/store";
+import { fetchTelegram } from "../../app/actions/telegramActions";
 
 const Navbar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +14,8 @@ const Navbar = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
 
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
-    const dispatch = useDispatch();
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -36,7 +38,6 @@ const Navbar = () => {
         const phone = `+${phoneNo}`;
         await LogoutApiTelegram(phone)
         dispatch(clearTelegramData());
-        // dispatch(setUser(null))
         message.success("Telegram logged out successfully!");
     }
 
@@ -53,8 +54,8 @@ const Navbar = () => {
         try {
             const phoneWithCountryCode = `+91${values.phone}`;
             setPhoneNumber(phoneWithCountryCode);
-            const res = await LoginApiTelegram(phoneWithCountryCode);
-            dispatch(setTelegramUser(res.telegramUser))
+            await LoginApiTelegram(phoneWithCountryCode);
+            dispatch(fetchTelegram())
         } catch (error) {
             console.error("Error while sending phone number:", error);
             message.error("Failed to send code. Please try again.");
@@ -70,6 +71,9 @@ const Navbar = () => {
         }
     };
 
+    useEffect(() => {
+        dispatch(fetchTelegram());
+    }, []);
 
     return (
         <>
