@@ -39,4 +39,13 @@ export const LogoutApiTelegram = async (phone: any) => {
 }
 
 
+export const GetTelegram = async ()=> {
+    try {
+      const res = await axios.get(`${API_END_POINT}/getTelegram`, { withCredentials: true });
+      return res.data;
+    } catch (error) {
+      console.error('Error fetching time logs:', error);
+      throw error;
+    }
+  }
 
