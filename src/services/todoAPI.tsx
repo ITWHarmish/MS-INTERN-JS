@@ -47,3 +47,13 @@ export const DeleteTodo = async (id: string) => {
     throw error;
   }
 }
+
+export const UpdateTodoInProgressDate = async () => {
+  try {
+    const res = await axios.put(`${API_END_POINT}/todo/updateInProgressDate`, {}, { withCredentials: true });
+    return res.data;
+  } catch (error) {
+    console.error('Error updating time log:', error);
+    throw error;
+  }
+};

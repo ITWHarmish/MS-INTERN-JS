@@ -39,13 +39,22 @@ export const LogoutApiTelegram = async (phone: any) => {
 }
 
 
-export const GetTelegram = async ()=> {
+export const GetTelegram = async () => {
     try {
-      const res = await axios.get(`${API_END_POINT}/getTelegram`, { withCredentials: true });
-      return res.data;
+        const res = await axios.get(`${API_END_POINT}/getTelegram`, { withCredentials: true });
+        return res.data;
     } catch (error) {
-      console.error('Error fetching time logs:', error);
-      throw error;
+        console.error('Error fetching time logs:', error);
+        throw error;
     }
-  }
+}
 
+export const SendTodosToChat = async (userData) => {
+    try {
+        const response = await axios.post(`${API_END_POINT}/sendTask`, userData);
+        return response.data;
+    } catch (error) {
+        console.error("Error sending todos to chat:", error);
+        throw error;
+    }
+}
