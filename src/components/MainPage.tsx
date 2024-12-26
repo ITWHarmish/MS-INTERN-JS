@@ -8,13 +8,15 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setUser } from "../app/slices/authSlice"
 import { GetCurrentUser, Verify } from "../services/authAPI"
-import { RootState } from "../app/store"
+import { AppDispatch, RootState } from "../app/store"
+import { UpdateTodoInProgressDate } from "../services/todoAPI"
+import { fetchTodos } from "../app/actions/todosAction"
 
 const MainPage = () => {
 
     const { user } = useSelector((state: RootState) => state.auth)
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         if (!user) {
@@ -51,13 +53,25 @@ const MainPage = () => {
             }
         };
         getCurrentUser();
-    }, []);
+    }, [dispatch]);
+
+    useEffect(() => {
+        const updateInProgressTodosDate = async () => {
+            try {
+                await UpdateTodoInProgressDate();
+                dispatch(fetchTodos());
+            } catch (error) {
+                console.error("Failed to update todo date:", error);
+            }
+        };
+        updateInProgressTodosDate();
+    }, [dispatch]);
 
 
     return (
         <>
             <Row >
-                <Col md={12} >
+                <Col md={15} >
                     <div
                         style={{
                             padding: "10px",
@@ -66,9 +80,9 @@ const MainPage = () => {
                         <Timelog />
                     </div>
                 </Col>
-                <Col md={12} >
-                    <TodoCard />
-                </Col>
+                    <Col md={9} >
+                        <TodoCard />
+                    </Col>
             </Row>
         </>
     )

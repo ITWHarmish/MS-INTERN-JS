@@ -39,3 +39,15 @@ export const GetCurrentUser = async () => {
         throw error;
     }
 }
+
+export const LogoutApi = async () => {
+    try {
+        const res = await axios.post(`${API_END_POINT}/auth/logout`, {}, {
+            withCredentials: true,
+        })
+        return res.data
+    } catch (error) {
+        console.error('Error While Logout:', error);
+        throw error;
+    }
+}
