@@ -1,1 +1,1 @@
-export const API_END_POINT = "http://localhost:3000/api"
+export const API_END_POINT = import.meta.env.VITE_REACT_APP_API_URL;
