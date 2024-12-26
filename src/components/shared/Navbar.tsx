@@ -1,14 +1,12 @@
 import { FieldTimeOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Input, Menu, Modal, Popover, Form, message } from "antd";
+import { Avatar, Button, ConfigProvider, Input, Menu, Modal, Popover, Form, message } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
+import { Link } from "react-router-dom";
+import { LoginApiTelegram, LogoutApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
+import { clearTelegramData } from "../../app/slices/telegramSlice";
 import { AppDispatch, RootState } from "../../app/store";
 import { fetchTelegram } from "../../app/actions/telegramActions";
-import { LogoutApi } from "../../services/authAPI";
-import { setUser } from "../../app/slices/authSlice";
-import { clearTelegramData } from "../../app/slices/telegramSlice";
 
 const Navbar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,10 +14,9 @@ const Navbar = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
 
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
-    const { user } = useSelector((state: RootState) => state.auth)
 
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate()
+
     const handleCancel = () => {
         setIsModalOpen(false);
         setIsOtpStep(false);
@@ -37,11 +34,11 @@ const Navbar = () => {
     };
 
     const handleLogout = async () => {
-        await LogoutApi()
-        dispatch(setUser(null));
+        const phoneNo = telegramUser?.telegram?.telegramData?.phone;
+        const phone = `+${phoneNo}`;
+        await LogoutApiTelegram(phone)
         dispatch(clearTelegramData());
-        navigate("/login");
-        message.success("Logged out successfully!");
+        message.success("Telegram logged out successfully!");
     }
 
     const popoverContent = (
@@ -76,111 +73,121 @@ const Navbar = () => {
 
     useEffect(() => {
         dispatch(fetchTelegram());
-    }, [dispatch]);
+    }, []);
 
     return (
         <>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderBottom: "1px solid #e0e0e0",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                    padding: "5px 20px",
+            <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: "#c9194b",
+                        borderRadius: 20,
+                        margin: 20,
+                    },
                 }}
             >
-                <Menu
-                    onClick={onMenuClick}
-                    selectedKeys={[current]}
+                <div
                     style={{
                         display: "flex",
-                        gap: "1px",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        borderBottom: "1px solid #e0e0e0",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                        padding: "0px 20px",
                     }}
-                    mode="horizontal"
-                    items={[
-                        { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
-                    ]}
-                ></Menu>
-                <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-                    <Button type="default">Connect Google</Button>
-                    {telegramUser?.telegram?.session_id ? (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <Button type="default" disabled>
-                                Telegram Connected
-                            </Button>
-                        </div>
-                    ) : (
-                        <>
-                            <Button onClick={showModal} type="default">
-                                Connect Telegram
-                            </Button>
-
-                            <Modal
-                                title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
-                                open={isModalOpen}
-                                footer={null}
-                                onCancel={handleCancel}
-                            >
-                                <Form
-                                    onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
-                                    layout="vertical"
+                >
+                    <Menu
+                        onClick={onMenuClick}
+                        selectedKeys={[current]}
+                        style={{
+                            display: "flex",
+                            gap: "1px",
+                        }}
+                        mode="horizontal"
+                        items={[
+                            // {
+                            //     key: "dashboard",
+                            //     icon: <PieChartOutlined />,
+                            //     label: <Link to={"/dashboard"}>Dashboard</Link>,
+                            // },
+                            { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
+                        ]}
+                    ></Menu>
+                    <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+                        <Button type="default">Connect Google</Button>
+                        {telegramUser ? (
+                            <Popover content={popoverContent} trigger="click">
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0px",
+                                        cursor: "pointer",
+                                    }}
                                 >
-                                    {!isOtpStep && (
-                                        <Form.Item
-                                            label="Phone Number"
-                                            name="phone"
-                                            rules={[
-                                                { required: true, message: "Please enter your phone number!" },
-                                                {
-                                                    pattern: /^[0-9]{10}$/,
-                                                    message: "Phone number must be 10 digits.",
-                                                },
-                                            ]}
-                                        >
-                                            <Input placeholder="Enter your phone number" />
+                                    <Button type="text">{telegramUser?.telegram?.telegramData?.firstName}</Button>
+                                </div>
+                            </Popover>
+                        ) : (
+                            <>
+                                <Button onClick={showModal} type="default">
+                                    Connect Telegram
+                                </Button>
+
+                                <Modal
+                                    title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
+                                    open={isModalOpen}
+                                    footer={null}
+                                    onCancel={handleCancel}
+                                >
+                                    <Form
+                                        onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
+                                        layout="vertical"
+                                    >
+                                        {!isOtpStep && (
+                                            <Form.Item
+                                                label="Phone Number"
+                                                name="phone"
+                                                rules={[
+                                                    { required: true, message: "Please enter your phone number!" },
+                                                    {
+                                                        pattern: /^[0-9]{10}$/,
+                                                        message: "Phone number must be 10 digits.",
+                                                    },
+                                                ]}
+                                            >
+                                                <Input placeholder="Enter your phone number" />
+                                            </Form.Item>
+                                        )}
+                                        {isOtpStep && (
+                                            <Form.Item
+                                                label="Code"
+                                                name="code"
+                                                rules={[
+                                                    { required: true, message: "Please enter the code!" },
+                                                    {
+                                                        pattern: /^[0-9]{5}$/,
+                                                        message: "Code must be 5 digits.",
+                                                    },
+                                                ]}
+                                            >
+                                                <Input placeholder="Enter the code" />
+                                            </Form.Item>
+                                        )}
+                                        <Form.Item>
+                                            <Button type="primary" htmlType="submit" >
+                                                {isOtpStep ? "Submit OTP" : "Send Code"}
+                                            </Button>
                                         </Form.Item>
-                                    )}
-                                    {isOtpStep && (
-                                        <Form.Item
-                                            label="Code"
-                                            name="code"
-                                            rules={[
-                                                { required: true, message: "Please enter the code!" },
-                                                {
-                                                    pattern: /^[0-9]{5}$/,
-                                                    message: "Code must be 5 digits.",
-                                                },
-                                            ]}
-                                        >
-                                            <Input placeholder="Enter the code" />
-                                        </Form.Item>
-                                    )}
-                                    <Form.Item>
-                                        <Button type="primary" htmlType="submit" >
-                                            {isOtpStep ? "Submit OTP" : "Send Code"}
-                                        </Button>
-                                    </Form.Item>
-                                </Form>
-                            </Modal>
-                        </>
-                    )}
-                    {user &&
-                        <Popover content={popoverContent} trigger="click">
-                            <span>
-                                <span style={{ cursor: "pointer", marginRight:"7px" }}>{user.email}</span>
-                                <Avatar style={{ marginRight: "7px", cursor:"pointer" }} icon={<UserOutlined />} />
-                            </span>
-                        </Popover>
-                    }
+                                    </Form>
+                                </Modal>
+                            </>
+                        )}
+                        <span>Vinay Singh</span>
+                        <Avatar style={{ marginRight: "7px" }} size="small" icon={<UserOutlined />} />
+                    </div>
                 </div>
-            </div>
+            </ConfigProvider>
         </>
     );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Form, Input, message } from 'antd';
+import { Button, Card, ConfigProvider, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { LoginApi } from '../../services/authAPI';
 import { useDispatch } from 'react-redux';
@@ -48,6 +48,14 @@ const Login = () => {
             }}
         >
             <Card style={{ width: 500, padding: 20 }}>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            colorPrimary: '#c9194b',
+                            borderRadius: 20,
+                        },
+                    }}
+                >
                     <Form
                         name="loginForm"
                         style={{ maxWidth: 400 }}
@@ -94,6 +102,7 @@ const Login = () => {
                             </Button>
                         </Form.Item>
                     </Form>
+                </ConfigProvider>
             </Card>
         </div>
     );
