@@ -8,16 +8,24 @@ body {
   max-width: 300px;
   width: 100%;
   right: -300px;
-  /* right: 16px; */
   bottom: 30px;
   transition: right 0.3s ease-in-out;
+
   &.show-card {
-    /* right: -300px; */
     right: 0px;
+    z-index: 1000;
   }
+
   .arrow-toggle {
     position: absolute;
     right: 300px;
     bottom: 0;
+    z-index: 1001;
   }
+}
+
+.ant-card .ant-card-body {
+  padding: 10px;
+  border-radius: 0 0 16px 16px;
+  word-wrap: break-word;
 }

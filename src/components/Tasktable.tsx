@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, LeftOutlined, RightOutlined, } from '@ant-design/icons';
-import { Button, Card, Col, ConfigProvider, Input, message, Row, Select, Table, TimePicker, Typography, } from 'antd';
+import { Button, Card, Col, Input, message, Row, Select, Table, TimePicker, Typography, } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
 import dayjs from 'dayjs';
@@ -19,13 +19,14 @@ const Tasktable = () => {
         description: '',
     });
     const { timelogs } = useSelector((state: RootState) => state.timelog)
+    const { user } = useSelector((state: RootState) => state.auth)
 
     const [editingId, setEditingId] = useState<string | null>(null);
 
     const { RangePicker } = TimePicker;
 
-    const SetRow = ({ label, value, textStyle }: any) => (
-        <Row gutter={16}>
+    const SetRow = ({ label, value, textStyle, key }: any) => (
+        <Row gutter={16} key={key}>
             <Col md={12} span={18}>
                 <Typography.Text style={textStyle}>{label}</Typography.Text>
             </Col>
@@ -34,6 +35,13 @@ const Tasktable = () => {
             </Col>
         </Row>
     );
+
+    const totalHours = timelogs.reduce((total, timelog) => {
+        const startTime = dayjs(timelog.startTime);
+        const endTime = dayjs(timelog.endTime);
+        const diff = endTime.diff(startTime, 'hour', true); 
+        return total + diff;
+    }, 0);
 
     const columns: any[] = [
         {
@@ -95,7 +103,7 @@ const Tasktable = () => {
                         icon={<DeleteOutlined />}
                         size="small"
                         onClick={() => {
-                           handleDelete(record._id);
+                            handleDelete(record._id);
                         }}
                     />
                 </div>
@@ -129,6 +137,7 @@ const Tasktable = () => {
             return;
         }
 
+        setLoading(true);
         if (editingId) {
             try {
                 await UpdateTimelog(editingId, formData);
@@ -149,12 +158,13 @@ const Tasktable = () => {
                 message.error('Submiision Failed! Please try again.');
             }
         }
+        setLoading(false);
         setFormData({
             startTime: '',
             endTime: '',
             category: '',
             description: '',
-        }); 
+        });
 
         setEditingId(null);
 
@@ -176,6 +186,7 @@ const Tasktable = () => {
 
     const handleDelete = async (record) => {
         try {
+            setLoading(true);
             await DeleteTimelog(record);
             dispatch(fetchTimelogs())
             message.success('TimeLog Deleted successful!');
@@ -183,103 +194,96 @@ const Tasktable = () => {
             message.error('Delete Failed! Please try again.');
             console.error('Error While Deleting the time log:', error);
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
         dispatch(fetchTimelogs());
-    }, []);
+    }, [dispatch]);
 
     return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: '#c9194b',
-                    borderRadius: 20,
-                },
-            }}
-        >
-            <div>
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        padding: '0px',
-                    }}
-                >
-                    <RangePicker
-                        format="HH:mm"
-                        style={{ borderRadius: '20px', width: '200px' }}
-                        onChange={handleRangeChange}
-                        value={
-                            formData.startTime && formData.endTime
-                                ? [dayjs(formData.startTime, 'HH:mm'), dayjs(formData.endTime, 'HH:mm')]
-                                : null
-                        }
-                        required
-                    />
+        <div style={{ minHeight: "70vh" }}>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                }}
+            >
+                <RangePicker
+                    format="HH:mm"
+                    style={{ borderRadius: '20px', width: '200px' }}
+                    onChange={handleRangeChange}
+                    value={
+                        formData.startTime && formData.endTime
+                            ? [dayjs(formData.startTime, 'HH:mm'), dayjs(formData.endTime, 'HH:mm')]
+                            : null
+                    }
+                    required
+                />
 
-                    <Select
-                        style={{ width: '180px' }}
-                        placeholder="Category"
-                        options={[
-                            { value: "", label: "Select Category", disabled: true },
-                            { value: 'learning', label: 'Learning' },
-                            { value: 'coding', label: 'Coding' },
-                            { value: 'management', label: 'Management' },
-                        ]}
-                        onChange={handleChangeCategory}
-                        value={formData.category}
-                    />
-                    <Input
-                        placeholder="Description"
-                        style={{ width: '400px' }}
-                        value={formData.description}
-                        onChange={handleChangeDescription}
-                        required
-                    />
-                    <Button onClick={handleSubmit} type="primary">
-                        Submit
-                    </Button>
-                </div>
-                <div style={{ padding: '14px' }}>
-                    <Table
-                        columns={columns}
-                        dataSource={timelogs}
-                        pagination={false}
-                        bordered
-                        size="small"
-                        loading={loading}
-                    />
-                </div>
-                <div>
-                    <Card
-                        size="small"
-                        title={
-                            <SetRow
-                                label="Vinay Singh"
-                                value="Work Duration"
-                                textStyle={{ fontWeight: 'bold' }}
-                            />
-                        }
-                        className={`calculate-hours-card ${showCard ? 'show-card' : ''
-                            }`}
-                    >
-                        <Button
-                            type="primary"
-                            icon={showCard ? <RightOutlined /> : <LeftOutlined />}
-                            className="arrow-toggle"
-                            onClick={() => setShowCard(!showCard)}
-                        />
+                <Select
+                    style={{ width: '180px' }}
+                    placeholder="Category"
+                    options={[
+                        { value: "", label: "Select Category", disabled: true },
+                        { value: 'learning', label: 'Learning' },
+                        { value: 'coding', label: 'Coding' },
+                        { value: 'management', label: 'Management' },
+                    ]}
+                    onChange={handleChangeCategory}
+                    value={formData.category}
+                />
+                <Input
+                    placeholder="Description"
+                    style={{ width: '400px' }}
+                    value={formData.description}
+                    onChange={handleChangeDescription}
+                    required
+                />
+                <Button onClick={handleSubmit} type="primary">
+                    Submit
+                </Button>
+            </div>
+            <div style={{ paddingTop: '10px' }}>
+                <Table
+                    columns={columns}
+                    dataSource={timelogs}
+                    pagination={false}
+                    bordered
+                    size="small"
+                    loading={loading}
+                />
+            </div>
+            <div>
+                <Card
+                    size="small"
+                    title={
                         <SetRow
-                            label="Total"
-                            value={0}
+                            label={user?.email}
+                            value="Work Duration"
                             textStyle={{ fontWeight: 'bold' }}
                         />
-                    </Card>
-                </div>
+                    }
+                    className={`calculate-hours-card ${showCard ? 'show-card' : ''
+                        }`}
+                >
+                    <Button
+                        type="primary"
+                        icon={showCard ? <RightOutlined /> : <LeftOutlined />}
+                        className="arrow-toggle"
+                        onClick={() => setShowCard(!showCard)}
+                    />
+                    <SetRow
+                        label="Total"
+                        value={`${totalHours.toFixed(2)} hours`}
+                        textStyle={{ fontWeight: 'bold' }}
+                    />
+                </Card>
             </div>
-        </ConfigProvider>
+        </div>
     );
 };
 
