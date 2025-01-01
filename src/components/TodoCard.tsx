@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Input, message, Modal, Spin } from "antd";
+import { Button, Card, Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
@@ -11,14 +11,13 @@ import { updateTodoInState } from "../app/slices/todoSlice";
 import "../index.css"
 import { SendTodosToChat } from "../services/telegramAPI";
 
-const TodoCard = () => {
+const TodoCard = ({ setLoading }: { setLoading: (loading: boolean) => void }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const [newTask, setNewTask] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -102,7 +101,6 @@ const TodoCard = () => {
     }
 
     const formattedTasks = `
------ Day Start Template -----
 Today's Tasks:
 ${description.map(task => `· ${task}`).join("\n")}
 `;
@@ -138,82 +136,71 @@ ${description.map(task => `· ${task}`).join("\n")}
               <Droppable droppableId="inProgress">
                 {(provided) => (
                   <>
-                    {loading ? <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        minHeight: "70vh",
-                      }}
+                    <Card
+                      style={{ flex: 1 }}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
                     >
-                      <Spin />
-                    </div> :
-                      <Card
-                        style={{ flex: 1 }}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <span style={{ fontSize: "16px", fontWeight: "bold" }}>In Progress</span>
+                        <span style={{ fontSize: "16px", fontWeight: "bold" }}>In Progress</span>
 
-                          <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
-                          <Modal style={{ fontWeight: "bolder" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
+                        <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
+                        <Modal style={{ fontWeight: "bolder" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
 
-                            <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
-                              <TextArea rows={4} placeholder="Description"
-                                value={newTask}
-                                onChange={(e) => setNewTask(e.target.value)}
-                              />
-                            </p>
+                          <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
+                            <TextArea rows={4} placeholder="Description"
+                              value={newTask}
+                              onChange={(e) => setNewTask(e.target.value)}
+                            />
+                          </p>
 
-                          </Modal>
-                        </div>
-                        {todos.filter(task => task.status === "inProgress").map((task, index) => (
-                          <Draggable key={task._id || task.todoId || index} draggableId={String(task._id || task.todoId || index)} index={index}>
-                            {(provided) => (
-                              <div style={{ marginBottom: "10px" }}>
+                        </Modal>
+                      </div>
+                      {todos.filter(task => task.status === "inProgress").map((task, index) => (
+                        <Draggable key={task._id || task.todoId || index} draggableId={String(task._id || task.todoId || index)} index={index}>
+                          {(provided) => (
+                            <div style={{ marginBottom: "10px" }}>
 
-                                <Card
-                                  type="inner"
-                                  style={{ backgroundColor: "#fafafa" }}
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
+                              <Card
+                                type="inner"
+                                style={{ backgroundColor: "#fafafa" }}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    gap: "15px",
+                                  }}
                                 >
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                      gap: "15px",
-                                    }}
-                                  >
-                                    <div>
-                                      <div>{task.description}</div>
-                                    </div>
-                                    <Button
-                                      size="small"
-                                      shape="circle"
-                                      icon={<DeleteOutlined />}
-                                      danger
-                                      onClick={() => handleDelete(task.todoId)}
-                                    />
+                                  <div>
+                                    <div>{task.description}</div>
                                   </div>
-                                </Card>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </Card>
-                    }
+                                  <Button
+                                    size="small"
+                                    shape="circle"
+                                    icon={<DeleteOutlined />}
+                                    danger
+                                    onClick={() => handleDelete(task.todoId)}
+                                  />
+                                </div>
+                              </Card>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </Card>
                   </>
                 )}
               </Droppable>

@@ -29,3 +29,11 @@ body {
   border-radius: 0 0 16px 16px;
   word-wrap: break-word;
 }
+
+.full-page-spin {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
