@@ -55,6 +55,8 @@ const MainPage = () => {
                     <div
                         style={{
                             padding: "10px",
+                            position: "relative",
+                            zIndex:"1"
                         }}
                     >
                         <Timelog />
