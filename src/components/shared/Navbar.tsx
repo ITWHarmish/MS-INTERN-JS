@@ -9,6 +9,7 @@ import { fetchTelegram } from "../../app/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
 import { setUser } from "../../app/slices/authSlice";
 import { clearTelegramData } from "../../app/slices/telegramSlice";
+import { API_END_POINT } from "../../utils/constants";
 
 const Navbar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +17,7 @@ const Navbar = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
 
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
+    const { accessToken } = useSelector((state: RootState) => state.googleLogin)
     const { user } = useSelector((state: RootState) => state.auth)
 
     const dispatch = useDispatch<AppDispatch>();
@@ -74,6 +76,11 @@ const Navbar = () => {
         }
     };
 
+    const googleLogin = async () => {
+        window.location.href = `${API_END_POINT}/G_login`
+    };
+
+
     useEffect(() => {
         dispatch(fetchTelegram());
     }, [dispatch]);
@@ -103,7 +110,13 @@ const Navbar = () => {
                     ]}
                 ></Menu>
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-                    <Button type="default">Connect Google</Button>
+
+                    {
+                        accessToken ?
+                            <Button disabled  type="default">Connect Google</Button>
+                            :
+                            <Button onClick={googleLogin} type="default">Connect Google</Button>
+                    }
                     {telegramUser?.telegram?.session_id ? (
                         <div
                             style={{
@@ -174,8 +187,8 @@ const Navbar = () => {
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
-                                <span style={{ cursor: "pointer", marginRight:"7px" }}>{user.email}</span>
-                                <Avatar style={{ marginRight: "7px", cursor:"pointer" }} icon={<UserOutlined />} />
+                                <span style={{ cursor: "pointer", marginRight: "7px" }}>{user.email}</span>
+                                <Avatar style={{ marginRight: "7px", cursor: "pointer" }} icon={<UserOutlined />} />
                             </span>
                         </Popover>
                     }

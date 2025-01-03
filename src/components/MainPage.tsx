@@ -3,19 +3,47 @@ import "../index.css"
 import Timelog from "./Timelog"
 import TodoCard from "./TodoCard"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setUser } from "../app/slices/authSlice"
 import { Verify } from "../services/authAPI"
 import { AppDispatch } from "../app/store"
 import { UpdateTodoInProgressDate } from "../services/todoAPI"
 import { fetchTodos } from "../app/actions/todosAction"
+import axios from "axios"
+import { API_END_POINT } from "../utils/constants"
+import { setGoogleLogin } from "../app/slices/googleSlice"
 
 const MainPage = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const [loading, setLoading] = useState(false);
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const handleOAuthCallback = async () => {
+            const code = searchParams.get("code");
+            if (!code) {
+                console.error("Authorization code not found.");
+                return;
+            }
+
+            try {
+                const res = await axios.get(`${API_END_POINT}/oauth2callback`, {
+                    params: { code },
+                    withCredentials: true
+                });
+                dispatch(setGoogleLogin({accessToken: res.data.response.access_token}))
+                navigate("/");
+            } catch (error) {
+                console.error("Error during OAuth2 callback:", error);
+            }
+        };
+
+        handleOAuthCallback();
+    }, [searchParams, navigate,dispatch]);
+
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -42,7 +70,6 @@ const MainPage = () => {
         updateInProgressTodosDate();
     }, [dispatch]);
 
-
     return (
         <>
             {loading && (
@@ -56,7 +83,7 @@ const MainPage = () => {
                         style={{
                             padding: "10px",
                             position: "relative",
-                            zIndex:"1"
+                            zIndex: "1"
                         }}
                     >
                         <Timelog />
