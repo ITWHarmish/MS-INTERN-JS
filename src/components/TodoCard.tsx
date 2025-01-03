@@ -170,7 +170,6 @@ ${description.map(task => `· ${task}`).join("\n")}
 
                               <Card
                                 type="inner"
-                                style={{ backgroundColor: "#fafafa" }}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
@@ -179,12 +178,14 @@ ${description.map(task => `· ${task}`).join("\n")}
                                   style={{
                                     display: "flex",
                                     justifyContent: "space-between",
-                                    alignItems: "center",
                                     gap: "15px",
+                                    minHeight: "10vh",
                                   }}
                                 >
                                   <div>
-                                    <div>{task.description}</div>
+                                    {task.description.length > 52
+                                      ? `${task.description.substring(0, 52)}...`
+                                      : task.description}
                                   </div>
                                   <Button
                                     size="small"
@@ -231,12 +232,14 @@ ${description.map(task => `· ${task}`).join("\n")}
                                 style={{
                                   display: "flex",
                                   justifyContent: "space-between",
-                                  alignItems: "center",
                                   gap: "15px",
+                                  minHeight: "10vh"
                                 }}
                               >
                                 <div>
-                                  <div>{task.description}</div>
+                                  {task.description.length > 52
+                                    ? `${task.description.substring(0, 52)}...`
+                                    : task.description}
                                 </div>
                                 <Button
                                   size="small"

@@ -36,4 +36,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  z-index: 1000;
+  backdrop-filter: blur(7px);
+}
+
+.ant-card-type-inner {
+  background-color: #fbfafa;
 }
