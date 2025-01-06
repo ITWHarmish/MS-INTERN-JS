@@ -17,7 +17,6 @@ const Navbar = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
 
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
-    const { accessToken } = useSelector((state: RootState) => state.googleLogin)
     const { user } = useSelector((state: RootState) => state.auth)
 
     const dispatch = useDispatch<AppDispatch>();
@@ -112,23 +111,15 @@ const Navbar = () => {
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
 
                     {
-                        accessToken ?
-                            <Button disabled  type="default">Connect Google</Button>
+                        telegramUser?.google?.tokens?.access_token ?
+                            <Button disabled type="default">Connect Google</Button>
                             :
                             <Button onClick={googleLogin} type="default">Connect Google</Button>
                     }
                     {telegramUser?.telegram?.session_id ? (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                        >
                             <Button type="default" disabled>
                                 Telegram Connected
                             </Button>
-                        </div>
                     ) : (
                         <>
                             <Button onClick={showModal} type="default">

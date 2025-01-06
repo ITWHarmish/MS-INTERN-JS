@@ -12,7 +12,7 @@ import { UpdateTodoInProgressDate } from "../services/todoAPI"
 import { fetchTodos } from "../app/actions/todosAction"
 import axios from "axios"
 import { API_END_POINT } from "../utils/constants"
-import { setGoogleLogin } from "../app/slices/googleSlice"
+import { fetchTelegram } from "../app/actions/telegramActions"
 
 const MainPage = () => {
 
@@ -30,11 +30,11 @@ const MainPage = () => {
             }
 
             try {
-                const res = await axios.get(`${API_END_POINT}/oauth2callback`, {
+                await axios.get(`${API_END_POINT}/oauth2callback`, {
                     params: { code },
                     withCredentials: true
                 });
-                dispatch(setGoogleLogin({accessToken: res.data.response.access_token}))
+                dispatch(fetchTelegram())
                 navigate("/");
             } catch (error) {
                 console.error("Error during OAuth2 callback:", error);
@@ -42,7 +42,7 @@ const MainPage = () => {
         };
 
         handleOAuthCallback();
-    }, [searchParams, navigate,dispatch]);
+    }, [searchParams, navigate, dispatch]);
 
 
     useEffect(() => {

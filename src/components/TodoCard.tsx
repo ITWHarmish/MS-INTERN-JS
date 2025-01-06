@@ -9,7 +9,7 @@ import { fetchTodos } from "../app/actions/todosAction";
 import { AppDispatch, RootState } from "../app/store";
 import { updateTodoInState } from "../app/slices/todoSlice";
 import "../index.css"
-import { SendTodosToChat } from "../services/telegramAPI";
+import { SendTodosToChat, SendTodosToGoogleChat } from "../services/telegramAPI";
 
 const TodoCard = ({ setLoading }: { setLoading: (loading: boolean) => void }) => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -108,6 +108,36 @@ ${description.map(task => `· ${task}`).join("\n")}
     try {
       setLoading(true);
       await SendTodosToChat({ task: formattedTasks, phone: phone });
+      await SendTodosToGoogleChat({ messageText: formattedTasks });
+      message.success("Tasks sent to chat successfully!");
+    } catch (error) {
+      console.error("Error sending tasks to chat:", error);
+      message.error("Failed to send tasks to chat. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendDayEndTodo = async () => {
+    const doneTodos = todos.filter((task) => task.status === "done");
+    const inProgressTodos = todos.filter((task) => task.status === "inProgress");
+    const phone = telegramUser?.telegram?.phone;
+
+    if (doneTodos.length === 0 && inProgressTodos.length === 0) {
+      message.warning("No tasks to send!");
+      return;
+    }
+
+    // Format the tasks into Day End Template
+    const formattedTasks = `--- Day End ---
+Completed Tasks:
+${doneTodos.map((task) => `* ${task.description} (Done)`).join("\n")} ${inProgressTodos.length > 0 ? `
+* ${inProgressTodos.map((task) => `${task.description} (In Progress)`).join("\n* ")}` : ""}`;
+
+    try {
+      setLoading(true);
+      await SendTodosToChat({ task: formattedTasks, phone: phone });
+      await SendTodosToGoogleChat({ messageText: formattedTasks });
       message.success("Tasks sent to chat successfully!");
     } catch (error) {
       console.error("Error sending tasks to chat:", error);
@@ -130,7 +160,25 @@ ${description.map(task => `· ${task}`).join("\n")}
   return (
     <>
       <div style={{ paddingTop: "10px", paddingRight: "10px" }}>
-        <Card title="Todos" extra={<Button onClick={handleSendTodo} type="primary">Send todos on chat</Button>}>
+        <Card
+          title="Todos"
+          extra={
+            <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
+              <Button
+                onClick={handleSendTodo}
+                type="primary"
+              >
+                Send Day Start todos
+              </Button>
+              <Button
+                onClick={handleSendDayEndTodo}
+                type="primary"
+              >
+                Send Day End todos
+              </Button>
+            </div>
+          }
+        >
           <div style={{ display: "flex", gap: "10px", minHeight: "70vh" }}>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="inProgress">

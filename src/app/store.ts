@@ -3,7 +3,6 @@ import timelogReducer from "./slices/timelogSlice"
 import authReducer from "./slices/authSlice"
 import telegramReducer from "./slices/telegramSlice"
 import todoReducer from "./slices/todoSlice"
-import googleReducer from "./slices/googleSlice"
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +10,6 @@ export const store = configureStore({
     auth: authReducer,
     telegramAuth: telegramReducer,
     todo: todoReducer,
-    googleLogin: googleReducer,
   },
 })
 

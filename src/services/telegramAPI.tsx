@@ -58,3 +58,13 @@ export const SendTodosToChat = async (userData) => {
         throw error;
     }
 }
+
+export const SendTodosToGoogleChat = async (userData) => {
+    try {
+        const response = await axios.post(`${API_END_POINT}/send-message`, userData, { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Error sending todos to chat:", error);
+        throw error;
+    }
+}
