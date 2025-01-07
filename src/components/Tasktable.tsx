@@ -9,7 +9,9 @@ import { useSelector } from 'react-redux';
 import { fetchTimelogs } from '../app/actions/timelogActions';
 import { AppDispatch, RootState } from '../app/store';
 
-const Tasktable = () => {
+const Tasktable = ({ selectedDate }) => {
+
+    const formattedDate = selectedDate.format("YYYY-MM-DD");
     const [showCard, setShowCard] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -17,6 +19,7 @@ const Tasktable = () => {
         endTime: '',
         category: '',
         description: '',
+        date: formattedDate,
     });
     const { timelogs } = useSelector((state: RootState) => state.timelog)
     const { user } = useSelector((state: RootState) => state.auth)
@@ -24,6 +27,7 @@ const Tasktable = () => {
     const [editingId, setEditingId] = useState<string | null>(null);
 
     const { RangePicker } = TimePicker;
+
 
     const SetRow = ({ label, value, textStyle, key }: any) => (
         <Row gutter={16} key={key}>
@@ -39,7 +43,7 @@ const Tasktable = () => {
     const totalHours = timelogs.reduce((total, timelog) => {
         const startTime = dayjs(timelog.startTime);
         const endTime = dayjs(timelog.endTime);
-        const diff = endTime.diff(startTime, 'hour', true); 
+        const diff = endTime.diff(startTime, 'hour', true);
         return total + diff;
     }, 0);
 
@@ -132,7 +136,7 @@ const Tasktable = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSubmit = async () => {
-        if (!formData.startTime || !formData.endTime || !formData.category || !formData.description) {
+        if (!formData.startTime || !formData.endTime || !formData.category || !formData.description || !formData.date) {
             message.error("All fields are required!");
             return;
         }
@@ -141,7 +145,7 @@ const Tasktable = () => {
         if (editingId) {
             try {
                 await UpdateTimelog(editingId, formData);
-                dispatch(fetchTimelogs())
+                dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Updated successful!');
 
             } catch (error) {
@@ -151,7 +155,7 @@ const Tasktable = () => {
         } else {
             try {
                 await AddTimelog(formData);
-                dispatch(fetchTimelogs())
+                dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Added successful!');
             } catch (error) {
                 console.error('Error While Deleting the time log:', error);
@@ -164,6 +168,7 @@ const Tasktable = () => {
             endTime: '',
             category: '',
             description: '',
+            date: formattedDate,
         });
 
         setEditingId(null);
@@ -181,6 +186,7 @@ const Tasktable = () => {
             endTime,
             category: record.category,
             description: record.description,
+            date: formattedDate,
         });
     };
 
@@ -188,7 +194,7 @@ const Tasktable = () => {
         try {
             setLoading(true);
             await DeleteTimelog(record);
-            dispatch(fetchTimelogs())
+            dispatch(fetchTimelogs({ date: formattedDate }))
             message.success('TimeLog Deleted successful!');
         } catch (error) {
             message.error('Delete Failed! Please try again.');
@@ -200,8 +206,8 @@ const Tasktable = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchTimelogs());
-    }, [dispatch]);
+        setFormData((prev) => ({ ...prev, date: formattedDate }));
+    }, [formattedDate]);
 
     return (
         <div style={{ minHeight: "70vh" }}>

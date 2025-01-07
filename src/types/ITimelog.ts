@@ -4,3 +4,8 @@ export interface TimeLog {
   category: string;
   description: string;
 }
+
+export interface IDate {
+  date: string;
+}
+

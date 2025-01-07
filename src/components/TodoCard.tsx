@@ -10,6 +10,8 @@ import { AppDispatch, RootState } from "../app/store";
 import { updateTodoInState } from "../app/slices/todoSlice";
 import "../index.css"
 import { SendTodosToChat, SendTodosToGoogleChat } from "../services/telegramAPI";
+import {  GetRefreshTokenAndUpdateAccessToken } from "../services/googleApi";
+import { fetchTelegram } from "../app/actions/telegramActions";
 
 const TodoCard = ({ setLoading }: { setLoading: (loading: boolean) => void }) => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -104,15 +106,34 @@ const TodoCard = ({ setLoading }: { setLoading: (loading: boolean) => void }) =>
 Today's Tasks:
 ${description.map(task => `· ${task}`).join("\n")}
 `;
-
     try {
       setLoading(true);
-      await SendTodosToChat({ task: formattedTasks, phone: phone });
-      await SendTodosToGoogleChat({ messageText: formattedTasks });
+      try {
+        await GetRefreshTokenAndUpdateAccessToken(user?._id);
+        dispatch(fetchTelegram())
+      } catch (error) {
+        console.error("Error sending tasks to chat:", error);
+        message.error("Failed to send tasks to chat. Please try again.");
+      }
+
+      const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
+        .catch((error) => {
+          console.error("Error sending tasks to chat:", error);
+          message.error("Failed to send tasks to chat. Please try again.");
+        });
+
+      const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
+        .catch((error) => {
+          console.error("Error sending tasks to Google Chat:", error);
+          message.error("Failed to send tasks to Google Chat. Please try again.");
+        });
+
+      await Promise.all([sendToChat, sendToGoogleChat]);
+
       message.success("Tasks sent to chat successfully!");
     } catch (error) {
-      console.error("Error sending tasks to chat:", error);
-      message.error("Failed to send tasks to chat. Please try again.");
+      console.error("Error during sending tasks:", error);
+      message.error("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -128,20 +149,37 @@ ${description.map(task => `· ${task}`).join("\n")}
       return;
     }
 
-    // Format the tasks into Day End Template
-    const formattedTasks = `--- Day End ---
-Completed Tasks:
-${doneTodos.map((task) => `* ${task.description} (Done)`).join("\n")} ${inProgressTodos.length > 0 ? `
-* ${inProgressTodos.map((task) => `${task.description} (In Progress)`).join("\n* ")}` : ""}`;
-
+    const formattedTasks = `Day end status:
+${doneTodos.map((task) => `· ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
+${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\n ")}` : ""}`;
     try {
       setLoading(true);
-      await SendTodosToChat({ task: formattedTasks, phone: phone });
-      await SendTodosToGoogleChat({ messageText: formattedTasks });
+      try {
+        await GetRefreshTokenAndUpdateAccessToken(user?._id);
+        dispatch(fetchTelegram())
+      } catch (error) {
+        console.error("Error Genrating New Access Token:", error);
+        message.error("Failed to send tasks to chat. Please try again.");
+      }
+
+      const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
+        .catch((error) => {
+          console.error("Error sending tasks to chat:", error);
+          message.error("Failed to send tasks to chat. Please try again.");
+        });
+
+      const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
+        .catch((error) => {
+          console.error("Error sending tasks to Google Chat:", error);
+          message.error("Failed to send tasks to Google Chat. Please try again.");
+        });
+
+      await Promise.all([sendToChat, sendToGoogleChat]);
+
       message.success("Tasks sent to chat successfully!");
     } catch (error) {
-      console.error("Error sending tasks to chat:", error);
-      message.error("Failed to send tasks to chat. Please try again.");
+      console.error("Error during sending tasks:", error);
+      message.error("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -2,7 +2,7 @@ import axios from "axios"
 import { API_END_POINT } from "../utils/constants";
 import { TimeLog } from "../types/ITimelog";
 
-export const AddTimelog = async (timelog: TimeLog)=> {
+export const AddTimelog = async (timelog: TimeLog) => {
   try {
     const res = await axios.post(`${API_END_POINT}/addTimelog`, timelog, { withCredentials: true })
     return res.data
@@ -12,9 +12,9 @@ export const AddTimelog = async (timelog: TimeLog)=> {
   }
 }
 
-export const GetTimelogs = async ()=> {
+export const GetTimelogs = async (date) => {
   try {
-    const res = await axios.get(`${API_END_POINT}/getTimelog`, { withCredentials: true });
+    const res = await axios.get(`${API_END_POINT}/getTimelog`, { params: { date }, withCredentials: true });
     return res.data;
   } catch (error) {
     console.error('Error fetching time logs:', error);
