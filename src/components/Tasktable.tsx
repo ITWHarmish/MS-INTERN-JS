@@ -220,7 +220,6 @@ const Tasktable = ({ selectedDate }) => {
             >
                 <RangePicker
                     format="HH:mm"
-                    style={{ borderRadius: '20px', width: '200px' }}
                     onChange={handleRangeChange}
                     value={
                         formData.startTime && formData.endTime
@@ -244,7 +243,7 @@ const Tasktable = ({ selectedDate }) => {
                 />
                 <Input
                     placeholder="Description"
-                    style={{ width: '400px' }}
+                    style={{ width: '450px' }}
                     value={formData.description}
                     onChange={handleChangeDescription}
                     required
