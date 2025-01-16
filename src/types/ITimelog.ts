@@ -3,6 +3,7 @@ export interface TimeLog {
   endTime: string;
   category: string;
   description: string;
+  hours?:any;
 }
 
 export interface IDate {

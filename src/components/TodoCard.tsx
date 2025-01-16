@@ -10,14 +10,17 @@ import { AppDispatch, RootState } from "../app/store";
 import { updateTodoInState } from "../app/slices/todoSlice";
 import "../index.css"
 import { SendTodosToChat, SendTodosToGoogleChat } from "../services/telegramAPI";
-import {  GetRefreshTokenAndUpdateAccessToken } from "../services/googleApi";
+import { GetRefreshTokenAndUpdateAccessToken } from "../services/googleApi";
 import { fetchTelegram } from "../app/actions/telegramActions";
 
 const TodoCard = ({ setLoading }: { setLoading: (loading: boolean) => void }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
+  const { timelogs } = useSelector((state: RootState) => state.timelog)
   const [newTask, setNewTask] = useState("");
+
+  const totalHours = timelogs.reduce((total, timelog) => total + (timelog?.hours || 0), 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -103,7 +106,7 @@ const TodoCard = ({ setLoading }: { setLoading: (loading: boolean) => void }) =>
     }
 
     const formattedTasks = `
-Today's Tasks:
+Day start status:
 ${description.map(task => `· ${task}`).join("\n")}
 `;
     try {
@@ -151,7 +154,9 @@ ${description.map(task => `· ${task}`).join("\n")}
 
     const formattedTasks = `Day end status:
 ${doneTodos.map((task) => `· ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
-${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\n ")}` : ""}`;
+${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\n ")}` : ""}
+  
+${user?.email}: ${totalHours.toFixed(2)} hours`;
     try {
       setLoading(true);
       try {
@@ -235,10 +240,10 @@ ${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\
                           marginBottom: "10px",
                         }}
                       >
-                        <span style={{ fontSize: "16px", fontWeight: "bold" }}>In Progress</span>
+                        <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
 
                         <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
-                        <Modal style={{ fontWeight: "bolder" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
+                        <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
 
                           <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
                             <TextArea rows={4} placeholder="Description"
@@ -299,7 +304,7 @@ ${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\
                     {...provided.droppableProps}
                   >
                     <div style={{ marginBottom: "10px" }}>
-                      <span style={{ fontSize: "16px", fontWeight: "bold" }}>Done</span>
+                      <span style={{ fontSize: "16px", fontWeight: "600" }}>Done</span>
                     </div>
                     {todos.filter(task => task.status === "done").map((task, index) => (
                       <Draggable key={task._id || `done-${index}`}

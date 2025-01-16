@@ -22,7 +22,7 @@ const Tasktable = ({ selectedDate }) => {
         date: formattedDate,
     });
     const { timelogs } = useSelector((state: RootState) => state.timelog)
-    const { user } = useSelector((state: RootState) => state.auth)
+    const { user } = useSelector((state: RootState) => state.auth);
 
     const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -40,12 +40,7 @@ const Tasktable = ({ selectedDate }) => {
         </Row>
     );
 
-    const totalHours = timelogs.reduce((total, timelog) => {
-        const startTime = dayjs(timelog.startTime);
-        const endTime = dayjs(timelog.endTime);
-        const diff = endTime.diff(startTime, 'hour', true);
-        return total + diff;
-    }, 0);
+    const totalHours = timelogs.reduce((total, timelog) => total + (timelog?.hours || 0), 0);
 
     const columns: any[] = [
         {
@@ -85,7 +80,7 @@ const Tasktable = ({ selectedDate }) => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            width: 700,
+            width: 300,
         },
         {
             title: 'Actions',
@@ -269,7 +264,7 @@ const Tasktable = ({ selectedDate }) => {
                         <SetRow
                             label={user?.email}
                             value="Work Duration"
-                            textStyle={{ fontWeight: 'bold' }}
+                            textStyle={{ fontWeight: '600' }}
                         />
                     }
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
@@ -284,7 +279,7 @@ const Tasktable = ({ selectedDate }) => {
                     <SetRow
                         label="Total"
                         value={`${totalHours.toFixed(2)} hours`}
-                        textStyle={{ fontWeight: 'bold' }}
+                        textStyle={{ fontWeight: '600' }}
                     />
                 </Card>
             </div>

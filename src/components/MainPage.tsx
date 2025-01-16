@@ -31,7 +31,7 @@ const MainPage = () => {
       }
     };
     telegramSessionCheck();
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     const handleOAuthCallback = async () => {
       const code = searchParams.get("code");
