@@ -5,6 +5,7 @@ import MainPage from './components/MainPage.tsx'
 import { Provider } from 'react-redux'
 import { store } from './app/store.ts'
 import Login from './components/auth/Login.tsx'
+import Profile from './components/profile/Profile.tsx'
 import { ConfigProvider } from 'antd'
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <MainPage />
       },
+      {
+        path:"/profile",
+        element:<Profile/>
+      }
     ]
   }
 ])

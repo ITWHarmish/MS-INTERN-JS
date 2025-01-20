@@ -1,5 +1,5 @@
 import { FieldTimeOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Input, Menu, Modal, Popover, Form, message } from "antd";
+import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
@@ -12,6 +12,7 @@ import { clearTelegramData } from "../../app/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 
 const Navbar = () => {
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -47,9 +48,14 @@ const Navbar = () => {
 
     const popoverContent = (
         <div>
+            <Space direction="vertical">
             <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
                 Logout
             </Button>
+            <Button onClick={()=>{navigate("/profile")}} type="text" icon={<UserOutlined />}>
+                Profile
+            </Button>
+            </Space>
         </div>
     );
 
