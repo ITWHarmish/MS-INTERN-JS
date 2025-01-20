@@ -153,7 +153,7 @@ const Tasktable = ({ selectedDate }) => {
                 dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Added successful!');
             } catch (error) {
-                console.error('Error While Deleting the time log:', error);
+                console.error('Error While Submitting the time log:', error);
                 message.error('Submiision Failed! Please try again.');
             }
         }

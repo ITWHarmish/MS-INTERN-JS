@@ -14,12 +14,14 @@ import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
 import { fetchTelegram } from "../app/actions/telegramActions";
 import { TelegramSessionValidation } from "../services/telegramAPI";
+import dayjs from "dayjs";
 
 const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
+  const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
 
   useEffect(() => {
     const telegramSessionCheck = async () => {
@@ -96,11 +98,11 @@ const MainPage = () => {
               zIndex: "1",
             }}
           >
-            <Timelog />
+            <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate}  />
           </div>
         </Col>
         <Col md={9}>
-          <TodoCard setLoading={setLoading} />
+          <TodoCard selectedDate={selectedDate} setLoading={setLoading} />
         </Col>
       </Row>
     </>

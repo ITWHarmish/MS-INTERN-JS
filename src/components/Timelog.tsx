@@ -1,13 +1,12 @@
 import { Card, DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import Tasktable from './Tasktable'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../app/store';
 import { fetchTimelogs } from '../app/actions/timelogActions';
 
-const Timelog = () => {
-    const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
+const Timelog = ({ selectedDate, setSelectedDate }) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleDateChange = (date) => {

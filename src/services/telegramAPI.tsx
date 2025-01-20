@@ -55,7 +55,9 @@ export const GetTelegram = async () => {
 
 export const SendTodosToChat = async (userData) => {
   try {
-    const response = await axios.post(`${API_END_POINT}/sendTask`, userData);
+    const response = await axios.post(`${API_END_POINT}/sendTask`, userData, {
+      withCredentials: true,
+    });
     return response.data;
   } catch (error) {
     console.error("Error sending todos to chat:", error);
