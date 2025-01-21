@@ -3,10 +3,10 @@ import { Button, Card, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { LoginApi } from '../../services/authAPI';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../app/slices/authSlice';
+import { setUser } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { RootState } from '../../redux/store';
 
 const Login = () => {
 

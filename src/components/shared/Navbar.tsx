@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../app/store";
-import { fetchTelegram } from "../../app/actions/telegramActions";
+import { AppDispatch, RootState } from "../../redux/store";
+import { fetchTelegram } from "../../redux/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
-import { setUser } from "../../app/slices/authSlice";
-import { clearTelegramData } from "../../app/slices/telegramSlice";
+import { setUser } from "../../redux/slices/authSlice";
+import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 
 const Navbar = () => {

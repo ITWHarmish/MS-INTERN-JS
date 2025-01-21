@@ -5,13 +5,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
 import { useDispatch } from "react-redux";
-import { fetchTodos } from "../app/actions/todosAction";
-import { AppDispatch, RootState } from "../app/store";
-import { updateTodoInState } from "../app/slices/todoSlice";
+import { fetchTodos } from "../redux/actions/todosAction";
+import { AppDispatch, RootState } from "../redux/store";
+import { updateTodoInState } from "../redux/slices/todoSlice";
 import "../index.css"
 import { SendTodosToChat, SendTodosToGoogleChat } from "../services/telegramAPI";
 import { GetRefreshTokenAndUpdateAccessToken } from "../services/googleApi";
-import { fetchTelegram } from "../app/actions/telegramActions";
+import { fetchTelegram } from "../redux/actions/telegramActions";
 import dayjs from "dayjs";
 import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
@@ -301,12 +301,12 @@ ${user?.email}: ${totalHours.toFixed(2)} hours`;
                                     display: "flex",
                                     justifyContent: "space-between",
                                     gap: "15px",
-                                    minHeight: "10vh",
+                                    minHeight: "8vh",
                                   }}
                                 >
                                   <div>
-                                    {task.description.length > 52
-                                      ? `${task.description.substring(0, 52)}...`
+                                    {task.description.length > 35
+                                      ? `${task.description.substring(0, 35)}...`
                                       : task.description}
                                   </div>
                                   <Button
@@ -355,12 +355,12 @@ ${user?.email}: ${totalHours.toFixed(2)} hours`;
                                   display: "flex",
                                   justifyContent: "space-between",
                                   gap: "15px",
-                                  minHeight: "10vh"
+                                  minHeight: "8vh"
                                 }}
                               >
                                 <div>
-                                  {task.description.length > 52
-                                    ? `${task.description.substring(0, 52)}...`
+                                  {task.description.length > 35
+                                    ? `${task.description.substring(0, 35)}...`
                                     : task.description}
                                 </div>
                                 <Button

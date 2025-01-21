@@ -5,9 +5,8 @@ import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-
-import { fetchTimelogs } from '../app/actions/timelogActions';
-import { AppDispatch, RootState } from '../app/store';
+import { fetchTimelogs } from '../redux/actions/timelogActions';
+import { AppDispatch, RootState } from '../redux/store';
 
 const Tasktable = ({ selectedDate }) => {
 
@@ -22,7 +21,6 @@ const Tasktable = ({ selectedDate }) => {
         date: formattedDate,
     });
     const { timelogs } = useSelector((state: RootState) => state.timelog)
-    const { user } = useSelector((state: RootState) => state.auth);
 
     const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -87,7 +85,7 @@ const Tasktable = ({ selectedDate }) => {
             dataIndex: 'actions',
             key: 'actions',
             render: (_, record) => (
-                <div style={{ display: 'flex', gap: '20px', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', gap: '20px', cursor: 'pointer', alignItems:"center" }}>
                     <Button
                         shape="circle"
                         icon={<EditOutlined />}
@@ -260,13 +258,6 @@ const Tasktable = ({ selectedDate }) => {
             <div>
                 <Card
                     size="small"
-                    title={
-                        <SetRow
-                            label={user?.email}
-                            value="Work Duration"
-                            textStyle={{ fontWeight: '600' }}
-                        />
-                    }
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
                         }`}
                 >
@@ -277,7 +268,7 @@ const Tasktable = ({ selectedDate }) => {
                         onClick={() => setShowCard(!showCard)}
                     />
                     <SetRow
-                        label="Total"
+                        label="Total Hours: "
                         value={`${totalHours.toFixed(2)} hours`}
                         textStyle={{ fontWeight: '600' }}
                     />

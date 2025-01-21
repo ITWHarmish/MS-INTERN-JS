@@ -5,14 +5,14 @@ import TodoCard from "./TodoCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../app/slices/authSlice";
+import { setUser } from "../redux/slices/authSlice";
 import { Verify } from "../services/authAPI";
-import { AppDispatch } from "../app/store";
+import { AppDispatch } from "../redux/store";
 import { UpdateTodoInProgressDate } from "../services/todoAPI";
-import { fetchTodos } from "../app/actions/todosAction";
+import { fetchTodos } from "../redux/actions/todosAction";
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
-import { fetchTelegram } from "../app/actions/telegramActions";
+import { fetchTelegram } from "../redux/actions/telegramActions";
 import { TelegramSessionValidation } from "../services/telegramAPI";
 import dayjs from "dayjs";
 

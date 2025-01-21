@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 import Tasktable from './Tasktable'
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../app/store';
-import { fetchTimelogs } from '../app/actions/timelogActions';
+import { AppDispatch } from '../redux/store';
+import { fetchTimelogs } from '../redux/actions/timelogActions';
 
 const Timelog = ({ selectedDate, setSelectedDate }) => {
     const dispatch = useDispatch<AppDispatch>();

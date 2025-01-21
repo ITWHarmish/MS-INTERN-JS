@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/Layout.tsx'
 import MainPage from './components/MainPage.tsx'
 import { Provider } from 'react-redux'
-import { store } from './app/store.ts'
+import { store } from './redux/store.ts'
 import Login from './components/auth/Login.tsx'
 import Profile from './components/profile/Profile.tsx'
 import { ConfigProvider } from 'antd'
@@ -36,7 +36,7 @@ createRoot(document.getElementById('root')!).render(
       theme={{
         token: {
           colorPrimary: '#c9194b',
-          borderRadius: 20,
+          borderRadius: 14,
         },
       }}
     >
