@@ -7,6 +7,7 @@ import { store } from './redux/store.ts'
 import Login from './components/auth/Login.tsx'
 import Profile from './components/profile/Profile.tsx'
 import { ConfigProvider } from 'antd'
+import FillUpForm from './components/profile/FillUpForm.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -21,10 +22,15 @@ const router = createBrowserRouter([
         element: <MainPage />
       },
       {
-        path:"/profile",
-        element:<Profile/>
-      }
+        path: "/profile",
+        element: <Profile />
+      },
+
     ]
+  },
+  {
+    path: "/fillUpForm",
+    element: <FillUpForm />
   }
 ])
 

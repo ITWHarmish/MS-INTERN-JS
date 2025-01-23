@@ -51,3 +51,15 @@ export const LogoutApi = async () => {
         throw error;
     }
 }
+
+export const UpdateUserDetails = async (userData) => {
+    try {
+        const res = await axios.put(`${API_END_POINT}/auth/updateUser`, userData, {
+            withCredentials: true,
+        })
+        return res.data
+    } catch (error) {
+        console.error('Error While Verifying:', error);
+        throw error;
+    }
+}

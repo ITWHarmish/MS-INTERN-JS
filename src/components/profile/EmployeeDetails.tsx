@@ -1,15 +1,18 @@
 import {
-  CalendarOutlined,
   EnvironmentOutlined,
   GiftOutlined,
   MailOutlined,
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Card, Flex, Space, Typography } from "antd";
-import React from "react";
+import { Card, DatePicker, Flex, Input, Space, Typography } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import dayjs from "dayjs";
 
-const EmployeeDetails = () => {
+const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange }) => {
+  const { user } = useSelector((state: RootState) => state.auth)
+
   return (
     <>
       <Space direction="vertical" size={15} style={{ width: "100%" }}>
@@ -40,7 +43,16 @@ const EmployeeDetails = () => {
               }
               description={
                 <Typography.Text strong style={{ fontSize: "16px" }}>
-                  Ujjval Patel
+                  {
+                    editMode
+                      ? <Input
+                        value={editedData?.fullName}
+                        size="middle"
+                        placeholder='Enter Full Name'
+                        onChange={(e) => handleChange(e, "fullName")}
+                      />
+                      : user?.fullName ? user?.fullName : <span style={{ color: "gray" }}>"Enter your Full Name"</span>
+                  }
                 </Typography.Text>
               }
             />
@@ -68,7 +80,17 @@ const EmployeeDetails = () => {
               }
               description={
                 <Typography.Text strong style={{ fontSize: "16px" }}>
-                  9 sep,2001
+                  {
+                    editMode
+                      ? <DatePicker
+                        value={editedData?.dob ? dayjs(editedData.dob) : null}
+                        size="middle"
+                        onChange={(e) => handleDateChange(e, "dob")}
+                      />
+                      : user?.dob
+                        ? dayjs(user.dob).format("DD MMM YYYY")
+                        : "N/A"
+                  }
                 </Typography.Text>
               }
             />
@@ -96,7 +118,7 @@ const EmployeeDetails = () => {
               }
               description={
                 <Typography.Text strong style={{ fontSize: "16px" }}>
-                  Example@email.com
+                  {user?.email}
                 </Typography.Text>
               }
             />
@@ -124,7 +146,16 @@ const EmployeeDetails = () => {
               }
               description={
                 <Typography.Text strong style={{ fontSize: "16px" }}>
-                  1800045000
+                  {
+                    editMode
+                      ? <Input
+                        value={editedData?.phoneNumber}
+                        size="middle"
+                        placeholder='Enter phoneNumber'
+                        onChange={(e) => handleChange(e, "phoneNumber")}
+                      />
+                      : user?.phoneNumber
+                  }
                 </Typography.Text>
               }
             />
@@ -152,7 +183,16 @@ const EmployeeDetails = () => {
               }
               description={
                 <Typography.Text strong style={{ fontSize: "16px" }}>
-                  Surat,Gujrat
+                  {
+                    editMode
+                      ? <Input
+                        value={editedData?.address}
+                        size="middle"
+                        placeholder='Enter address'
+                        onChange={(e) => handleChange(e, "address")}
+                      />
+                      : user?.address
+                  }
                 </Typography.Text>
               }
             />

@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fetchTimelogs } from '../redux/actions/timelogActions';
 import { AppDispatch, RootState } from '../redux/store';
+import type { TableProps } from 'antd';
+import { IColumns, ISetRowProps, TimeLog } from '../types/ITimelog';
 
 const Tasktable = ({ selectedDate }) => {
 
@@ -27,7 +29,7 @@ const Tasktable = ({ selectedDate }) => {
     const { RangePicker } = TimePicker;
 
 
-    const SetRow = ({ label, value, textStyle, key }: any) => (
+    const SetRow: React.FC<ISetRowProps> = ({ label, value, textStyle, key }: ISetRowProps) => (
         <Row gutter={16} key={key}>
             <Col md={12} span={18}>
                 <Typography.Text style={textStyle}>{label}</Typography.Text>
@@ -38,9 +40,12 @@ const Tasktable = ({ selectedDate }) => {
         </Row>
     );
 
-    const totalHours = timelogs.reduce((total, timelog) => total + (timelog?.hours || 0), 0);
-
-    const columns: any[] = [
+    const totalHours = timelogs.reduce((total, timelog) => {
+        const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
+        return total + hours;
+    }, 0);
+    
+    const columns: TableProps<IColumns>['columns'] = [
         {
             title: 'Start Time',
             dataIndex: 'startTime',
@@ -108,7 +113,7 @@ const Tasktable = ({ selectedDate }) => {
         },
     ];
 
-    const handleRangeChange = (value: any) => {
+    const handleRangeChange = (value: [dayjs.Dayjs | null, dayjs.Dayjs | null]) => {
         if (value) {
             setFormData({
                 ...formData,
@@ -168,7 +173,7 @@ const Tasktable = ({ selectedDate }) => {
 
     };
 
-    const handleEdit = (record: any) => {
+    const handleEdit = (record: TimeLog) => {
         setEditingId(record._id);
 
         const startTime = dayjs(record.startTime).format('HH:mm');
@@ -203,7 +208,7 @@ const Tasktable = ({ selectedDate }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "70vh" }}>
+        <div style={{ minHeight: "67.5vh" }}>
             <div
                 style={{
                     display: 'flex',
@@ -246,7 +251,7 @@ const Tasktable = ({ selectedDate }) => {
                 </Button>
             </div>
             <div style={{ paddingTop: '10px' }}>
-                <Table
+                <Table<IColumns>
                     columns={columns}
                     dataSource={timelogs}
                     pagination={false}

@@ -1,7 +1,7 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
 import { useDispatch } from "react-redux";
@@ -23,7 +23,10 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const { timelogs } = useSelector((state: RootState) => state.timelog)
   const [newTask, setNewTask] = useState("");
 
-  const totalHours = timelogs.reduce((total, timelog) => total + (timelog?.hours || 0), 0);
+  const totalHours = timelogs.reduce((total, timelog) => {
+    const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
+    return total + hours;
+  }, 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +35,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     dispatch(fetchTodos());
   }, [dispatch]);
 
-  const onDragEnd = async (result: any) => {
+  const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
     if (!destination) return;
@@ -104,7 +107,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     const phone = telegramUser?.telegram?.phone;
 
     if (inProgressTodos.length === 0) {
-      message.warning("No tasks in progress to send!");
+      message.warning("No tasks to send!");
       return;
     }
 
@@ -238,22 +241,42 @@ ${user?.email}: ${totalHours.toFixed(2)} hours`;
           title="Todos"
           extra={
             <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
-              <Button
-                onClick={handleSendTodo}
-                type="primary"
-              >
-                Send Day Start Status
-              </Button>
-              <Button
-                onClick={handleSendDayEndTodo}
-                type="primary"
-              >
-                Send Day End Status
-              </Button>
+              {
+                telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
+                  <Button
+                    onClick={handleSendTodo}
+                    type="primary"
+                  >
+                    Send Day Start Status
+                  </Button>
+                  : <Button
+                    disabled
+                    onClick={handleSendTodo}
+                    type="primary"
+                  >
+                    Send Day Start Status
+                  </Button>
+              }
+              {
+                telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
+                  <Button
+                    onClick={handleSendDayEndTodo}
+                    type="primary"
+                  >
+                    Send Day End Status
+                  </Button>
+                  : <Button
+                    disabled
+                    onClick={handleSendDayEndTodo}
+                    type="primary"
+                  >
+                    Send Day End Status
+                  </Button>
+              }
             </div>
           }
         >
-          <div style={{ display: "flex", gap: "10px", minHeight: "70vh" }}>
+          <div style={{ display: "flex", gap: "10px", minHeight: "67.5vh" }}>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="inProgress">
                 {(provided) => (

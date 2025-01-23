@@ -3,13 +3,17 @@ import {
   LinkedinOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Card, Flex, Space, Typography } from "antd";
-import React from "react";
+import { Avatar, Card, Flex, Input, Space, Typography } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
-const OtherLinks = () => {
+const OtherLinks = ({ editMode, editedData, handleChange }) => {
+  const { user } = useSelector((state: RootState) => state.auth)
+  const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   return (
     <Flex gap={20} vertical style={{ width: "auto" }} align="center">
       <Avatar
+        src={telegramUser?.google?.profile?.picture}
         shape="square"
         size={300}
         icon={<UserOutlined />}
@@ -37,8 +41,17 @@ const OtherLinks = () => {
               </Typography.Text>
             }
             description={
-              <Typography.Text strong style={{ fontSize: "16px" }}>
-                github link
+              <Typography.Text strong style={{ fontSize: "16px" }} >
+                {
+                  editMode
+                    ? <Input
+                      value={editedData?.githubURL}
+                      size="middle"
+                      placeholder='Enter Your GithubURL'
+                      onChange={(e) => handleChange(e, "githubURL")}
+                    />
+                    : user?.githubURL ? <a href={user?.githubURL} target="_blanck">{user?.githubURL}</a> : "Not Provided"
+                }
               </Typography.Text>
             }
           />
@@ -65,7 +78,16 @@ const OtherLinks = () => {
             }
             description={
               <Typography.Text strong style={{ fontSize: "16px" }}>
-                profile link
+                {
+                  editMode
+                    ? <Input
+                      value={editedData?.linkedinURL}
+                      size="middle"
+                      placeholder='Enter Your LinkedinURL'
+                      onChange={(e) => handleChange(e, "linkedinURL")}
+                    />
+                    : user?.linkedinURL ? <a href={user?.linkedinURL} target="_blanck">{user?.linkedinURL}</a> : "Not Provided"
+                }
               </Typography.Text>
             }
           />

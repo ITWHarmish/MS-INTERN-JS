@@ -12,7 +12,7 @@ import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 
 const Navbar = () => {
-    
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -36,6 +36,11 @@ const Navbar = () => {
 
     const onMenuClick = (e) => {
         setCurrent(e.key);
+        if (e.key === "profile") {
+            navigate("/profile");
+        } else if (e.key === "timelog") {
+            navigate("/");
+        }
     };
 
     const handleLogout = async () => {
@@ -49,12 +54,12 @@ const Navbar = () => {
     const popoverContent = (
         <div>
             <Space direction="vertical">
-            <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
-                Logout
-            </Button>
-            <Button onClick={()=>{navigate("/profile")}} type="text" icon={<UserOutlined />}>
-                Profile
-            </Button>
+                <Button onClick={() => onMenuClick({ key: "profile" })} type="text" icon={<UserOutlined />}>
+                    Profile
+                </Button>
+                <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
+                    Logout
+                </Button>
             </Space>
         </div>
     );
@@ -88,6 +93,11 @@ const Navbar = () => {
 
     useEffect(() => {
         dispatch(fetchTelegram());
+        if (location.pathname === "/profile") {
+            setCurrent("profile");
+        } else {
+            setCurrent("timelog");
+        }
     }, [dispatch]);
 
     return (
@@ -123,9 +133,9 @@ const Navbar = () => {
                             <Button onClick={googleLogin} type="default">Connect Google</Button>
                     }
                     {telegramUser?.telegram?.session_id ? (
-                            <Button type="default" disabled>
-                                Telegram Connected
-                            </Button>
+                        <Button type="default" disabled>
+                            Telegram Connected
+                        </Button>
                     ) : (
                         <>
                             <Button onClick={showModal} type="default">
@@ -184,8 +194,8 @@ const Navbar = () => {
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
-                                <span style={{ cursor: "pointer", marginRight: "7px" }}>{user.email}</span>
-                                <Avatar style={{ marginRight: "7px", cursor: "pointer" }} icon={<UserOutlined />} />
+                                <span style={{ cursor: "pointer", marginRight: "7px" }}>{user.fullName}</span>
+                                <Avatar src={telegramUser?.google?.profile?.picture} style={{ marginRight: "7px", cursor: "pointer" }} icon={<UserOutlined />} />
                             </span>
                         </Popover>
                     }

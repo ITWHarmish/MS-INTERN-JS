@@ -5,9 +5,7 @@ import TodoCard from "./TodoCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/slices/authSlice";
-import { Verify } from "../services/authAPI";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 import { UpdateTodoInProgressDate } from "../services/todoAPI";
 import { fetchTodos } from "../redux/actions/todosAction";
 import axios from "axios";
@@ -15,6 +13,7 @@ import { API_END_POINT } from "../utils/constants";
 import { fetchTelegram } from "../redux/actions/telegramActions";
 import { TelegramSessionValidation } from "../services/telegramAPI";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -22,6 +21,7 @@ const MainPage = () => {
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
+  const { user } = useSelector((state: RootState) => state.auth)
 
   useEffect(() => {
     const telegramSessionCheck = async () => {
@@ -34,6 +34,7 @@ const MainPage = () => {
     };
     telegramSessionCheck();
   }, [dispatch]);
+
   useEffect(() => {
     const handleOAuthCallback = async () => {
       const code = searchParams.get("code");
@@ -58,19 +59,6 @@ const MainPage = () => {
   }, [searchParams, navigate, dispatch]);
 
   useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const response = await Verify();
-        dispatch(setUser(response));
-      } catch (error) {
-        console.error("Verification failed:", error);
-        navigate("/login");
-      }
-    };
-    verifyToken();
-  }, [dispatch, navigate]);
-
-  useEffect(() => {
     const updateInProgressTodosDate = async () => {
       try {
         await UpdateTodoInProgressDate();
@@ -82,29 +70,36 @@ const MainPage = () => {
     updateInProgressTodosDate();
   }, [dispatch]);
 
+  useEffect(() => {
+    if (user) {
+      if (user.fullName === undefined) {
+        navigate("/fillUpForm");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [user, navigate])
+
   return (
     <>
-      {loading && (
-        <div className="full-page-spin">
-          <Spin size="large" />
-        </div>
-      )}
-      <Row>
-        <Col md={15}>
-          <div
-            style={{
-              padding: "10px",
-              position: "relative",
-              zIndex: "1",
-            }}
-          >
-            <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate}  />
-          </div>
-        </Col>
-        <Col md={9}>
-          <TodoCard selectedDate={selectedDate} setLoading={setLoading} />
-        </Col>
-      </Row>
+      <Spin size="large" tip="Loading..." spinning={loading} className="full-page-spin">
+        <Row>
+          <Col md={15}>
+            <div
+              style={{
+                padding: "10px",
+                position: "relative",
+                zIndex: "1",
+              }}
+            >
+              <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+            </div>
+          </Col>
+          <Col md={9}>
+            <TodoCard selectedDate={selectedDate} setLoading={setLoading} />
+          </Col>
+        </Row>
+      </Spin>
     </>
   );
 };
