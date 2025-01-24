@@ -34,6 +34,7 @@ const Profile = () => {
     hrFullName: user?.hrFullName || "",
     mentorEmail: user?.mentorEmail || "",
     mentorFullName: user?.mentorFullName || "",
+    collegeName: user?.collegeName || "",
     dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
     joiningDate: user?.joiningDate ? dayjs(user?.joiningDate).format("YYYY-MM-DD") : "",
   });
@@ -52,6 +53,7 @@ const Profile = () => {
         hrFullName: user?.hrFullName || "",
         mentorEmail: user?.mentorEmail || "",
         mentorFullName: user?.mentorFullName || "",
+        collegeName: user?.collegeName || "",
         dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
         joiningDate: user?.joiningDate ? dayjs(user?.joiningDate).format("YYYY-MM-DD") : "",
       })
@@ -94,7 +96,7 @@ const Profile = () => {
       tip="Loading..."
       className="full-page-spin"
     >
-      <Flex vertical style={{ height: "91.5vh" }}>
+      <Flex vertical style={{ marginBottom: "10px" }}>
         <ProfileHeader
           editMode={editMode}
           setEditMode={setEditMode}

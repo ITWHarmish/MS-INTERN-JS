@@ -182,7 +182,7 @@ const Navbar = () => {
                                             <Input placeholder="Enter the code" />
                                         </Form.Item>
                                     )}
-                                    <Form.Item>
+                                    <Form.Item style={{marginBottom:"10px"}}>
                                         <Button type="primary" htmlType="submit" >
                                             {isOtpStep ? "Submit OTP" : "Send Code"}
                                         </Button>

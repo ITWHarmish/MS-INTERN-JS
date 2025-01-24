@@ -178,6 +178,43 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
               }
               title={
                 <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
+                  College Name
+                </Typography.Text>
+              }
+              description={
+                <Typography.Text strong style={{ fontSize: "16px" }}>
+                  {
+                    editMode
+                      ? <Input
+                        value={editedData?.collegeName}
+                        size="middle"
+                        placeholder='Enter address'
+                        onChange={(e) => handleChange(e, "address")}
+                      />
+                      : user?.collegeName
+                  }
+                </Typography.Text>
+              }
+            />
+          </Card>
+          <Card className="cardWidth">
+            <Card.Meta
+              avatar={
+                <Flex
+                  justify="center"
+                  align="center"
+                  style={{
+                    fontSize: "20px",
+                    height: "100%",
+                    width: "auto",
+                    color: "#c9101c",
+                  }}
+                >
+                  <EnvironmentOutlined style={{ margin: "10px" }} />
+                </Flex>
+              }
+              title={
+                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
                   Location
                 </Typography.Text>
               }

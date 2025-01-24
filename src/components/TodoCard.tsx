@@ -185,7 +185,7 @@ ${description.map(task => `· ${task}`).join("\n")}
 ${doneTodos.map((task) => `· ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
 ${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\n ")}` : ""}
   
-${user?.email}: ${totalHours.toFixed(2)} hours`;
+${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
       setLoading(true);
       try {

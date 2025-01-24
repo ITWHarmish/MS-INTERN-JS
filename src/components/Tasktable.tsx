@@ -229,15 +229,16 @@ const Tasktable = ({ selectedDate }) => {
 
                 <Select
                     style={{ width: '180px' }}
-                    placeholder="Category"
+                    showSearch
+                    placeholder="Select Category"
+                    optionFilterProp="label"
                     options={[
-                        { value: "", label: "Select Category", disabled: true },
                         { value: 'learning', label: 'Learning' },
                         { value: 'coding', label: 'Coding' },
                         { value: 'management', label: 'Management' },
                     ]}
                     onChange={handleChangeCategory}
-                    value={formData.category}
+                    value={formData.category || undefined}
                 />
                 <Input
                     placeholder="Description"

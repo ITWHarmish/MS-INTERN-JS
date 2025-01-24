@@ -17,7 +17,7 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            if (user.fullName === undefined) {
+            if (user.fullName === undefined || user.fullName === "") {
                 navigate("/fillUpForm");
             } else {
                 navigate("/");

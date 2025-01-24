@@ -1,4 +1,4 @@
-import { Form, Input, Button, Row, Col, DatePicker, message, Card, Spin } from "antd";
+import { Form, Input, Button, Row, Col, DatePicker, message, Card, Spin, Select } from "antd";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import dayjs from "dayjs";
@@ -16,10 +16,8 @@ const FillUpForm = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (user) {
-            if (user.fullname) {
-                navigate("/")
-            }
+        if (!user) {
+            navigate("/");
         }
     }, [user, navigate])
 
@@ -45,6 +43,7 @@ const FillUpForm = () => {
     };
 
     return (
+        user &&
         <Spin size="large" tip="Loading..." spinning={loading} className="full-page-spin">
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", backgroundColor: "#f0f2f5", padding: "20px" }}>
                 <Card
@@ -74,9 +73,18 @@ const FillUpForm = () => {
                                 <Form.Item
                                     label="Stream/Language"
                                     name="stream"
-                                    rules={[{ required: true, message: "Please input your stream!" }]}
+                                    rules={[{ required: true, message: "Please select a Stream!" }]}
                                 >
-                                    <Input />
+                                    <Select
+                                        showSearch
+                                        placeholder="Select Your Stream"
+                                        optionFilterProp="label"
+                                        options={[
+                                            { value: "Nodejs Intern", label: "Nodejs Intern" },
+                                            { value: "MERN Stack Intern", label: "MERN Stack Intern" },
+                                            { value: "Reactjs Intern", label: "Reactjs Inrtern" },
+                                        ]}
+                                    />
                                 </Form.Item>
                                 <Form.Item
                                     label="Phone Number"
@@ -92,6 +100,16 @@ const FillUpForm = () => {
                                 >
                                     <Input />
                                 </Form.Item>
+
+                            </Col>
+
+                            <Col span={12}>
+                                <Form.Item
+                                    label="College Name"
+                                    name="collegeName"
+                                >
+                                    <Input />
+                                </Form.Item>
                                 <Form.Item
                                     label="GitHub URL"
                                     name="githubURL"
@@ -101,38 +119,6 @@ const FillUpForm = () => {
                                 <Form.Item
                                     label="LinkedIn URL"
                                     name="linkedinURL"
-                                >
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-
-                            <Col span={12}>
-
-                                <Form.Item
-                                    label="HR Email"
-                                    name="hrEmail"
-                                    rules={[{ required: true, message: "Please input your HR email!" }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="HR Full Name"
-                                    name="hrFullName"
-                                    rules={[{ required: true, message: "Please input your HR full name!" }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="Mentor Email"
-                                    name="mentorEmail"
-                                    rules={[{ required: true, message: "Please input your mentor email!" }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="Mentor Full Name"
-                                    name="mentorFullName"
-                                    rules={[{ required: true, message: "Please input your mentor full name!" }]}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -153,7 +139,7 @@ const FillUpForm = () => {
                             </Col>
                         </Row>
                         <Form.Item>
-                            <div style={{textAlign:"center" }}>
+                            <div>
                                 <Button type="primary" htmlType="submit" size="large">
                                     Submit
                                 </Button>
@@ -162,7 +148,7 @@ const FillUpForm = () => {
                     </Form>
                 </Card>
             </div>
-        </Spin>
+        </Spin >
     );
 };
 
