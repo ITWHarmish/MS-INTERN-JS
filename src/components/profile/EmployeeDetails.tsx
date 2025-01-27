@@ -1,4 +1,5 @@
 import {
+  BankOutlined,
   EnvironmentOutlined,
   GiftOutlined,
   MailOutlined,
@@ -173,7 +174,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
                     color: "#c9101c",
                   }}
                 >
-                  <EnvironmentOutlined style={{ margin: "10px" }} />
+                  <BankOutlined style={{ margin: "10px" }} />
                 </Flex>
               }
               title={

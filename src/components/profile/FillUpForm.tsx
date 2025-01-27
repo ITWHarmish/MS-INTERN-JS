@@ -61,14 +61,14 @@ const FillUpForm = () => {
                                     name="fullName"
                                     rules={[{ required: true, message: "Please input your full name!" }]}
                                 >
-                                    <Input />
+                                    <Input placeholder="John Allen"/>
                                 </Form.Item>
                                 <Form.Item
                                     label="Duration"
                                     name="duration"
                                     rules={[{ required: true, message: "Please input the duration!" }]}
                                 >
-                                    <Input />
+                                    <Input placeholder="6 months"/>
                                 </Form.Item>
                                 <Form.Item
                                     label="Stream/Language"
@@ -80,9 +80,9 @@ const FillUpForm = () => {
                                         placeholder="Select Your Stream"
                                         optionFilterProp="label"
                                         options={[
-                                            { value: "Nodejs Intern", label: "Nodejs Intern" },
-                                            { value: "MERN Stack Intern", label: "MERN Stack Intern" },
-                                            { value: "Reactjs Intern", label: "Reactjs Inrtern" },
+                                            { value: "Nodejs", label: "Nodejs " },
+                                            { value: "MERN Stack", label: "MERN Stack" },
+                                            { value: "Reactjs", label: "Reactjs" },
                                         ]}
                                     />
                                 </Form.Item>
@@ -91,14 +91,14 @@ const FillUpForm = () => {
                                     name="phoneNumber"
                                     rules={[{ required: true, message: "Please input your phone number!" }]}
                                 >
-                                    <Input />
+                                    <Input placeholder="9876543210"/>
                                 </Form.Item>
                                 <Form.Item
                                     label="Address"
                                     name="address"
                                     rules={[{ required: true, message: "Please input your address!" }]}
                                 >
-                                    <Input />
+                                    <Input placeholder="45 Main St, Apartment 101, Cityville, 12345"/>
                                 </Form.Item>
 
                             </Col>
@@ -108,19 +108,19 @@ const FillUpForm = () => {
                                     label="College Name"
                                     name="collegeName"
                                 >
-                                    <Input />
+                                    <Input placeholder="Enter your College fullName "/>
                                 </Form.Item>
                                 <Form.Item
                                     label="GitHub URL"
                                     name="githubURL"
                                 >
-                                    <Input />
+                                    <Input placeholder="Enter your GitHub URL "/>
                                 </Form.Item>
                                 <Form.Item
                                     label="LinkedIn URL"
                                     name="linkedinURL"
                                 >
-                                    <Input />
+                                    <Input placeholder="Enter your LinkedIn URL "/>
                                 </Form.Item>
                                 <Form.Item
                                     label="Date of Birth"
