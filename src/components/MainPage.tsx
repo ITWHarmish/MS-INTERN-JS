@@ -83,13 +83,13 @@ const MainPage = () => {
   return (
     <>
       <Spin size="large" tip="Loading..." spinning={loading} className="full-page-spin">
-        <Row>
+        <Row className="Check" style={{height:"calc(100vh - 19vh )"}}>
           <Col md={15}>
             <div
               style={{
                 padding: "10px",
                 position: "relative",
-                zIndex: "1",
+                zIndex: "3",
               }}
             >
               <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate} />

@@ -169,7 +169,7 @@ const Navbar = () => {
                                     )}
                                     {isOtpStep && (
                                         <Form.Item
-                                            label="Code"
+                                            label="Code (For OTP See the Telegram Chat) "
                                             name="code"
                                             rules={[
                                                 { required: true, message: "Please enter the code!" },

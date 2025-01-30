@@ -41,11 +41,15 @@ body {
   backdrop-filter: blur(7px);
 }
 
+:where(.css-dev-only-do-not-override-82w5ug).ant-btn-sm.ant-btn-icon-only {
+  width: 30px;
+}
+
 .ant-card-type-inner {
   background-color: #fbfafa;
 }
 
-.icons{
+.icons {
   border-radius: 50%;
   display: flex;
   font-size: 12px;
@@ -55,12 +59,15 @@ body {
   height: 40px;
   padding: 10px;
 }
-.cardWidth{
-  width:100%;
+
+.cardWidth {
+  width: 100%;
 }
-:where(.css-dev-only-do-not-override-1bp3pgj).ant-card .ant-card-meta-detail >div:not(:last-child) {
+
+:where(.css-dev-only-do-not-override-1bp3pgj).ant-card .ant-card-meta-detail>div:not(:last-child) {
   margin-bottom: -5px;
 }
-:where(.css-dev-only-do-not-override-1vn0kyl).ant-divider-horizontal{
+
+:where(.css-dev-only-do-not-override-1vn0kyl).ant-divider-horizontal {
   margin: 10px 0
 }

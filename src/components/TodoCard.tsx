@@ -113,7 +113,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
 
     const formattedTasks = `
 Day start status:
-${description.map(task => `· ${task}`).join("\n")}
+${description.map(task => `• ${task}`).join("\n")}
 `;
     try {
       setLoading(true);
@@ -127,8 +127,8 @@ ${description.map(task => `· ${task}`).join("\n")}
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .catch((error) => {
-          console.error("Error sending tasks to chat:", error);
-          message.error("Failed to send tasks to chat. Please try again.");
+          console.error("Error sending tasks on Telegram:", error);
+          message.error("Failed to send tasks on Telegram. Please try again.");
         });
 
       const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
@@ -139,7 +139,7 @@ ${description.map(task => `· ${task}`).join("\n")}
 
       await Promise.all([sendToChat, sendToGoogleChat]);
 
-      message.success("Tasks sent to chat successfully!");
+      message.success("Tasks sent to chats successfully!");
     } catch (error) {
       console.error("Error during sending tasks:", error);
       message.error("An unexpected error occurred. Please try again.");
@@ -182,8 +182,8 @@ ${description.map(task => `· ${task}`).join("\n")}
     }
 
     const formattedTasks = `Day end status:
-${doneTodos.map((task) => `· ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
-${inProgressTodos.map((task) => `· ${task.description} - In Progress `).join("\n ")}` : ""}
+${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
+${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("\n ")}` : ""}
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
@@ -203,8 +203,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
         });
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .catch((error) => {
-          console.error("Error sending tasks to chat:", error);
-          message.error("Failed to send tasks to chat. Please try again.");
+          console.error("Error sending tasks on Telegram:", error);
+          message.error("Failed to send tasks on Telegram. Please try again.");
         });
 
       const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
@@ -215,7 +215,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
 
       await Promise.all([SendTimelogToSpreadSheets, sendToChat, sendToGoogleChat]);
 
-      message.success("Tasks sent to chat successfully!");
+      message.success("Tasks sent to chats successfully!");
     } catch (error) {
       console.error("Error during sending tasks:", error);
       message.error("An unexpected error occurred. Please try again.");
@@ -276,7 +276,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             </div>
           }
         >
-          <div style={{ display: "flex", gap: "10px", minHeight: "67.5vh" }}>
+          <div style={{ display: "flex", gap: "10px", minHeight: "65vh" }}>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="inProgress">
                 {(provided) => (
