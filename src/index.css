@@ -67,15 +67,12 @@ body {
   background: #b30000; 
 }
 
-.icons {
+.anticon {
   border-radius: 50%;
   display: flex;
   font-size: 12px;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
-  padding: 10px;
 }
 
 .cardWidth {
