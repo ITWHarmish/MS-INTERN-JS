@@ -294,7 +294,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 >
                   <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
 
-                  <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
+                  <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined  className="check"/>}></Button>
                   <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
 
                     <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
@@ -349,7 +349,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                     <Button
                                       size="small"
                                       shape="circle"
-                                      icon={<DeleteOutlined />}
+                                      icon={<DeleteOutlined  className="check"/>}
                                       danger
                                       onClick={() => handleDelete(task.todoId)}
                                     />
@@ -413,7 +413,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                   <Button
                                     size="small"
                                     shape="circle"
-                                    icon={<DeleteOutlined />}
+                                    icon={<DeleteOutlined className="check" />}
                                     danger
                                     onClick={() => handleDelete(task.todoId)}
                                   />

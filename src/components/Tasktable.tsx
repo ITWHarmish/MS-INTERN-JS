@@ -89,11 +89,12 @@ const Tasktable = ({ selectedDate }) => {
             title: 'Actions',
             dataIndex: 'actions',
             key: 'actions',
+            align: 'center',
             render: (_, record) => (
-                <div style={{ display: 'flex', gap: '20px', cursor: 'pointer', alignItems:"center" }}>
+                <div style={{ display: 'flex', justifyContent:"center", gap: '20px', cursor: 'pointer', alignItems:"center" }}>
                     <Button
                         shape="circle"
-                        icon={<EditOutlined />}
+                        icon={<EditOutlined className="check" />}
                         size="small"
                         onClick={() => {
                             handleEdit(record);
@@ -102,7 +103,7 @@ const Tasktable = ({ selectedDate }) => {
                     <Button
                         shape="circle"
                         danger
-                        icon={<DeleteOutlined />}
+                        icon={<DeleteOutlined className="check" />}
                         size="small"
                         onClick={() => {
                             handleDelete(record._id);
@@ -269,7 +270,7 @@ const Tasktable = ({ selectedDate }) => {
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <RightOutlined /> : <LeftOutlined />}
+                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined  className="check"/>}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
                     />
