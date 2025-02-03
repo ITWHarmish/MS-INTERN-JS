@@ -349,6 +349,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                     <Button
                                       size="small"
                                       shape="circle"
+                                     style={{paddingBottom: "3px"}}
                                       icon={<DeleteOutlined />}
                                       danger
                                       onClick={() => handleDelete(task.todoId)}

@@ -83,7 +83,7 @@ const Tasktable = ({ selectedDate }) => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            width: 300,
+            width: 350,
         },
         {
             title: 'Actions',
@@ -95,6 +95,7 @@ const Tasktable = ({ selectedDate }) => {
                         shape="circle"
                         icon={<EditOutlined />}
                         size="small"
+                        style={{paddingBottom: "3px"}}
                         onClick={() => {
                             handleEdit(record);
                         }}
@@ -102,6 +103,7 @@ const Tasktable = ({ selectedDate }) => {
                     <Button
                         shape="circle"
                         danger
+                        style={{paddingBottom: "3px"}}
                         icon={<DeleteOutlined />}
                         size="small"
                         onClick={() => {
