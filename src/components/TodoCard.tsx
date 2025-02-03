@@ -237,84 +237,162 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
   return (
     <>
       <div style={{ paddingTop: "10px", paddingRight: "10px" }}>
-        <Card
-          title="Todos"
-          extra={
-            <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
-              {
-                telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
-                  <Button
-                    onClick={handleSendTodo}
-                    type="primary"
-                  >
-                    Send Day Start Status
-                  </Button>
-                  : <Button
-                    disabled
-                    onClick={handleSendTodo}
-                    type="primary"
-                  >
-                    Send Day Start Status
-                  </Button>
-              }
-              {
-                telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
-                  <Button
-                    onClick={handleSendDayEndTodo}
-                    type="primary"
-                  >
-                    Send Day End Status
-                  </Button>
-                  : <Button
-                    disabled
-                    onClick={handleSendDayEndTodo}
-                    type="primary"
-                  >
-                    Send Day End Status
-                  </Button>
-              }
-            </div>
-          }
-        >
-          <div style={{ display: "flex", gap: "10px", minHeight: "65vh" }}>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="inProgress">
-                {(provided) => (
-                  <>
-                    <Card
-                      style={{ flex: 1 }}
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Card
+            title="Todos"
+            extra={
+              <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
+                {
+                  telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
+                    <Button
+                      onClick={handleSendTodo}
+                      type="primary"
                     >
+                      Send Day Start Status
+                    </Button>
+                    : <Button
+                      disabled
+                      onClick={handleSendTodo}
+                      type="primary"
+                    >
+                      Send Day Start Status
+                    </Button>
+                }
+                {
+                  telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
+                    <Button
+                      onClick={handleSendDayEndTodo}
+                      type="primary"
+                    >
+                      Send Day End Status
+                    </Button>
+                    : <Button
+                      disabled
+                      onClick={handleSendDayEndTodo}
+                      type="primary"
+                    >
+                      Send Day End Status
+                    </Button>
+                }
+              </div>
+            }
+          >
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "5px" }}>
+              <Card
+                className="ScrollInProgress"
+                style={{ flex: 1, minHeight: "65vh", position: "relative" }}
+              >
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
+
+                  <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
+                  <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
+
+                    <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
+                      <TextArea rows={4} placeholder="Description"
+                        value={newTask}
+                        onChange={(e) => setNewTask(e.target.value)}
+                      />
+                    </p>
+
+                  </Modal>
+                </div>
+                <Droppable droppableId="inProgress">
+                  {(provided) => (
+                    <>
                       <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          marginBottom: "10px",
+                        className="ScrollInProgress" style={{
+                          height: "calc(65vh - 9vh)",
+                          width: "100%",
+                          overflow: "auto",
+                          overflowX: "hidden",
+                          position: "absolute",
+                          right: "0",
                         }}
-                      >
-                        <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
+                        ref={provided.innerRef}
+                        {...provided.droppableProps} >
 
-                        <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
-                        <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
+                        {todos.filter(task => task.status === "inProgress").map((task, index) => (
+                          <Draggable key={task._id || task.todoId || index} draggableId={String(task._id || task.todoId || index)} index={index}>
+                            {(provided) => (
 
-                          <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
-                            <TextArea rows={4} placeholder="Description"
-                              value={newTask}
-                              onChange={(e) => setNewTask(e.target.value)}
-                            />
-                          </p>
+                              <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
 
-                        </Modal>
+                                <Card
+                                  type="inner"
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      gap: "15px",
+                                      minHeight: "8vh",
+                                    }}
+                                  >
+                                    <div className="hello">
+                                      {task.description.length > 35
+                                        ? `${task.description.substring(0, 35)}...`
+                                        : task.description}
+                                    </div>
+                                    <Button
+                                      size="small"
+                                      shape="circle"
+                                      icon={<DeleteOutlined />}
+                                      danger
+                                      onClick={() => handleDelete(task.todoId)}
+                                    />
+                                  </div>
+                                </Card>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
                       </div>
-                      {todos.filter(task => task.status === "inProgress").map((task, index) => (
-                        <Draggable key={task._id || task.todoId || index} draggableId={String(task._id || task.todoId || index)} index={index}>
+                    </>
+                  )}
+                </Droppable>
+              </Card>
+              <Card
+                style={{ flex: 1, minHeight: "65vh", position: "relative" }}
+              >
+                <div style={{ marginBottom: "10px" }}>
+                  <span style={{ fontSize: "16px", fontWeight: "600" }}>Done</span>
+                </div>
+
+                <Droppable droppableId="done">
+                  {(provided) => (
+                    <div className="ScrollInProgress" style={{
+                      height: "calc(65vh - 9vh)",
+                      overflowY: "auto",
+                      overflowX: "hidden",
+                      position: "absolute",
+                      right: "0",
+                      width: "100%",
+                    }}
+                      ref={provided.innerRef}  {...provided.droppableProps}>
+
+                      {todos.filter(task => task.status === "done").map((task, index) => (
+                        <Draggable key={task._id || `done-${index}`}
+                          draggableId={task._id ? String(task._id) : `done-${index}`} index={index}>
                           {(provided) => (
-                            <div style={{ marginBottom: "10px" }}>
+                            <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
 
                               <Card
                                 type="inner"
+                                style={{ backgroundColor: "#fafafa" }}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
@@ -324,7 +402,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                     display: "flex",
                                     justifyContent: "space-between",
                                     gap: "15px",
-                                    minHeight: "8vh",
+                                    minHeight: "8vh"
                                   }}
                                 >
                                   <div>
@@ -346,66 +424,13 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                         </Draggable>
                       ))}
                       {provided.placeholder}
-                    </Card>
-                  </>
-                )}
-              </Droppable>
-              <Droppable droppableId="done">
-                {(provided) => (
-                  <Card
-                    style={{ flex: 1 }}
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    <div style={{ marginBottom: "10px" }}>
-                      <span style={{ fontSize: "16px", fontWeight: "600" }}>Done</span>
                     </div>
-                    {todos.filter(task => task.status === "done").map((task, index) => (
-                      <Draggable key={task._id || `done-${index}`}
-                        draggableId={task._id ? String(task._id) : `done-${index}`} index={index}>
-                        {(provided) => (
-                          <div style={{ marginBottom: "10px" }}>
-
-                            <Card
-                              type="inner"
-                              style={{ backgroundColor: "#fafafa" }}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  gap: "15px",
-                                  minHeight: "8vh"
-                                }}
-                              >
-                                <div>
-                                  {task.description.length > 35
-                                    ? `${task.description.substring(0, 35)}...`
-                                    : task.description}
-                                </div>
-                                <Button
-                                  size="small"
-                                  shape="circle"
-                                  icon={<DeleteOutlined />}
-                                  danger
-                                  onClick={() => handleDelete(task.todoId)}
-                                />
-                              </div>
-                            </Card>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </Card>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
-        </Card>
+                  )}
+                </Droppable>
+              </Card>
+            </div>
+          </Card>
+        </DragDropContext>
       </div >
     </>
   );

@@ -49,6 +49,24 @@ body {
   background-color: #fbfafa;
 }
 
+.ScrollInProgress::-webkit-scrollbar{
+  width: 5px;
+}
+
+.ScrollInProgress::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+.ScrollInProgress::-webkit-scrollbar-thumb {
+  background: #c9194b; 
+  border-radius: 10px;
+}
+
+.ScrollInProgress::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+}
+
 .icons {
   border-radius: 50%;
   display: flex;
