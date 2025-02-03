@@ -16,9 +16,11 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { UpdateUserDetails } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth)
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -88,6 +90,16 @@ const Profile = () => {
       [field]: date ? date.toISOString() : null,
     });
   };
+
+   useEffect(() => {
+      if (user) {
+        if (user.fullName === undefined || user.fullName === "") {
+          navigate("/fillUpForm");
+        } else {
+          navigate("/profile");
+        }
+      }
+    }, [user, navigate])
 
   return (
     <Spin

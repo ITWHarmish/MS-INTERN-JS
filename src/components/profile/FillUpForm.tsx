@@ -61,14 +61,14 @@ const FillUpForm = () => {
                                     name="fullName"
                                     rules={[{ required: true, message: "Please input your full name!" }]}
                                 >
-                                    <Input placeholder="John Allen"/>
+                                    <Input placeholder="John Allen" />
                                 </Form.Item>
                                 <Form.Item
                                     label="Duration"
                                     name="duration"
                                     rules={[{ required: true, message: "Please input the duration!" }]}
                                 >
-                                    <Input placeholder="6 months"/>
+                                    <Input placeholder="6 months" />
                                 </Form.Item>
                                 <Form.Item
                                     label="Stream/Language"
@@ -89,16 +89,22 @@ const FillUpForm = () => {
                                 <Form.Item
                                     label="Phone Number"
                                     name="phoneNumber"
-                                    rules={[{ required: true, message: "Please input your phone number!" }]}
+                                    rules={[
+                                        { required: true, message: "Please input your phone number!" },
+                                        {
+                                            pattern: /^[0-9]{10}$/,
+                                            message: "Phone number must be 10 digits.",
+                                        },
+                                    ]}
                                 >
-                                    <Input placeholder="9876543210"/>
+                                    <Input placeholder="9876543210" />
                                 </Form.Item>
                                 <Form.Item
                                     label="Address"
                                     name="address"
                                     rules={[{ required: true, message: "Please input your address!" }]}
                                 >
-                                    <Input placeholder="45 Main St, Apartment 101, Cityville, 12345"/>
+                                    <Input placeholder="45 Main St, Apartment 101, Cityville, 12345" />
                                 </Form.Item>
 
                             </Col>
@@ -108,19 +114,19 @@ const FillUpForm = () => {
                                     label="College Name"
                                     name="collegeName"
                                 >
-                                    <Input placeholder="Enter your College fullName "/>
+                                    <Input placeholder="Enter your College fullName " />
                                 </Form.Item>
                                 <Form.Item
                                     label="GitHub URL"
                                     name="githubURL"
                                 >
-                                    <Input placeholder="Enter your GitHub URL "/>
+                                    <Input placeholder="Enter your GitHub URL " />
                                 </Form.Item>
                                 <Form.Item
                                     label="LinkedIn URL"
                                     name="linkedinURL"
                                 >
-                                    <Input placeholder="Enter your LinkedIn URL "/>
+                                    <Input placeholder="Enter your LinkedIn URL " />
                                 </Form.Item>
                                 <Form.Item
                                     label="Date of Birth"
