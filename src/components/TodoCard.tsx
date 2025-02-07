@@ -241,7 +241,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             extra={
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
                 {
-                  telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
+                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token ?
                     <Button
                       onClick={handleSendTodo}
                       type="primary"
@@ -257,7 +257,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     </Button>
                 }
                 {
-                  telegramUser?.telegram?.session_id && telegramUser?.google?.tokens?.access_token ?
+                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token ?
                     <Button
                       onClick={handleSendDayEndTodo}
                       type="primary"
