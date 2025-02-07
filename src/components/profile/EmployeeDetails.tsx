@@ -1,17 +1,15 @@
 import {
   BankOutlined,
   EnvironmentOutlined,
-  GiftOutlined,
   MailOutlined,
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Card, DatePicker, Flex, Input, Space, Typography } from "antd";
+import { Card, Flex, Input, Space, Typography } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import dayjs from "dayjs";
 
-const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange }) => {
+const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
   const { user } = useSelector((state: RootState) => state.auth)
 
   return (
@@ -58,7 +56,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
               }
             />
           </Card>
-          <Card className="cardWidth">
+          {/* <Card className="cardWidth">
             <Card.Meta
               avatar={
                 <Flex
@@ -95,7 +93,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
                 </Typography.Text>
               }
             />
-          </Card>
+          </Card> */}
           <Card className="cardWidth">
             <Card.Meta
               avatar={
@@ -155,7 +153,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
                         placeholder='Enter phoneNumber'
                         onChange={(e) => handleChange(e, "phoneNumber")}
                       />
-                      : user?.phoneNumber
+                      : user?.internsDetails?.phoneNumber
                   }
                 </Typography.Text>
               }
@@ -192,7 +190,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
                         placeholder='Enter address'
                         onChange={(e) => handleChange(e, "address")}
                       />
-                      : user?.collegeName
+                      : user?.internsDetails?.collegeName
                   }
                 </Typography.Text>
               }
@@ -229,7 +227,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange, handleDateChange 
                         placeholder='Enter address'
                         onChange={(e) => handleChange(e, "address")}
                       />
-                      : user?.address
+                      : user?.internsDetails?.address
                   }
                 </Typography.Text>
               }

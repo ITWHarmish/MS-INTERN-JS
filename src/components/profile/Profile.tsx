@@ -26,38 +26,38 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState({
     fullName: user?.fullName || "",
-    duration: user?.duration || "",
-    stream: user?.stream || "",
-    phoneNumber: user?.phoneNumber || "",
-    address: user?.address || "",
-    githubURL: user?.githubURL || "",
-    linkedinURL: user?.linkedinURL || "",
+    duration: user?.internsDetails?.duration || "",
+    stream: user?.internsDetails?.stream || "",
+    phoneNumber: user?.internsDetails?.phoneNumber || "",
+    address: user?.internsDetails?.address || "",
+    githubURL: user?.internsDetails?.githubURL || "",
+    linkedinURL: user?.internsDetails?.linkedinURL || "",
     hrEmail: user?.hrEmail || "",
     hrFullName: user?.hrFullName || "",
-    mentorEmail: user?.mentorEmail || "",
-    mentorFullName: user?.mentorFullName || "",
-    collegeName: user?.collegeName || "",
+    mentorEmail: user?.internshipDetails?.mentorEmail || "",
+    mentorFullName: user?.internshipDetails?.mentorFullName || "",
+    collegeName: user?.internsDetails?.collegeName || "",
     dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
-    joiningDate: user?.joiningDate ? dayjs(user?.joiningDate).format("YYYY-MM-DD") : "",
+    joiningDate: user?.internshipDetails?.joiningDate ? dayjs(user?.internshipDetails?.joiningDate).format("YYYY-MM-DD") : "",
   });
 
   useEffect(() => {
     if (user) {
       setEditedData({
         fullName: user?.fullName || "",
-        duration: user?.duration || "",
-        stream: user?.stream || "",
-        phoneNumber: user?.phoneNumber || "",
-        address: user?.address || "",
-        githubURL: user?.githubURL || "",
-        linkedinURL: user?.linkedinURL || "",
+        duration: user?.internsDetails?.duration || "",
+        stream: user?.internsDetails?.stream || "",
+        phoneNumber: user?.internsDetails?.phoneNumber || "",
+        address: user?.internsDetails?.address || "",
+        githubURL: user?.internsDetails?.githubURL || "",
+        linkedinURL: user?.internsDetails?.linkedinURL || "",
         hrEmail: user?.hrEmail || "",
         hrFullName: user?.hrFullName || "",
-        mentorEmail: user?.mentorEmail || "",
-        mentorFullName: user?.mentorFullName || "",
-        collegeName: user?.collegeName || "",
+        mentorEmail: user?.internshipDetails?.mentorEmail || "",
+        mentorFullName: user?.internshipDetails?.mentorFullName || "",
+        collegeName: user?.internsDetails?.collegeName || "",
         dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
-        joiningDate: user?.joiningDate ? dayjs(user?.joiningDate).format("YYYY-MM-DD") : "",
+        joiningDate: user?.internshipDetails?.joiningDate ? dayjs(user?.internshipDetails?.joiningDate).format("YYYY-MM-DD") : "",
       })
     }
   }, [user])
@@ -91,15 +91,15 @@ const Profile = () => {
     });
   };
 
-   useEffect(() => {
-      if (user) {
-        if (user.fullName === undefined || user.fullName === "") {
-          navigate("/fillUpForm");
-        } else {
-          navigate("/profile");
-        }
+  useEffect(() => {
+    if (user) {
+      if (user.internsDetails === undefined || user.internsDetails === "") {
+        navigate("/fillUpForm");
+      } else {
+        navigate("/profile");
       }
-    }, [user, navigate])
+    }
+  }, [user, navigate])
 
   return (
     <Spin
@@ -108,13 +108,13 @@ const Profile = () => {
       tip="Loading..."
       className="full-page-spin"
     >
-      <Flex vertical style={{ marginBottom: "10px" }}>
+      <Flex vertical style={{ marginBottom: "65px", overflowX: "hidden" }}>
         <ProfileHeader
           editMode={editMode}
           setEditMode={setEditMode}
           handleSave={handleSave}
         />
-        <Layout style={{ backgroundColor: "white", height: "auto" }}>
+        <Layout style={{ backgroundColor: "white", height: "auto", overflow: "hidden" }}>
           <Content
             style={{
               backgroundColor: "white",
@@ -136,10 +136,9 @@ const Profile = () => {
                     editMode={editMode}
                     editedData={editedData}
                     handleChange={handleChange}
-                    handleDateChange={handleDateChange}
                   />
                 </Flex>
-                <Flex vertical style={{ width: "100%" }}>
+                <Flex vertical style={{ width: "100%", marginRight: "35px" }}>
                   <Space direction="vertical" size={15} style={{ width: "100%" }}>
                     <Typography.Text
                       style={{ color: "#c9101c", fontSize: "20px" }}
@@ -181,12 +180,12 @@ const Profile = () => {
                               {
                                 editMode
                                   ? <DatePicker
-                                    value={editedData?.joiningDate ? dayjs(editedData.joiningDate) : null}
+                                    value={editedData?.joiningDate ? dayjs(editedData?.joiningDate) : null}
                                     size="middle"
                                     onChange={(e) => handleDateChange(e, "joiningDate")}
                                   />
-                                  : user?.joiningDate
-                                    ? dayjs(user.joiningDate).format("DD MMM YYYY")
+                                  : user?.internsDetails?.joiningDate
+                                    ? dayjs(user?.internsDetails?.joiningDate).format("DD MMM YYYY")
                                     : "N/A"
                               }
                             </Typography.Text>
@@ -226,7 +225,7 @@ const Profile = () => {
                                     placeholder='Enter Duration Here'
                                     onChange={(e) => handleChange(e, "duration")}
                                   />
-                                  : user?.duration
+                                  : user?.internsDetails?.duration
                               }
                             </Typography.Text>
                           }
@@ -266,7 +265,7 @@ const Profile = () => {
                                     placeholder='Enter Stream Here'
                                     onChange={(e) => handleChange(e, "stream")}
                                   />
-                                  : user?.stream
+                                  : user?.internsDetails?.stream
                               }
                             </Typography.Text>
                           }
@@ -386,7 +385,7 @@ const Profile = () => {
                                             placeholder='Enter Mentor FullName'
                                             onChange={(e) => handleChange(e, "mentorFullName")}
                                           />
-                                          : user?.mentorFullName
+                                          : user?.internshipDetails?.mentorFullName
                                       }
                                     </Typography.Text>
                                     <Typography.Text
@@ -403,7 +402,7 @@ const Profile = () => {
                                             placeholder='Enter Mentor Email'
                                             onChange={(e) => handleChange(e, "mentorEmail")}
                                           />
-                                          : user?.mentorEmail
+                                          : user?.internshipDetails?.mentorEmail
                                       }
                                     </Typography.Text>
                                   </Flex>

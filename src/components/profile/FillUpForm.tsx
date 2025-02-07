@@ -1,13 +1,13 @@
 import { Form, Input, Button, Row, Col, DatePicker, message, Card, Spin, Select } from "antd";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
-import dayjs from "dayjs";
-import { UpdateUserDetails } from "../../services/authAPI";
+import { UpdateAllUserDetails } from "../../services/authAPI";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { IProfileForm } from "../../types/IProfile";
+import { IProfileForm, IProfileUpdate } from "../../types/IProfile";
+import dayjs from "dayjs";
 
 const FillUpForm = () => {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -25,12 +25,19 @@ const FillUpForm = () => {
         setLoading(true);
 
         try {
-            const formattedValues = {
-                ...values,
-                dob: dayjs(values.dob).format("YYYY-MM-DD"),
-                joiningDate: dayjs(values.joiningDate).format("YYYY-MM-DD"),
+            const formattedValues: IProfileUpdate = {
+                internsDetails: {
+                    phoneNumber: values.phoneNumber,
+                    address: values.address,
+                    collegeName: values.collegeName,
+                    stream: values.stream,
+                    duration: values.duration,
+                    githubURL: values.githubURL,
+                    linkedinURL: values.linkedinURL,
+                    joiningDate: dayjs(values.joiningDate).format("YYYY-MM-DD"),
+                },
             };
-            const response = await UpdateUserDetails(formattedValues)
+            const response = await UpdateAllUserDetails(formattedValues)
             dispatch(setUser(response.user));
             message.success("Updated successful!");
             navigate("/")
@@ -56,20 +63,14 @@ const FillUpForm = () => {
                     >
                         <Row gutter={24}>
                             <Col span={12}>
-                                <Form.Item
+                                {/* <Form.Item
                                     label="Full Name"
                                     name="fullName"
                                     rules={[{ required: true, message: "Please input your full name!" }]}
                                 >
                                     <Input placeholder="John Allen" />
-                                </Form.Item>
-                                <Form.Item
-                                    label="Duration"
-                                    name="duration"
-                                    rules={[{ required: true, message: "Please input the duration!" }]}
-                                >
-                                    <Input placeholder="6 months" />
-                                </Form.Item>
+                                </Form.Item> */}
+                               
                                 <Form.Item
                                     label="Stream/Language"
                                     name="stream"
@@ -85,6 +86,13 @@ const FillUpForm = () => {
                                             { value: "Reactjs", label: "Reactjs" },
                                         ]}
                                     />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Duration"
+                                    name="duration"
+                                    rules={[{ required: true, message: "Please input the duration!" }]}
+                                >
+                                    <Input placeholder="6 months" />
                                 </Form.Item>
                                 <Form.Item
                                     label="Phone Number"
@@ -128,13 +136,13 @@ const FillUpForm = () => {
                                 >
                                     <Input placeholder="Enter your LinkedIn URL " />
                                 </Form.Item>
-                                <Form.Item
+                                {/* <Form.Item
                                     label="Date of Birth"
                                     name="dob"
                                     rules={[{ required: true, message: "Please input your date of birth!" }]}
                                 >
                                     <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item
                                     label="Joining Date"
                                     name="joiningDate"

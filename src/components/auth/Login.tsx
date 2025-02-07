@@ -17,7 +17,7 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            if (user.fullName === undefined || user.fullName === "") {
+            if (user.internsDetails === undefined || user.internsDetails === "") {
                 navigate("/fillUpForm");
             } else {
                 navigate("/");
@@ -32,7 +32,7 @@ const Login = () => {
             const response = await LoginApi(values);
             message.success('Login successful!');
             dispatch(setUser(response.user))
-            if (response.user.fullName === "") {
+            if (response.user.internsDetails === "") {
                 navigate("/fillUpForm");
             }
             else {
