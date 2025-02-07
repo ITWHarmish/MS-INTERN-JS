@@ -125,20 +125,24 @@ ${description.map(task => `• ${task}`).join("\n")}
       }
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
-        .catch((error) => {
-          console.error("Error sending tasks on Telegram:", error);
+        .then(()=> true)
+        .catch(() => {
           message.error("Failed to send tasks on Telegram. Please try again.");
+          return false;
         });
 
       const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
-        .catch((error) => {
-          console.error("Error sending tasks to Google Chat:", error);
+        .then(()=> true)
+        .catch(() => {
           message.error("Failed to send tasks to Google Chat. Please try again.");
+          return false;
         });
 
-      await Promise.all([sendToChat, sendToGoogleChat]);
-
-      message.success("Tasks sent to chats successfully!");
+      const promiseResult = await Promise.all([sendToChat, sendToGoogleChat]);
+      const check = promiseResult.every((item)=>item==false)
+      if(!check){
+        message.success("Tasks sent to chats successfully!");
+      }
     } catch (error) {
       console.error("Error during sending tasks:", error);
       message.error("An unexpected error occurred. Please try again.");
