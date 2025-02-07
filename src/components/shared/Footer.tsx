@@ -20,7 +20,7 @@ const Footer = () => {
                     fontSize: "15px",
                 }}
             >
-                @ToshalInfotech{new Date().getFullYear()}
+                Toshal Management System ©{new Date().getFullYear()} Created by Toshal Infotech 
             </Typography.Text>
         </div>
     )
