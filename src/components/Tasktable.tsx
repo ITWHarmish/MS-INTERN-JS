@@ -219,6 +219,7 @@ const Tasktable = ({ selectedDate }) => {
             >
                 <RangePicker
                     format="HH:mm"
+                    minuteStep={15}
                     onChange={handleRangeChange}
                     value={
                         formData.startTime && formData.endTime

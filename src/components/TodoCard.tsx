@@ -23,6 +23,8 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const { timelogs } = useSelector((state: RootState) => state.timelog)
   const [newTask, setNewTask] = useState("");
 
+  const currentDate = dayjs(Date.now()).format("YYYY-MM-DD")
+  const formattedDate = selectedDate.format("YYYY-MM-DD");
   const totalHours = timelogs.reduce((total, timelog) => {
     const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
     return total + hours;
@@ -245,7 +247,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             extra={
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
                 {
-                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token ?
+                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token && currentDate === formattedDate ?
                     <Button
                       onClick={handleSendTodo}
                       type="primary"
@@ -261,7 +263,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     </Button>
                 }
                 {
-                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token ?
+                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token && currentDate === formattedDate ?
                     <Button
                       onClick={handleSendDayEndTodo}
                       type="primary"
@@ -279,7 +281,6 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               </div>
             }
           >
-
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "5px" }}>
               <Card
                 className="ScrollInProgress"

@@ -56,44 +56,6 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
               }
             />
           </Card>
-          {/* <Card className="cardWidth">
-            <Card.Meta
-              avatar={
-                <Flex
-                  justify="center"
-                  align="center"
-                  style={{
-                    fontSize: "20px",
-                    height: "100%",
-                    width: "auto",
-                    color: "#c9101c",
-                  }}
-                >
-                  <GiftOutlined style={{ margin: "10px" }} />
-                </Flex>
-              }
-              title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
-                  Date of birth
-                </Typography.Text>
-              }
-              description={
-                <Typography.Text strong style={{ fontSize: "16px" }}>
-                  {
-                    editMode
-                      ? <DatePicker
-                        value={editedData?.dob ? dayjs(editedData.dob) : null}
-                        size="middle"
-                        onChange={(e) => handleDateChange(e, "dob")}
-                      />
-                      : user?.dob
-                        ? dayjs(user.dob).format("DD MMM YYYY")
-                        : "N/A"
-                  }
-                </Typography.Text>
-              }
-            />
-          </Card> */}
           <Card className="cardWidth">
             <Card.Meta
               avatar={

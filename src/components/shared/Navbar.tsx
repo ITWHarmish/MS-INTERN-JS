@@ -109,7 +109,7 @@ const Navbar = () => {
                     alignItems: "center",
                     borderBottom: "1px solid #e0e0e0",
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                    padding: "5px 20px",
+                    padding: "0px 20px",
                 }}
             >
                 <Menu

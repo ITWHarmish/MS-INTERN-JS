@@ -63,14 +63,6 @@ const FillUpForm = () => {
                     >
                         <Row gutter={24}>
                             <Col span={12}>
-                                {/* <Form.Item
-                                    label="Full Name"
-                                    name="fullName"
-                                    rules={[{ required: true, message: "Please input your full name!" }]}
-                                >
-                                    <Input placeholder="John Allen" />
-                                </Form.Item> */}
-                               
                                 <Form.Item
                                     label="Stream/Language"
                                     name="stream"
@@ -136,13 +128,6 @@ const FillUpForm = () => {
                                 >
                                     <Input placeholder="Enter your LinkedIn URL " />
                                 </Form.Item>
-                                {/* <Form.Item
-                                    label="Date of Birth"
-                                    name="dob"
-                                    rules={[{ required: true, message: "Please input your date of birth!" }]}
-                                >
-                                    <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
-                                </Form.Item> */}
                                 <Form.Item
                                     label="Joining Date"
                                     name="joiningDate"
