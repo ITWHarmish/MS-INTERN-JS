@@ -72,7 +72,7 @@ const MainPage = () => {
 
   useEffect(() => {
     if (user) {
-      if (user.fullName === undefined || user.fullName === "") {
+      if (user.internsDetails === undefined || user.internsDetails === "") {
         navigate("/fillUpForm");
       } else {
         navigate("/");

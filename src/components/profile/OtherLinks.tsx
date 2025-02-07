@@ -11,7 +11,7 @@ const OtherLinks = ({ editMode, editedData, handleChange }) => {
   const { user } = useSelector((state: RootState) => state.auth)
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   return (
-    <Flex gap={20} vertical style={{ width: "auto" }} align="center">
+    <Flex gap={20} vertical style={{ width: "auto", marginLeft: "15px" }} align="center">
       <Avatar
         src={telegramUser?.google?.profile?.picture}
         shape="square"
@@ -50,7 +50,7 @@ const OtherLinks = ({ editMode, editedData, handleChange }) => {
                       placeholder='Enter Your GithubURL'
                       onChange={(e) => handleChange(e, "githubURL")}
                     />
-                    : user?.githubURL ? <a href={user?.githubURL} target="_blanck">{user?.githubURL}</a> : "Not Provided"
+                    : user?.internsDetails?.githubURL ? <a href={user?.internsDetails?.githubURL} target="_blanck">{user?.internsDetails?.githubURL}</a> : "Not Provided"
                 }
               </Typography.Text>
             }
@@ -86,7 +86,7 @@ const OtherLinks = ({ editMode, editedData, handleChange }) => {
                       placeholder='Enter Your LinkedinURL'
                       onChange={(e) => handleChange(e, "linkedinURL")}
                     />
-                    : user?.linkedinURL ? <a href={user?.linkedinURL} target="_blanck">{user?.linkedinURL}</a> : "Not Provided"
+                    : user?.internsDetails?.linkedinURL ? <a href={user?.internsDetails?.linkedinURL} target="_blanck">{user?.internsDetails?.linkedinURL}</a> : "Not Provided"
                 }
               </Typography.Text>
             }

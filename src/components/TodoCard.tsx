@@ -111,8 +111,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
       return;
     }
 
-    const formattedTasks = `
-Day start status:
+    const formattedTasks = `𝗗𝗮𝘆 𝘀𝘁𝗮𝗿𝘁 𝘀𝘁𝗮𝘁𝘂𝘀:
 ${description.map(task => `• ${task}`).join("\n")}
 `;
     try {
@@ -180,10 +179,9 @@ ${description.map(task => `• ${task}`).join("\n")}
       message.warning("No tasks to send!");
       return;
     }
-
-    const formattedTasks = `Day end status:
+    const formattedTasks = `𝗗𝗮𝘆 𝗲𝗻𝗱 𝘀𝘁𝗮𝘁𝘂𝘀:
 ${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
-${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("\n ")}` : ""}
+${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("\n")}` : ""}
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
@@ -294,7 +292,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 >
                   <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
 
-                  <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined  className="check"/>}></Button>
+                  <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
                   <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
 
                     <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
@@ -349,7 +347,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                     <Button
                                       size="small"
                                       shape="circle"
-                                      icon={<DeleteOutlined  className="check"/>}
+                                      style={{ paddingBottom: "3px" }}
+                                      icon={<DeleteOutlined />}
                                       danger
                                       onClick={() => handleDelete(task.todoId)}
                                     />
@@ -413,7 +412,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                   <Button
                                     size="small"
                                     shape="circle"
-                                    icon={<DeleteOutlined className="check" />}
+                                    icon={<DeleteOutlined />}
                                     danger
                                     onClick={() => handleDelete(task.todoId)}
                                   />

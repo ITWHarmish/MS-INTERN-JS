@@ -16,6 +16,21 @@ export interface IProfileForm {
     hrFullName: string;
     mentorEmail: string;
     mentorFullName: string;
-    dob: Date;
-    joiningDate: Date;
+    dob?: string;
+    joiningDate: string;
+    collegeName: string;
+}
+
+export interface IProfileUpdate {
+    fullName?: string;
+    internsDetails: {
+        stream: string;
+        phoneNumber: string;
+        address: string;
+        collegeName: string;
+        githubURL: string;
+        linkedinURL: string;
+        duration: string;
+        joiningDate: string;
+    };
 }

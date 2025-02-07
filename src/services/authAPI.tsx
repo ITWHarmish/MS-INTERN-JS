@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
 import { Login } from "../types/ILogin";
+import { IProfileForm, IProfileUpdate } from "../types/IProfile";
 
 
 
@@ -52,9 +53,21 @@ export const LogoutApi = async () => {
     }
 }
 
-export const UpdateUserDetails = async (userData) => {
+export const UpdateUserDetails = async (userData: IProfileForm) => {
     try {
         const res = await axios.put(`${API_END_POINT}/auth/updateUser`, userData, {
+            withCredentials: true,
+        })
+        return res.data
+    } catch (error) {
+        console.error('Error While Verifying:', error);
+        throw error;
+    }
+}
+
+export const UpdateAllUserDetails = async (userData: IProfileUpdate) => {
+    try {
+        const res = await axios.put(`${API_END_POINT}/auth/updateAllUsersDetails`, userData, {
             withCredentials: true,
         })
         return res.data
