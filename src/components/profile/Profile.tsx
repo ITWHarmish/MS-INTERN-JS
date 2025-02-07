@@ -11,7 +11,7 @@ import EmployeeDetails from "./EmployeeDetails";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import ProfileHeader from "./ProfileHeader";
+import ProfileHeader from "./ProfileTopBar";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { UpdateUserDetails } from "../../services/authAPI";

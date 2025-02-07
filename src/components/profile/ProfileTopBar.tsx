@@ -4,7 +4,7 @@ import { RootState } from '../../redux/store'
 import { useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
 import { IProfileHeaderProps } from '../../types/IProfile';
-const ProfileHeader = ({ editMode, setEditMode, handleSave }: IProfileHeaderProps) => {
+const ProfileTopBar = ({ editMode, setEditMode, handleSave }: IProfileHeaderProps) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [showEditButton, setShowEditButton] = useState(false);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
@@ -39,4 +39,4 @@ const ProfileHeader = ({ editMode, setEditMode, handleSave }: IProfileHeaderProp
   )
 }
 
-export default ProfileHeader
+export default ProfileTopBar
