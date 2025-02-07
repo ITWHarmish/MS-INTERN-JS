@@ -1,16 +1,18 @@
 import { FieldTimeOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Input, Menu, Modal, Popover, Form, message } from "antd";
+import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../app/store";
-import { fetchTelegram } from "../../app/actions/telegramActions";
+import { AppDispatch, RootState } from "../../redux/store";
+import { fetchTelegram } from "../../redux/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
-import { setUser } from "../../app/slices/authSlice";
-import { clearTelegramData } from "../../app/slices/telegramSlice";
+import { setUser } from "../../redux/slices/authSlice";
+import { clearTelegramData } from "../../redux/slices/telegramSlice";
+import { API_END_POINT } from "../../utils/constants";
 
 const Navbar = () => {
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -34,6 +36,11 @@ const Navbar = () => {
 
     const onMenuClick = (e) => {
         setCurrent(e.key);
+        if (e.key === "profile") {
+            navigate("/profile");
+        } else if (e.key === "timelog") {
+            navigate("/");
+        }
     };
 
     const handleLogout = async () => {
@@ -46,9 +53,14 @@ const Navbar = () => {
 
     const popoverContent = (
         <div>
-            <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
-                Logout
-            </Button>
+            <Space direction="vertical">
+                <Button onClick={() => onMenuClick({ key: "profile" })} type="text" icon={<UserOutlined />}>
+                    Profile
+                </Button>
+                <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
+                    Logout
+                </Button>
+            </Space>
         </div>
     );
 
@@ -74,8 +86,18 @@ const Navbar = () => {
         }
     };
 
+    const googleLogin = async () => {
+        window.location.href = `${API_END_POINT}/G_login`
+    };
+
+
     useEffect(() => {
         dispatch(fetchTelegram());
+        if (location.pathname === "/profile") {
+            setCurrent("profile");
+        } else {
+            setCurrent("timelog");
+        }
     }, [dispatch]);
 
     return (
@@ -87,7 +109,7 @@ const Navbar = () => {
                     alignItems: "center",
                     borderBottom: "1px solid #e0e0e0",
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                    padding: "5px 20px",
+                    padding: "0px 20px",
                 }}
             >
                 <Menu
@@ -103,19 +125,17 @@ const Navbar = () => {
                     ]}
                 ></Menu>
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-                    <Button type="default">Connect Google</Button>
+
+                    {
+                        telegramUser?.google?.tokens?.access_token ?
+                            <Button disabled type="default">Connect Google</Button>
+                            :
+                            <Button onClick={googleLogin} type="default">Connect Google</Button>
+                    }
                     {telegramUser?.telegram?.session_id ? (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <Button type="default" disabled>
-                                Telegram Connected
-                            </Button>
-                        </div>
+                        <Button type="default" disabled>
+                            Telegram Connected
+                        </Button>
                     ) : (
                         <>
                             <Button onClick={showModal} type="default">
@@ -149,7 +169,7 @@ const Navbar = () => {
                                     )}
                                     {isOtpStep && (
                                         <Form.Item
-                                            label="Code"
+                                            label="Code (For OTP See the Telegram Chat) "
                                             name="code"
                                             rules={[
                                                 { required: true, message: "Please enter the code!" },
@@ -162,7 +182,7 @@ const Navbar = () => {
                                             <Input placeholder="Enter the code" />
                                         </Form.Item>
                                     )}
-                                    <Form.Item>
+                                    <Form.Item style={{marginBottom:"10px"}}>
                                         <Button type="primary" htmlType="submit" >
                                             {isOtpStep ? "Submit OTP" : "Send Code"}
                                         </Button>
@@ -174,8 +194,8 @@ const Navbar = () => {
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
-                                <span style={{ cursor: "pointer", marginRight:"7px" }}>{user.email}</span>
-                                <Avatar style={{ marginRight: "7px", cursor:"pointer" }} icon={<UserOutlined />} />
+                                <span style={{ cursor: "pointer", marginRight: "7px" }}>{user.fullName}</span>
+                                <Avatar src={telegramUser?.google?.profile?.picture} style={{ marginRight: "7px", cursor: "pointer" }} icon={<UserOutlined />} />
                             </span>
                         </Popover>
                     }

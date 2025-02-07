@@ -3,9 +3,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/Layout.tsx'
 import MainPage from './components/MainPage.tsx'
 import { Provider } from 'react-redux'
-import { store } from './app/store.ts'
+import { store } from './redux/store.ts'
 import Login from './components/auth/Login.tsx'
+import Profile from './components/profile/Profile.tsx'
 import { ConfigProvider } from 'antd'
+import FillUpForm from './components/profile/FillUpForm.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -19,7 +21,16 @@ const router = createBrowserRouter([
         path: "/",
         element: <MainPage />
       },
+      {
+        path: "/profile",
+        element: <Profile />
+      },
+
     ]
+  },
+  {
+    path: "/fillUpForm",
+    element: <FillUpForm />
   }
 ])
 
@@ -31,7 +42,7 @@ createRoot(document.getElementById('root')!).render(
       theme={{
         token: {
           colorPrimary: '#c9194b',
-          borderRadius: 20,
+          borderRadius: 14,
         },
       }}
     >

@@ -3,10 +3,10 @@ import { Button, Card, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { LoginApi } from '../../services/authAPI';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../app/slices/authSlice';
+import { setUser } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { RootState } from '../../redux/store';
 
 const Login = () => {
 
@@ -17,7 +17,11 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            navigate("/")
+            if (user.internsDetails === undefined || user.internsDetails === "") {
+                navigate("/fillUpForm");
+            } else {
+                navigate("/");
+            }
         }
     }, [user, navigate])
 
@@ -28,7 +32,12 @@ const Login = () => {
             const response = await LoginApi(values);
             message.success('Login successful!');
             dispatch(setUser(response.user))
-            navigate("/")
+            if (response.user.internsDetails === "") {
+                navigate("/fillUpForm");
+            }
+            else {
+                navigate("/")
+            }
         } catch (error) {
             message.error('Login failed! Please try again.');
             console.error('API Error:', error);
@@ -48,52 +57,52 @@ const Login = () => {
             }}
         >
             <Card style={{ width: 500, padding: 20 }}>
-                    <Form
-                        name="loginForm"
-                        style={{ maxWidth: 400 }}
-                        onFinish={handleSubmit}
-                        autoComplete="off"
-                        layout="vertical"
+                <Form
+                    name="loginForm"
+                    style={{ maxWidth: 400 }}
+                    onFinish={handleSubmit}
+                    autoComplete="off"
+                    layout="vertical"
+                >
+                    <Form.Item
+                        label="E-Mail"
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Please enter your email!' },
+                            { type: 'email', message: 'Please enter a valid email!' },
+                        ]}
                     >
-                        <Form.Item
-                            label="E-Mail"
-                            name="email"
-                            rules={[
-                                { required: true, message: 'Please enter your email!' },
-                                { type: 'email', message: 'Please enter a valid email!' },
-                            ]}
-                        >
-                            <Input
-                                prefix={<UserOutlined />}
-                                placeholder="E-Mail"
-                                size="large"
-                            />
-                        </Form.Item>
+                        <Input
+                            prefix={<UserOutlined />}
+                            placeholder="E-Mail"
+                            size="large"
+                        />
+                    </Form.Item>
 
-                        <Form.Item
-                            label="Password"
-                            name="password"
-                            rules={[{ required: true, message: 'Please enter your password!' }]}
-                        >
-                            <Input.Password
-                                prefix={<LockOutlined />}
-                                placeholder="Password"
-                                size="large"
-                            />
-                        </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[{ required: true, message: 'Please enter your password!' }]}
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined />}
+                            placeholder="Password"
+                            size="large"
+                        />
+                    </Form.Item>
 
-                        <Form.Item>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                style={{ width: '100%' }}
-                                size="large"
-                                loading={loading}
-                            >
-                                Log in
-                            </Button>
-                        </Form.Item>
-                    </Form>
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ width: '100%' }}
+                            size="large"
+                            loading={loading}
+                        >
+                            Log in
+                        </Button>
+                    </Form.Item>
+                </Form>
             </Card>
         </div>
     );

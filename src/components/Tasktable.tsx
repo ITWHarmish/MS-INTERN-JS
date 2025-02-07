@@ -5,11 +5,14 @@ import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { fetchTimelogs } from '../redux/actions/timelogActions';
+import { AppDispatch, RootState } from '../redux/store';
+import type { TableProps } from 'antd';
+import { IColumns, ISetRowProps, TimeLog } from '../types/ITimelog';
 
-import { fetchTimelogs } from '../app/actions/timelogActions';
-import { AppDispatch, RootState } from '../app/store';
+const Tasktable = ({ selectedDate }) => {
 
-const Tasktable = () => {
+    const formattedDate = selectedDate.format("YYYY-MM-DD");
     const [showCard, setShowCard] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -17,15 +20,16 @@ const Tasktable = () => {
         endTime: '',
         category: '',
         description: '',
+        date: formattedDate,
     });
     const { timelogs } = useSelector((state: RootState) => state.timelog)
-    const { user } = useSelector((state: RootState) => state.auth)
 
     const [editingId, setEditingId] = useState<string | null>(null);
 
     const { RangePicker } = TimePicker;
 
-    const SetRow = ({ label, value, textStyle, key }: any) => (
+
+    const SetRow: React.FC<ISetRowProps> = ({ label, value, textStyle, key }: ISetRowProps) => (
         <Row gutter={16} key={key}>
             <Col md={12} span={18}>
                 <Typography.Text style={textStyle}>{label}</Typography.Text>
@@ -37,13 +41,11 @@ const Tasktable = () => {
     );
 
     const totalHours = timelogs.reduce((total, timelog) => {
-        const startTime = dayjs(timelog.startTime);
-        const endTime = dayjs(timelog.endTime);
-        const diff = endTime.diff(startTime, 'hour', true); 
-        return total + diff;
+        const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
+        return total + hours;
     }, 0);
-
-    const columns: any[] = [
+    
+    const columns: TableProps<IColumns>['columns'] = [
         {
             title: 'Start Time',
             dataIndex: 'startTime',
@@ -81,17 +83,18 @@ const Tasktable = () => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            width: 700,
+            width: 350,
         },
         {
             title: 'Actions',
             dataIndex: 'actions',
             key: 'actions',
+            align: 'center',
             render: (_, record) => (
-                <div style={{ display: 'flex', gap: '20px', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', justifyContent:"center", gap: '20px', cursor: 'pointer', alignItems:"center" }}>
                     <Button
                         shape="circle"
-                        icon={<EditOutlined />}
+                        icon={<EditOutlined className="check" />}
                         size="small"
                         onClick={() => {
                             handleEdit(record);
@@ -100,7 +103,7 @@ const Tasktable = () => {
                     <Button
                         shape="circle"
                         danger
-                        icon={<DeleteOutlined />}
+                        icon={<DeleteOutlined className="check" />}
                         size="small"
                         onClick={() => {
                             handleDelete(record._id);
@@ -111,7 +114,7 @@ const Tasktable = () => {
         },
     ];
 
-    const handleRangeChange = (value: any) => {
+    const handleRangeChange = (value: [dayjs.Dayjs | null, dayjs.Dayjs | null]) => {
         if (value) {
             setFormData({
                 ...formData,
@@ -132,7 +135,7 @@ const Tasktable = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSubmit = async () => {
-        if (!formData.startTime || !formData.endTime || !formData.category || !formData.description) {
+        if (!formData.startTime || !formData.endTime || !formData.category || !formData.description || !formData.date) {
             message.error("All fields are required!");
             return;
         }
@@ -141,7 +144,7 @@ const Tasktable = () => {
         if (editingId) {
             try {
                 await UpdateTimelog(editingId, formData);
-                dispatch(fetchTimelogs())
+                dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Updated successful!');
 
             } catch (error) {
@@ -151,10 +154,10 @@ const Tasktable = () => {
         } else {
             try {
                 await AddTimelog(formData);
-                dispatch(fetchTimelogs())
+                dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Added successful!');
             } catch (error) {
-                console.error('Error While Deleting the time log:', error);
+                console.error('Error While Submitting the time log:', error);
                 message.error('Submiision Failed! Please try again.');
             }
         }
@@ -164,13 +167,14 @@ const Tasktable = () => {
             endTime: '',
             category: '',
             description: '',
+            date: formattedDate,
         });
 
         setEditingId(null);
 
     };
 
-    const handleEdit = (record: any) => {
+    const handleEdit = (record: TimeLog) => {
         setEditingId(record._id);
 
         const startTime = dayjs(record.startTime).format('HH:mm');
@@ -181,6 +185,7 @@ const Tasktable = () => {
             endTime,
             category: record.category,
             description: record.description,
+            date: formattedDate,
         });
     };
 
@@ -188,7 +193,7 @@ const Tasktable = () => {
         try {
             setLoading(true);
             await DeleteTimelog(record);
-            dispatch(fetchTimelogs())
+            dispatch(fetchTimelogs({ date: formattedDate }))
             message.success('TimeLog Deleted successful!');
         } catch (error) {
             message.error('Delete Failed! Please try again.');
@@ -200,11 +205,11 @@ const Tasktable = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchTimelogs());
-    }, [dispatch]);
+        setFormData((prev) => ({ ...prev, date: formattedDate }));
+    }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "70vh" }}>
+        <div style={{ minHeight: "65vh"}}>
             <div
                 style={{
                     display: 'flex',
@@ -214,7 +219,7 @@ const Tasktable = () => {
             >
                 <RangePicker
                     format="HH:mm"
-                    style={{ borderRadius: '20px', width: '200px' }}
+                    minuteStep={15}
                     onChange={handleRangeChange}
                     value={
                         formData.startTime && formData.endTime
@@ -226,19 +231,20 @@ const Tasktable = () => {
 
                 <Select
                     style={{ width: '180px' }}
-                    placeholder="Category"
+                    showSearch
+                    placeholder="Select Category"
+                    optionFilterProp="label"
                     options={[
-                        { value: "", label: "Select Category", disabled: true },
                         { value: 'learning', label: 'Learning' },
                         { value: 'coding', label: 'Coding' },
                         { value: 'management', label: 'Management' },
                     ]}
                     onChange={handleChangeCategory}
-                    value={formData.category}
+                    value={formData.category || undefined}
                 />
                 <Input
                     placeholder="Description"
-                    style={{ width: '400px' }}
+                    style={{ width: '450px' }}
                     value={formData.description}
                     onChange={handleChangeDescription}
                     required
@@ -248,7 +254,7 @@ const Tasktable = () => {
                 </Button>
             </div>
             <div style={{ paddingTop: '10px' }}>
-                <Table
+                <Table<IColumns>
                     columns={columns}
                     dataSource={timelogs}
                     pagination={false}
@@ -260,26 +266,19 @@ const Tasktable = () => {
             <div>
                 <Card
                     size="small"
-                    title={
-                        <SetRow
-                            label={user?.email}
-                            value="Work Duration"
-                            textStyle={{ fontWeight: 'bold' }}
-                        />
-                    }
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
                         }`}
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <RightOutlined /> : <LeftOutlined />}
+                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined  className="check"/>}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
                     />
                     <SetRow
-                        label="Total"
+                        label="Total Hours: "
                         value={`${totalHours.toFixed(2)} hours`}
-                        textStyle={{ fontWeight: 'bold' }}
+                        textStyle={{ fontWeight: '600' }}
                     />
                 </Card>
             </div>
