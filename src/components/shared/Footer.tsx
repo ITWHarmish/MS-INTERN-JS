@@ -10,6 +10,9 @@ const Footer = () => {
                 padding: "10px 0",
                 position:"fixed",
                 bottom: "0px",
+                display:"flex",
+                justifyContent: "center",
+                alignItems: "center",
             }}
         >
             <Typography.Text
