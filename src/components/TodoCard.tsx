@@ -294,7 +294,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
 
                   <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
-                  <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
+                  <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit">
 
                     <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
                       <TextArea rows={4} placeholder="Description"
@@ -312,7 +312,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                         className="ScrollInProgress" style={{
                           height: "calc(65vh - 9vh)",
                           width: "100%",
-                          overflow: "auto",
+                          overflowY: "auto",
                           overflowX: "hidden",
                           position: "absolute",
                           right: "0",
