@@ -82,7 +82,10 @@ const FillUpForm = () => {
                                 <Form.Item
                                     label="Duration"
                                     name="duration"
-                                    rules={[{ required: true, message: "Please input the duration!" }]}
+                                    rules={
+                                        [{ required: true, message: "Please input the duration!" },
+                                        { pattern: /^[0-9]+$/, message: "Only numbers are allowed!" },
+                                        ]}
                                 >
                                     <Input placeholder="6 months" />
                                 </Form.Item>
