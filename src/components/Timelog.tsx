@@ -25,7 +25,7 @@ const Timelog = ({ selectedDate, setSelectedDate }) => {
 
     return (
         <>
-            <Card title={"Timelog"} extra={
+            <Card style={{position: "relative", height:"100%" }} title={"Timelog"} extra={
                 <DatePicker defaultValue={selectedDate} onChange={handleDateChange} />
             }>
                 <Tasktable selectedDate={selectedDate} />

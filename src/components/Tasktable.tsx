@@ -44,7 +44,7 @@ const Tasktable = ({ selectedDate }) => {
         const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
         return total + hours;
     }, 0);
-    
+
     const columns: TableProps<IColumns>['columns'] = [
         {
             title: 'Start Time',
@@ -91,7 +91,7 @@ const Tasktable = ({ selectedDate }) => {
             key: 'actions',
             align: 'center',
             render: (_, record) => (
-                <div style={{ display: 'flex', justifyContent:"center", gap: '20px', cursor: 'pointer', alignItems:"center" }}>
+                <div style={{ display: 'flex', justifyContent: "center", gap: '20px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
                         shape="circle"
                         icon={<EditOutlined className="check" />}
@@ -209,7 +209,7 @@ const Tasktable = ({ selectedDate }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "65vh"}}>
+        <div style={{ minHeight: "65vh" }}>
             <div
                 style={{
                     display: 'flex',
@@ -253,7 +253,9 @@ const Tasktable = ({ selectedDate }) => {
                     Submit
                 </Button>
             </div>
-            <div style={{ paddingTop: '10px' }}>
+            <div style={{
+                paddingTop: '10px',
+            }}>
                 <Table<IColumns>
                     columns={columns}
                     dataSource={timelogs}
@@ -261,6 +263,17 @@ const Tasktable = ({ selectedDate }) => {
                     bordered
                     size="small"
                     loading={loading}
+                    sticky={true}
+                    className="ScrollInProgress"
+                    style={{
+                        height:"calc(65vh - 50px)",
+                        position: "absolute",
+                        overflowY: "auto",
+                        overflowX: "hidden",
+                        left: "10px",
+                        right: "0",
+                        paddingRight: "10px",
+                    }}
                 />
             </div>
             <div>
@@ -271,7 +284,7 @@ const Tasktable = ({ selectedDate }) => {
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined  className="check"/>}
+                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined className="check"/>}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
                     />

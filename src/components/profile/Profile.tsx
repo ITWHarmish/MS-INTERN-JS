@@ -225,7 +225,7 @@ const Profile = () => {
                                     placeholder='Enter Duration Here'
                                     onChange={(e) => handleChange(e, "duration")}
                                   />
-                                  : user?.internsDetails?.duration
+                                  : `${user?.internsDetails?.duration} months`
                               }
                             </Typography.Text>
                           }
@@ -324,7 +324,7 @@ const Profile = () => {
                                         color: "grey",
                                       }}
                                     >
-                                       hr@toshalinfotech.com
+                                      hr@toshalinfotech.com
                                     </Typography.Text>
                                   </Flex>
                                 </Flex>
