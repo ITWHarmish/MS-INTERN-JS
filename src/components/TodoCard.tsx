@@ -15,6 +15,7 @@ import { fetchTelegram } from "../redux/actions/telegramActions";
 import dayjs from "dayjs";
 import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
+import ModalCard from "../utils/ModalCard";
 
 const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -31,6 +32,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   }, 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ModalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -117,6 +119,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
 ${description.map(task => `• ${task}`).join("\n")}
 `;
     try {
+      setModalOpen(false)
       setLoading(true);
       try {
         await GetRefreshTokenAndUpdateAccessToken(user?._id);
@@ -187,6 +190,7 @@ ${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
+      setModalOpen(false);
       setLoading(true);
       try {
         await GetRefreshTokenAndUpdateAccessToken(user?._id);
@@ -244,15 +248,23 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
                 {
                   telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token && currentDate === formattedDate ?
-                    <Button
-                      onClick={handleSendTodo}
-                      type="primary"
-                    >
-                      Send Day Start Status
-                    </Button>
+
+                    <>
+                      <Button
+                        onClick={() => setModalOpen(true)}
+                        type="primary"
+                      >
+                        Send Day Start Status
+                      </Button>
+                        <ModalCard
+                          title="Are you sure, Do you want to send the day start status?"
+                          ModalOpen={ModalOpen}
+                          setModalOpen={setModalOpen}
+                          onOk={handleSendTodo}
+                        />
+                    </>
                     : <Button
                       disabled
-                      onClick={handleSendTodo}
                       type="primary"
                     >
                       Send Day Start Status
@@ -260,15 +272,23 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 }
                 {
                   telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token && currentDate === formattedDate ?
-                    <Button
-                      onClick={handleSendDayEndTodo}
-                      type="primary"
-                    >
-                      Send Day End Status
-                    </Button>
+
+                    <>
+                      <Button
+                        onClick={() => setModalOpen(true)}
+                        type="primary"
+                      >
+                        Send Day End Status
+                      </Button>
+                      <ModalCard
+                        title="Are you sure, Do you want to send the day-end status?"
+                        ModalOpen={ModalOpen}
+                        setModalOpen={setModalOpen}
+                        onOk={handleSendDayEndTodo}
+                      />
+                    </>
                     : <Button
                       disabled
-                      onClick={handleSendDayEndTodo}
                       type="primary"
                     >
                       Send Day End Status
