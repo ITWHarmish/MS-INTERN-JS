@@ -49,6 +49,7 @@ const Tasktable = ({ selectedDate }) => {
         {
             title: 'Start Time',
             dataIndex: 'startTime',
+            width: 100,
             key: 'startTime',
             render: (startTime: string) =>
                 new Date(startTime).toLocaleTimeString([], {
@@ -60,6 +61,7 @@ const Tasktable = ({ selectedDate }) => {
         {
             title: 'End Time',
             dataIndex: 'endTime',
+            width: 100,
             key: 'endTime',
             render: (endTime: string) =>
                 new Date(endTime).toLocaleTimeString([], {
@@ -72,23 +74,24 @@ const Tasktable = ({ selectedDate }) => {
             title: 'Hours',
             dataIndex: 'hours',
             key: 'hours',
+            width: 70,
         },
         {
             title: 'Category',
             dataIndex: 'category',
             key: 'category',
-            width: 100,
+            width: 120,
         },
         {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            width: 350,
         },
         {
             title: 'Actions',
             dataIndex: 'actions',
             key: 'actions',
+            width: 100,
             align: 'center',
             render: (_, record) => (
                 <div style={{ display: 'flex', justifyContent: "center", gap: '20px', cursor: 'pointer', alignItems: "center" }}>
@@ -137,6 +140,15 @@ const Tasktable = ({ selectedDate }) => {
     const handleSubmit = async () => {
         if (!formData.startTime || !formData.endTime || !formData.category || !formData.description || !formData.date) {
             message.error("All fields are required!");
+            return;
+        }
+
+        const startTime = dayjs(formData.startTime, "HH:mm");
+        const endTime = dayjs(formData.endTime, "HH:mm");
+        const duration = endTime.diff(startTime, "minutes");
+
+        if (duration > 60) {
+            message.error("Time should not be more than 1 hour!");
             return;
         }
 
@@ -266,7 +278,7 @@ const Tasktable = ({ selectedDate }) => {
                     sticky={true}
                     className="ScrollInProgress"
                     style={{
-                        height:"calc(65vh - 50px)",
+                        height: "calc(65vh - 50px)",
                         position: "absolute",
                         overflowY: "auto",
                         overflowX: "hidden",
@@ -284,7 +296,7 @@ const Tasktable = ({ selectedDate }) => {
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined className="check"/>}
+                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined className="check" />}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
                     />
