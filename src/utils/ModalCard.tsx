@@ -16,7 +16,7 @@ const ModalCard = ({ title, ModalOpen, setModalOpen, onOk }) => {
                 onCancel={handleCancel}
                 okText="Yes"
                 cancelText="No"
-                width={350}
+                width={370}
             />
         </>
     )
