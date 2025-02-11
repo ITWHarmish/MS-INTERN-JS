@@ -51,22 +51,22 @@ body {
   background-color: #fbfafa;
 }
 
-.ScrollInProgress::-webkit-scrollbar{
+.ScrollInProgress::-webkit-scrollbar {
   width: 5px;
 }
 
 .ScrollInProgress::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+  box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }
- 
+
 .ScrollInProgress::-webkit-scrollbar-thumb {
-  background: #c9194b; 
+  background: #474787;
   border-radius: 10px;
 }
 
 .ScrollInProgress::-webkit-scrollbar-thumb:hover {
-  background: #b30000; 
+  background: #43437f;
 }
 
 .icons {
@@ -98,4 +98,19 @@ body {
 
 :where(.css-dev-only-do-not-override-1vn0kyl).ant-divider-horizontal {
   margin: 10px 0
+}
+
+
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.ant-menu-light.ant-menu-horizontal >.ant-menu-item {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 60px;
 }
