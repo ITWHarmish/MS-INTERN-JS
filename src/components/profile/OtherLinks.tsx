@@ -2,13 +2,14 @@ import {
   GithubOutlined,
   LinkedinOutlined,
 } from "@ant-design/icons";
-import { Avatar, Card, Flex, Input, Space, Typography } from "antd";
+import { Avatar, Card, Flex, Space, theme } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-const OtherLinks = ({ editMode, editedData, handleChange }) => {
+const OtherLinks = () => {
   const { user } = useSelector((state: RootState) => state.auth)
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
+  const { token } = theme.useToken();
   const fullName = user?.fullName;
 
   const getInitials = (name?: string) => {
@@ -28,9 +29,9 @@ const OtherLinks = ({ editMode, editedData, handleChange }) => {
       <Avatar
         src={telegramUser?.google?.profile?.picture || undefined}
         shape="square"
-        size={300}
+        size={100}
         icon={!telegramUser?.google?.profile?.picture ? initials : undefined}
-        style={{ border: "2px solid #c9101c" }}
+        style={{ border: "2px solid #474787" }}
       />
       <Space style={{ width: "100%" }} direction="vertical" size={15}>
         <Card className="cardWidth">
@@ -42,66 +43,18 @@ const OtherLinks = ({ editMode, editedData, handleChange }) => {
                 style={{
                   fontSize: "25px",
                   width: "auto",
-                  color: "#c9101c",
+                  color: token.colorPrimary,
                 }}
               >
-                <GithubOutlined style={{ margin: "10px" }} />
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "26px" }}>
+                  {
+                    user?.internsDetails?.githubURL && <a href={user?.internsDetails?.githubURL} target="_blanck"><GithubOutlined style={{  color: token.colorPrimary }} /></a>
+                  }
+                  {
+                    user?.internsDetails?.linkedinURL && <a href={user?.internsDetails?.linkedinURL} target="_blanck"><LinkedinOutlined style={{ color: token.colorPrimary }} /></a>
+                  }
+                </div>
               </Flex>
-            }
-            title={
-              <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
-                Github
-              </Typography.Text>
-            }
-            description={
-              <Typography.Text strong style={{ fontSize: "16px" }} >
-                {
-                  editMode
-                    ? <Input
-                      value={editedData?.githubURL}
-                      size="middle"
-                      placeholder='Enter Your GithubURL'
-                      onChange={(e) => handleChange(e, "githubURL")}
-                    />
-                    : user?.internsDetails?.githubURL ? <a href={user?.internsDetails?.githubURL} target="_blanck"><GithubOutlined style={{ fontSize: '36px' }} /></a> : "Not Provided"
-                }
-              </Typography.Text>
-            }
-          />
-        </Card>
-        <Card className="cardWidth">
-          <Card.Meta
-            avatar={
-              <Flex
-                justify="center"
-                align="center"
-                style={{
-                  fontSize: "25px",
-                  width: "auto",
-                  color: "#c9101c",
-                }}
-              >
-                <LinkedinOutlined style={{ margin: "10px" }} />
-              </Flex>
-            }
-            title={
-              <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
-                Linkdin
-              </Typography.Text>
-            }
-            description={
-              <Typography.Text strong style={{ fontSize: "16px" }}>
-                {
-                  editMode
-                    ? <Input
-                      value={editedData?.linkedinURL}
-                      size="middle"
-                      placeholder='Enter Your LinkedinURL'
-                      onChange={(e) => handleChange(e, "linkedinURL")}
-                    />
-                    : user?.internsDetails?.linkedinURL ? <a href={user?.internsDetails?.linkedinURL} target="_blanck">{user?.internsDetails?.linkedinURL}</a> : "Not Provided"
-                }
-              </Typography.Text>
             }
           />
         </Card>
