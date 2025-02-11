@@ -55,7 +55,7 @@ const Tasktable = ({ selectedDate }) => {
                 new Date(startTime).toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
-                    hour12: false,
+                    hour12: true,
                 }),
         },
         {
@@ -67,7 +67,7 @@ const Tasktable = ({ selectedDate }) => {
                 new Date(endTime).toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
-                    hour12: false,
+                    hour12: true,
                 }),
         },
         {
@@ -230,7 +230,7 @@ const Tasktable = ({ selectedDate }) => {
                 }}
             >
                 <RangePicker
-                    format="HH:mm"
+                    format="HH:mm A"
                     minuteStep={15}
                     onChange={handleRangeChange}
                     value={
