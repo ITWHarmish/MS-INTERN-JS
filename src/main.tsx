@@ -41,8 +41,9 @@ createRoot(document.getElementById('root')!).render(
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#c9194b',
-          borderRadius: 14,
+          colorPrimary: '#474787', // LIBERTY COLOR
+          borderRadius: 16,
+          fontFamily: "Rubik",
         },
       }}
     >

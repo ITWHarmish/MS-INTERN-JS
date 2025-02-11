@@ -5,17 +5,17 @@ import {
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Card, Flex, Input, Space, Typography } from "antd";
+import { Card, Flex, Input, Space, theme, Typography } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
   const { user } = useSelector((state: RootState) => state.auth)
-
+  const { token } = theme.useToken();
   return (
     <>
       <Space direction="vertical" size={15} style={{ width: "100%" }}>
-        <Typography.Text strong style={{ color: "#c9101c", fontSize: "20px" }}>
+        <Typography.Text strong style={{ color: token.colorPrimary, fontSize: "20px" }}>
           Personal Details
         </Typography.Text>
         <Space style={{ width: "100%" }} direction="vertical" size={15}>
@@ -29,14 +29,14 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                     fontSize: "20px",
                     height: "100%",
                     width: "auto",
-                    color: "#c9101c",
+                    color: token.colorPrimary,
                   }}
                 >
                   <UserOutlined style={{ margin: "10px" }} />
                 </Flex>
               }
               title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
+                <Typography.Text style={{ fontSize: "12px", color: "grey"  }}>
                   Name
                 </Typography.Text>
               }
@@ -45,12 +45,13 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                   {
                     editMode
                       ? <Input
+                        style={{}}
                         value={editedData?.fullName}
                         size="middle"
                         placeholder='Enter Full Name'
                         onChange={(e) => handleChange(e, "fullName")}
                       />
-                      : user?.fullName ? user?.fullName : <span style={{ color: "gray" }}>"Enter your Full Name"</span>
+                      : user?.fullName
                   }
                 </Typography.Text>
               }
@@ -66,7 +67,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                     fontSize: "20px",
                     height: "100%",
                     width: "auto",
-                    color: "#c9101c",
+                    color: token.colorPrimary,
                   }}
                 >
                   <MailOutlined style={{ margin: "10px" }} />
@@ -94,7 +95,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                     fontSize: "20px",
                     height: "100%",
                     width: "auto",
-                    color: "#c9101c",
+                    color: token.colorPrimary,
                   }}
                 >
                   <PhoneOutlined style={{ margin: "10px" }} />
@@ -131,7 +132,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                     fontSize: "20px",
                     height: "100%",
                     width: "auto",
-                    color: "#c9101c",
+                    color: token.colorPrimary,
                   }}
                 >
                   <BankOutlined style={{ margin: "10px" }} />
@@ -168,7 +169,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                     fontSize: "20px",
                     height: "100%",
                     width: "auto",
-                    color: "#c9101c",
+                    color: token.colorPrimary,
                   }}
                 >
                   <EnvironmentOutlined style={{ margin: "10px" }} />

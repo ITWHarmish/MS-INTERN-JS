@@ -20,6 +20,20 @@ const Navbar = () => {
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
     const { user } = useSelector((state: RootState) => state.auth)
 
+    const fullName = user?.fullName;
+
+    const getInitials = (name?: string) => {
+        if (!name) return "";
+
+        const words = name.trim().split(" ")
+
+        if (words.length === 0) return "";
+        if (words.length === 1) return words[0][0]?.toUpperCase() || "";
+        return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+    };
+
+    const initials = getInitials(fullName);
+
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate()
     const handleCancel = () => {
@@ -115,8 +129,8 @@ const Navbar = () => {
                 <Menu
                     onClick={onMenuClick}
                     selectedKeys={[current]}
+                    className="check"
                     style={{
-                        display: "flex",
                         gap: "1px",
                     }}
                     mode="horizontal"
@@ -128,17 +142,17 @@ const Navbar = () => {
 
                     {
                         telegramUser?.google?.tokens?.access_token ?
-                            <Button disabled type="default">Connect Google</Button>
+                            <Button style={{ fontFamily: "Rubik" }} disabled type="default">Connect Google</Button>
                             :
-                            <Button onClick={googleLogin} type="default">Connect Google</Button>
+                            <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
                     }
                     {telegramUser?.telegram?.session_id ? (
-                        <Button type="default" disabled>
+                        <Button style={{ fontFamily: "Rubik" }} type="default" disabled>
                             Telegram Connected
                         </Button>
                     ) : (
                         <>
-                            <Button onClick={showModal} type="default">
+                            <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
                                 Connect Telegram
                             </Button>
 
@@ -182,7 +196,7 @@ const Navbar = () => {
                                             <Input placeholder="Enter the code" />
                                         </Form.Item>
                                     )}
-                                    <Form.Item style={{marginBottom:"10px"}}>
+                                    <Form.Item style={{ marginBottom: "10px" }}>
                                         <Button type="primary" htmlType="submit" >
                                             {isOtpStep ? "Submit OTP" : "Send Code"}
                                         </Button>
@@ -194,8 +208,8 @@ const Navbar = () => {
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
-                                <span style={{ cursor: "pointer", marginRight: "7px" }}>{user.fullName}</span>
-                                <Avatar src={telegramUser?.google?.profile?.picture} style={{ marginRight: "7px", cursor: "pointer" }} icon={<UserOutlined />} />
+                                <span style={{ cursor: "pointer", marginRight: "7px", fontFamily: "Rubik" }}>{user.fullName}</span>
+                                <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "7px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
                             </span>
                         </Popover>
                     }

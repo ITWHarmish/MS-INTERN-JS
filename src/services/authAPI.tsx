@@ -3,8 +3,6 @@ import { API_END_POINT } from "../utils/constants";
 import { Login } from "../types/ILogin";
 import { IProfileForm, IProfileUpdate } from "../types/IProfile";
 
-
-
 export const LoginApi = async (userData: Login) => {
     try {
         const res = await axios.post(`${API_END_POINT}/auth/signin`, userData, {
@@ -12,7 +10,7 @@ export const LoginApi = async (userData: Login) => {
         })
         return res.data
     } catch (error) {
-        console.error('Error While Login:', error);
+        console.error('Error While Login:', error)
         throw error;
     }
 }

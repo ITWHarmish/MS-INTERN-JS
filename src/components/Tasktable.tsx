@@ -44,11 +44,12 @@ const Tasktable = ({ selectedDate }) => {
         const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
         return total + hours;
     }, 0);
-    
+
     const columns: TableProps<IColumns>['columns'] = [
         {
             title: 'Start Time',
             dataIndex: 'startTime',
+            width: 100,
             key: 'startTime',
             render: (startTime: string) =>
                 new Date(startTime).toLocaleTimeString([], {
@@ -60,6 +61,7 @@ const Tasktable = ({ selectedDate }) => {
         {
             title: 'End Time',
             dataIndex: 'endTime',
+            width: 100,
             key: 'endTime',
             render: (endTime: string) =>
                 new Date(endTime).toLocaleTimeString([], {
@@ -72,26 +74,27 @@ const Tasktable = ({ selectedDate }) => {
             title: 'Hours',
             dataIndex: 'hours',
             key: 'hours',
+            width: 70,
         },
         {
             title: 'Category',
             dataIndex: 'category',
             key: 'category',
-            width: 100,
+            width: 120,
         },
         {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            width: 350,
         },
         {
             title: 'Actions',
             dataIndex: 'actions',
             key: 'actions',
+            width: 100,
             align: 'center',
             render: (_, record) => (
-                <div style={{ display: 'flex', justifyContent:"center", gap: '20px', cursor: 'pointer', alignItems:"center" }}>
+                <div style={{ display: 'flex', justifyContent: "center", gap: '20px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
                         shape="circle"
                         icon={<EditOutlined className="check" />}
@@ -137,6 +140,15 @@ const Tasktable = ({ selectedDate }) => {
     const handleSubmit = async () => {
         if (!formData.startTime || !formData.endTime || !formData.category || !formData.description || !formData.date) {
             message.error("All fields are required!");
+            return;
+        }
+
+        const startTime = dayjs(formData.startTime, "HH:mm");
+        const endTime = dayjs(formData.endTime, "HH:mm");
+        const duration = endTime.diff(startTime, "minutes");
+
+        if (duration > 60) {
+            message.error("Time should not be more than 1 hour!");
             return;
         }
 
@@ -209,7 +221,7 @@ const Tasktable = ({ selectedDate }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "65vh"}}>
+        <div style={{ minHeight: "65vh" }}>
             <div
                 style={{
                     display: 'flex',
@@ -253,7 +265,9 @@ const Tasktable = ({ selectedDate }) => {
                     Submit
                 </Button>
             </div>
-            <div style={{ paddingTop: '10px' }}>
+            <div style={{
+                paddingTop: '10px',
+            }}>
                 <Table<IColumns>
                     columns={columns}
                     dataSource={timelogs}
@@ -261,6 +275,17 @@ const Tasktable = ({ selectedDate }) => {
                     bordered
                     size="small"
                     loading={loading}
+                    sticky={true}
+                    className="ScrollInProgress"
+                    style={{
+                        height: "calc(65vh - 50px)",
+                        position: "absolute",
+                        overflowY: "auto",
+                        overflowX: "hidden",
+                        left: "10px",
+                        right: "0",
+                        paddingRight: "10px",
+                    }}
                 />
             </div>
             <div>
@@ -271,7 +296,7 @@ const Tasktable = ({ selectedDate }) => {
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined  className="check"/>}
+                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined className="check" />}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
                     />

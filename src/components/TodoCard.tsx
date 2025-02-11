@@ -15,13 +15,13 @@ import { fetchTelegram } from "../redux/actions/telegramActions";
 import dayjs from "dayjs";
 import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
+import ModalCard from "../utils/ModalCard";
 
 const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const { timelogs } = useSelector((state: RootState) => state.timelog)
-  const [newTask, setNewTask] = useState("");
 
   const currentDate = dayjs(Date.now()).format("YYYY-MM-DD")
   const formattedDate = selectedDate.format("YYYY-MM-DD");
@@ -30,7 +30,10 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     return total + hours;
   }, 0);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newTask, setNewTask] = useState("");
+  const [isDayStartModalOpen, setIsDayStartModalOpen] = useState(false);
+  const [isDayEndModalOpen, setIsDayEndModalOpen] = useState(false);
+  const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -74,7 +77,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
       description: newTask,
     };
     setNewTask("");
-    setIsModalOpen(false);
+    setIsAddTodoModalOpen(false);
 
     try {
       setLoading(true);
@@ -117,6 +120,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
 ${description.map(task => `• ${task}`).join("\n")}
 `;
     try {
+      setIsDayStartModalOpen(false)
       setLoading(true);
       try {
         await GetRefreshTokenAndUpdateAccessToken(user?._id);
@@ -127,20 +131,26 @@ ${description.map(task => `• ${task}`).join("\n")}
       }
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
+        .then(() => true)
         .catch((error) => {
-          console.error("Error sending tasks on Telegram:", error);
-          message.error("Failed to send tasks on Telegram. Please try again.");
+          const errorMessage = error.response?.data || "Failed to send tasks on Telegram. Please try again.";
+          message.error(errorMessage);
+          return false;
         });
 
       const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
+        .then(() => true)
         .catch((error) => {
-          console.error("Error sending tasks to Google Chat:", error);
-          message.error("Failed to send tasks to Google Chat. Please try again.");
+          const errorMessage = error.response?.data || "Failed to send tasks on Google Chat. Please try again.";
+          message.error(errorMessage);
+          return false;
         });
 
-      await Promise.all([sendToChat, sendToGoogleChat]);
-
-      message.success("Tasks sent to chats successfully!");
+      const promiseResult = await Promise.all([sendToChat, sendToGoogleChat]);
+      const check = promiseResult.every((item) => item == false)
+      if (!check) {
+        message.success("Tasks sent to chats successfully!");
+      }
     } catch (error) {
       console.error("Error during sending tasks:", error);
       message.error("An unexpected error occurred. Please try again.");
@@ -187,6 +197,7 @@ ${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
+      setIsDayEndModalOpen(false);
       setLoading(true);
       try {
         await GetRefreshTokenAndUpdateAccessToken(user?._id);
@@ -198,38 +209,45 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
 
       const SendTimelogToSpreadSheets = SendTimelogToSheet(messageText)
         .catch((error) => {
-          console.error("Error sending Timelog to sheet:", error);
-          message.error("Failed to send Timelog to sheet. Please try again.");
+          message.error(error.response?.data || error.message || "Failed to send TimeLog. Please try again.");
+          return false;
         });
+
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
+        .then(() => true)
         .catch((error) => {
-          console.error("Error sending tasks on Telegram:", error);
-          message.error("Failed to send tasks on Telegram. Please try again.");
+          const errorMessage = error.response?.data || "Failed to send tasks on Telegram. Please try again.";
+          message.error(errorMessage);
+          return false;
         });
 
       const sendToGoogleChat = SendTodosToGoogleChat({ messageText: formattedTasks })
+        .then(() => true)
         .catch((error) => {
-          console.error("Error sending tasks to Google Chat:", error);
-          message.error("Failed to send tasks to Google Chat. Please try again.");
+          const errorMessage = error.response?.data || "Failed to send tasks on Google Chat. Please try again.";
+          message.error(errorMessage);
+          return false;
         });
 
-      await Promise.all([SendTimelogToSpreadSheets, sendToChat, sendToGoogleChat]);
-
-      message.success("Tasks sent to chats successfully!");
+      const promiseResult = await Promise.all([SendTimelogToSpreadSheets, sendToChat, sendToGoogleChat]);
+      const check = promiseResult.every((item) => item == false)
+      if (!check) {
+        message.success("Tasks sent to chats successfully!");
+      }
     } catch (error) {
       console.error("Error during sending tasks:", error);
-      message.error("An unexpected error occurred. Please try again.");
+      message.error("Failed to send tasks on Telegram. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setIsAddTodoModalOpen(false);
   };
 
   const showModal = () => {
-    setIsModalOpen(true);
+    setIsAddTodoModalOpen(true);
   };
 
   const { TextArea } = Input;
@@ -243,35 +261,49 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             extra={
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
                 {
-                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token && currentDate === formattedDate ?
+                  (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? <>
                     <Button
-                      onClick={handleSendTodo}
+                      onClick={() => setIsDayStartModalOpen(true)}
                       type="primary"
                     >
-                      Send Day Start Status
+                      Day Start Status
                     </Button>
+                    <ModalCard
+                      title="Are you sure, Do you want to send the day start status?"
+                      ModalOpen={isDayStartModalOpen}
+                      setModalOpen={setIsDayStartModalOpen}
+                      onOk={handleSendTodo}
+                    />
+                  </>
                     : <Button
                       disabled
-                      onClick={handleSendTodo}
                       type="primary"
                     >
-                      Send Day Start Status
+                      Day Start Status
                     </Button>
                 }
                 {
-                  telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token && currentDate === formattedDate ?
-                    <Button
-                      onClick={handleSendDayEndTodo}
-                      type="primary"
-                    >
-                      Send Day End Status
-                    </Button>
+                  (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ?
+
+                    <>
+                      <Button
+                        onClick={() => setIsDayEndModalOpen(true)}
+                        type="primary"
+                      >
+                        Day End Status
+                      </Button>
+                      <ModalCard
+                        title="Are you sure, Do you want to send the day-end status?"
+                        ModalOpen={isDayEndModalOpen}
+                        setModalOpen={setIsDayEndModalOpen}
+                        onOk={handleSendDayEndTodo}
+                      />
+                    </>
                     : <Button
                       disabled
-                      onClick={handleSendDayEndTodo}
                       type="primary"
                     >
-                      Send Day End Status
+                      Day End Status
                     </Button>
                 }
               </div>
@@ -294,7 +326,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
 
                   <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
-                  <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit" cancelButtonProps={{ danger: true }}>
+                  <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isAddTodoModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit">
 
                     <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
                       <TextArea rows={4} placeholder="Description"
@@ -312,7 +344,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                         className="ScrollInProgress" style={{
                           height: "calc(65vh - 9vh)",
                           width: "100%",
-                          overflow: "auto",
+                          overflowY: "auto",
                           overflowX: "hidden",
                           position: "absolute",
                           right: "0",
@@ -348,8 +380,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                     <Button
                                       size="small"
                                       shape="circle"
-                                      style={{ paddingBottom: "3px" }}
-                                      icon={<DeleteOutlined />}
+                                      icon={<DeleteOutlined className="check" />}
                                       danger
                                       onClick={() => handleDelete(task.todoId)}
                                     />
