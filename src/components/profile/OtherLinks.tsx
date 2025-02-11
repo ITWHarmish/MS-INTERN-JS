@@ -34,30 +34,32 @@ const OtherLinks = () => {
         style={{ border: "2px solid #474787" }}
       />
       <Space style={{ width: "100%" }} direction="vertical" size={15}>
-        <Card className="cardWidth">
-          <Card.Meta
-            avatar={
-              <Flex
-                justify="center"
-                align="center"
-                style={{
-                  fontSize: "25px",
-                  width: "auto",
-                  color: token.colorPrimary,
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "26px" }}>
-                  {
-                    user?.internsDetails?.githubURL && <a href={user?.internsDetails?.githubURL} target="_blanck"><GithubOutlined style={{  color: token.colorPrimary }} /></a>
-                  }
-                  {
-                    user?.internsDetails?.linkedinURL && <a href={user?.internsDetails?.linkedinURL} target="_blanck"><LinkedinOutlined style={{ color: token.colorPrimary }} /></a>
-                  }
-                </div>
-              </Flex>
-            }
-          />
-        </Card>
+        {user?.internsDetails?.linkedinURL && user?.internsDetails?.githubURL &&
+          <Card className="cardWidth">
+            <Card.Meta
+              avatar={
+                <Flex
+                  justify="center"
+                  align="center"
+                  style={{
+                    fontSize: "25px",
+                    width: "auto",
+                    color: token.colorPrimary,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "26px" }}>
+                    {
+                      user?.internsDetails?.githubURL && <a href={user?.internsDetails?.githubURL} target="_blanck"><GithubOutlined style={{ color: token.colorPrimary }} /></a>
+                    }
+                    {
+                      user?.internsDetails?.linkedinURL && <a href={user?.internsDetails?.linkedinURL} target="_blanck"><LinkedinOutlined style={{ color: token.colorPrimary }} /></a>
+                    }
+                  </div>
+                </Flex>
+              }
+            />
+          </Card>
+        }
       </Space>
     </Flex>
   );
