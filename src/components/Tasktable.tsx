@@ -3,13 +3,14 @@ import { Button, Card, Col, Input, message, Row, Select, Table, TimePicker, Typo
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
 import dayjs from 'dayjs';
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fetchTimelogs } from '../redux/actions/timelogActions';
 import { AppDispatch, RootState } from '../redux/store';
 import type { TableProps } from 'antd';
 import { IColumns, ISetRowProps, TimeLog } from '../types/ITimelog';
-
+dayjs.extend(localizedFormat);
 const Tasktable = ({ selectedDate }) => {
 
     const formattedDate = selectedDate.format("YYYY-MM-DD");
@@ -52,11 +53,7 @@ const Tasktable = ({ selectedDate }) => {
             width: 100,
             key: 'startTime',
             render: (startTime: string) =>
-                new Date(startTime).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true,
-                }),
+                dayjs(startTime).format('hh:mm A'),
         },
         {
             title: 'End Time',
@@ -64,11 +61,7 @@ const Tasktable = ({ selectedDate }) => {
             width: 100,
             key: 'endTime',
             render: (endTime: string) =>
-                new Date(endTime).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true,
-                }),
+                dayjs(endTime).format('hh:mm A'),
         },
         {
             title: 'Hours',
@@ -143,19 +136,25 @@ const Tasktable = ({ selectedDate }) => {
             return;
         }
 
-        const startTime = dayjs(formData.startTime, "HH:mm");
-        const endTime = dayjs(formData.endTime, "HH:mm");
-        const duration = endTime.diff(startTime, "minutes");
+        const startTimeObj = dayjs(formData.startTime, "HH:mm");
+        const endTimeObj = dayjs(formData.endTime, "HH:mm");
+        const duration = endTimeObj.diff(startTimeObj, "minutes")/60;
 
         if (duration > 60) {
             message.error("Time should not be more than 1 hour!");
             return;
         }
-
+        const payload = {
+            ...formData,
+            startTime: dayjs(formData.startTime, "HH:mm").format(),
+            endTime: dayjs(formData.endTime, "HH:mm").format(),
+            hours: Number(duration).toFixed(2),
+        };
+        
         setLoading(true);
         if (editingId) {
             try {
-                await UpdateTimelog(editingId, formData);
+                await UpdateTimelog(editingId, payload);
                 dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Updated successful!');
 
@@ -165,7 +164,7 @@ const Tasktable = ({ selectedDate }) => {
             }
         } else {
             try {
-                await AddTimelog(formData);
+                await AddTimelog(payload);
                 dispatch(fetchTimelogs({ date: formattedDate }))
                 message.success('TimeLog Added successful!');
             } catch (error) {
