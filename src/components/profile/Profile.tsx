@@ -104,6 +104,9 @@ const Profile = () => {
   }, [user, navigate])
 
   return (
+    <div
+    style={{backgroundColor: token.colorBgLayout}}
+    >
       <Spin
         spinning={loading}
         size="large"
@@ -116,7 +119,7 @@ const Profile = () => {
             setEditMode={setEditMode}
             handleSave={handleSave}
           />
-          <Layout style={{ backgroundColor: "white", height: "auto", overflow: "hidden" }}>
+          <Layout style={{ height: "auto", overflow: "hidden" }}>
             <Content
               style={{
                 backgroundColor: "white",
@@ -124,7 +127,7 @@ const Profile = () => {
                 margin: "auto",
               }}
             >
-              <Flex style={{ width: "auto", height: "fit-content" }} gap={70}>
+              <Flex style={{ width: "auto", height: "fit-content", backgroundColor: token.colorBgLayout }} gap={70}>
                 <Flex>
                   <OtherLinks
                   />
@@ -402,6 +405,7 @@ const Profile = () => {
           </Layout>
         </Flex>
       </Spin>
+    </div>
   );
 };
 

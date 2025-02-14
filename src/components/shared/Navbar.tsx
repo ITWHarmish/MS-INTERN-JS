@@ -1,5 +1,5 @@
-import { FieldTimeOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
+import { FieldTimeOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
@@ -11,7 +11,7 @@ import { setUser } from "../../redux/slices/authSlice";
 import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 
-const Navbar = () => {
+const Navbar = ({ onToggleTheme, currentTheme }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
@@ -19,6 +19,7 @@ const Navbar = () => {
 
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
     const { user } = useSelector((state: RootState) => state.auth)
+    const { token } = theme.useToken();
 
     const fullName = user?.fullName;
 
@@ -205,16 +206,25 @@ const Navbar = () => {
                             </Modal>
                         </>
                     )}
+                    <div style={{ margin: "0px 0px" }}>
+                        <Button onClick={onToggleTheme} style={{ border: "none" }}>
+                            {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
+                        </Button>
+                    </div>
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
-                                <span style={{ cursor: "pointer", marginRight: "7px", fontFamily: "Rubik" }}>{user.fullName}</span>
+                                <span style={{
+                                    marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"
+                                }}
+                                    className={token.colorBgLayout === "White" ? "" : "navbarSpanDark"}
+                                >{user.fullName}</span>
                                 <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "7px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
                             </span>
                         </Popover>
                     }
                 </div>
-            </div>
+            </div >
         </>
     );
 };

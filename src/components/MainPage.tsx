@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { UpdateTodoInProgressDate } from "../services/todoAPI";
-import { fetchTodos } from "../redux/actions/todosAction";
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
 import { fetchTelegram } from "../redux/actions/telegramActions";
@@ -59,18 +57,6 @@ const MainPage = () => {
   }, [searchParams, navigate, dispatch]);
 
   useEffect(() => {
-    const updateInProgressTodosDate = async () => {
-      try {
-        await UpdateTodoInProgressDate();
-        dispatch(fetchTodos());
-      } catch (error) {
-        console.error("Failed to update todo date:", error);
-      }
-    };
-    updateInProgressTodosDate();
-  }, [dispatch]);
-
-  useEffect(() => {
     if (user) {
       if (user.internsDetails === undefined || user.internsDetails === "") {
         navigate("/fillUpForm");
@@ -83,7 +69,7 @@ const MainPage = () => {
   return (
     <>
       <Spin size="large" tip="Loading..." spinning={loading} className="full-page-spin">
-        <Row className="Check" style={{height:"calc(100vh - 19vh )"}}>
+        <Row className="Check" style={{ height: "calc(100vh - 100px )" }}>
           <Col md={15}>
             <div
               style={{

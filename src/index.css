@@ -108,9 +108,18 @@ body {
   height: 60px;
 }
 
-.ant-menu-light.ant-menu-horizontal >.ant-menu-item {
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item {
   justify-content: center;
   display: flex;
   align-items: center;
   height: 60px;
+}
+
+.BgCard {
+  background-color: black;
+  color: white;
+}
+
+.navbarSpanDark {
+  color: white;
 }
