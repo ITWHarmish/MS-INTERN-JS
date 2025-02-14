@@ -1,16 +1,18 @@
-import { Typography } from "antd"
+import { theme, Typography } from "antd"
 
 const Footer = () => {
+    const { token } = theme.useToken();
+
     return (
         <div
             style={{
-                backgroundColor: "#ebf2ed",
+                backgroundColor: token.colorPrimaryBg,
+                borderTop:"1px solid #fafafa",
                 width: "100%",
-                height:"5vh",
-                padding: "10px 0",
-                position:"fixed",
+                height: "50px",
+                position: "fixed",
                 bottom: "0px",
-                display:"flex",
+                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
             }}
@@ -19,11 +21,11 @@ const Footer = () => {
                 style={{
                     display: "flex",
                     justifyContent: "center",
-                    alignItems:"center",
+                    alignItems: "center",
                     fontSize: "15px",
                 }}
             >
-                Toshal Management System ©{new Date().getFullYear()} Created by Toshal Infotech 
+                Toshal Management System ©{new Date().getFullYear()} Created by Toshal Infotech
             </Typography.Text>
         </div>
     )

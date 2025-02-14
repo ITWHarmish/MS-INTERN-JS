@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Input, message, Modal } from "antd";
+import { Button, Card, Input, message, Modal, theme } from "antd";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
@@ -22,6 +22,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const { timelogs } = useSelector((state: RootState) => state.timelog)
+  const { token } = theme.useToken()
 
   const currentDate = dayjs(Date.now()).format("YYYY-MM-DD")
   const formattedDate = selectedDate.format("YYYY-MM-DD");
@@ -75,6 +76,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     const todo = {
       userId: user?._id,
       description: newTask,
+      date : currentDate
     };
     setNewTask("");
     setIsAddTodoModalOpen(false);
@@ -164,9 +166,7 @@ ${description.map(task => `• ${task}`).join("\n")}
       message.warning("No Timelogs to Send!");
       return;
     }
-    const currentDate = dayjs(Date.now()).format("YYYY-MM-DD")
-    const formattedDate = selectedDate.format("YYYY-MM-DD");
-
+    
     if (currentDate != formattedDate) {
       message.warning("Timelog must be Current Date!");
       return;
@@ -359,11 +359,13 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                               <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
 
                                 <Card
+                                className={token.colorBgLayout === "White" ? "" : "BgCard" }
                                   type="inner"
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
+                               
                                   <div
                                     style={{
                                       display: "flex",
@@ -422,8 +424,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                             <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
 
                               <Card
+                                className={token.colorBgLayout === "White" ? "" : "BgCard" }
                                 type="inner"
-                                style={{ backgroundColor: "#fafafa" }}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}

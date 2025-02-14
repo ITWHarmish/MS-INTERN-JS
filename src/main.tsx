@@ -44,6 +44,8 @@ createRoot(document.getElementById('root')!).render(
           colorPrimary: '#474787', // LIBERTY COLOR
           borderRadius: 16,
           fontFamily: "Rubik",
+          colorPrimaryBg:"#ebf2ed",
+          colorBgLayout:"White",
         },
       }}
     >

@@ -43,12 +43,13 @@ const Tasktable = ({ selectedDate }) => {
             endTime = dayjs('10:00', 'HH:mm');
         }
 
-        setFormData({
-            ...formData,
+        setFormData(prevFormData => ({ 
+            ...prevFormData,
             startTime: startTime.format('HH:mm'),
             endTime: endTime.format('HH:mm'),
-        });
+        }));
     }, [timelogs]);
+
     const SetRow: React.FC<ISetRowProps> = ({ label, value, textStyle, key }: ISetRowProps) => (
         <Row gutter={16} key={key}>
             <Col md={12} span={18}>
@@ -157,9 +158,9 @@ const Tasktable = ({ selectedDate }) => {
 
         const startTimeObj = dayjs(formData.startTime, "HH:mm");
         const endTimeObj = dayjs(formData.endTime, "HH:mm");
-        const duration = endTimeObj.diff(startTimeObj, "minutes")/60;
+        const duration = endTimeObj.diff(startTimeObj, "minutes") / 60;
 
-        if (duration > 60) {
+        if (duration > 1) {
             message.error("Time should not be more than 1 hour!");
             return;
         }

@@ -1,16 +1,36 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import Navbar from "./shared/Navbar"
 import { Verify } from "../services/authAPI";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setUser } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import Footer from "./shared/Footer";
 import { useSelector } from "react-redux";
+import { ConfigProvider, theme, Layout as Layouts } from "antd";
 const Layout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
+  const [currentTheme, setCurrentTheme] = useState("light")
+  const lightTheme = {
+    algorithm: theme.defaultAlgorithm,
+    token: {
+      colorPrimary: "#474787",
+      borderRadius: 16,
+      fontFamily: "Rubik",
+      colorBgLayout: "White",
+    },
+  };
+  const darkTheme = {
+    algorithm: theme.darkAlgorithm,
+    token: {
+      borderRadius: 16,
+      fontFamily: "Rubik",
+      colorBgLayout: "black",
+      colorPrimaryBg: "black",
+    },
+  }
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -30,13 +50,20 @@ const Layout = () => {
     }
   }, [user, navigate])
 
+  const toggleTheme = () => {
+    setCurrentTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
+  };
 
   return (
-    <div>
-      <Navbar />
-      <Outlet />
-      <Footer />
-    </div>
+    <ConfigProvider
+      theme={currentTheme === "light" ? lightTheme : darkTheme}
+    >
+      <Layouts style={{height:"100vh"}}>
+        <Navbar onToggleTheme={toggleTheme} currentTheme={currentTheme} />
+        <Outlet />
+        <Footer />
+      </Layouts>
+    </ConfigProvider>
   )
 }
 
