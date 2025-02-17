@@ -123,3 +123,34 @@ body {
 .navbarSpanDark {
   color: white;
 }
+
+.button {
+  border-radius: 16px;
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+  -o-animation: glowing 1500ms infinite;
+  animation: glowing 1500ms infinite;
+}
+@-webkit-keyframes glowing {
+  0% { background-color: #474787; -webkit-box-shadow: 0 0 0px #474787; }
+  50% { background-color: #FF0000; -webkit-box-shadow: 0 0 0px #FF0000; }
+  100% { background-color: #474787; -webkit-box-shadow: 0 0 0px #474787; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: #474787; -moz-box-shadow: 0 0 0px #474787; }
+  50% { background-color: #FF0000; -moz-box-shadow: 0 0 0px #FF0000; }
+  100% { background-color: #474787; -moz-box-shadow: 0 0 0px #474787; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: #474787; box-shadow: 0 0 0px #474787; }
+  50% { background-color: #FF0000; box-shadow: 0 0 0px #FF0000; }
+  100% { background-color: #474787; box-shadow: 0 0 0px #474787; }
+}
+
+@keyframes glowing {
+  0% { background-color: #474787; box-shadow: 0 0 0px #474787; }
+  50% { background-color: #FF0000; box-shadow: 0 0 0px #FF0000; }
+  100% { background-color: #474787; box-shadow: 0 0 0px #474787; }
+}

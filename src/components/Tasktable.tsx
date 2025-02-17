@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, LeftOutlined, RightOutlined, } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, LeftOutlined, PauseCircleOutlined, PlayCircleOutlined, RightOutlined, } from '@ant-design/icons';
 import { Button, Card, Col, Input, message, Row, Select, Table, TimePicker, Typography, } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
@@ -13,7 +13,7 @@ import { IColumns, ISetRowProps, TimeLog } from '../types/ITimelog';
 
 dayjs.extend(localizedFormat);
 
-const Tasktable = ({ selectedDate }) => {
+const Tasktable = ({ selectedDate, setIsRunning, isRunning }) => {
 
     const formattedDate = selectedDate.format("YYYY-MM-DD");
     const [showCard, setShowCard] = useState(false);
@@ -21,7 +21,7 @@ const Tasktable = ({ selectedDate }) => {
     const [formData, setFormData] = useState({
         startTime: '',
         endTime: '',
-        category: '',
+        category: 'coding',
         description: '',
         date: formattedDate,
     });
@@ -43,7 +43,7 @@ const Tasktable = ({ selectedDate }) => {
             endTime = dayjs('10:00', 'HH:mm');
         }
 
-        setFormData(prevFormData => ({ 
+        setFormData(prevFormData => ({
             ...prevFormData,
             startTime: startTime.format('HH:mm'),
             endTime: endTime.format('HH:mm'),
@@ -112,6 +112,7 @@ const Tasktable = ({ selectedDate }) => {
                         shape="circle"
                         icon={<EditOutlined className="check" />}
                         size="small"
+                        disabled={isRunning ? true : false}
                         onClick={() => {
                             handleEdit(record);
                         }}
@@ -121,6 +122,7 @@ const Tasktable = ({ selectedDate }) => {
                         danger
                         icon={<DeleteOutlined className="check" />}
                         size="small"
+                        disabled={isRunning ? true : false}
                         onClick={() => {
                             handleDelete(record._id);
                         }}
@@ -195,7 +197,7 @@ const Tasktable = ({ selectedDate }) => {
         setFormData({
             startTime: '',
             endTime: '',
-            category: '',
+            category: 'coding',
             description: '',
             date: formattedDate,
         });
@@ -238,6 +240,65 @@ const Tasktable = ({ selectedDate }) => {
         setFormData((prev) => ({ ...prev, date: formattedDate }));
     }, [formattedDate]);
 
+    // for play pause button
+
+    // const [isRunning, setIsRunning] = useState(false);
+
+    const handleToggle = async () => {
+
+        if (!formData.category || !formData.description || !formData.date) {
+            message.error("All fields are required!");
+            return;
+        }
+
+        if (isRunning) {
+            const startTimeISO = formData.startTime;
+            const endTimeISO = dayjs(`${formattedDate} ${dayjs().format("HH:mm")}`).format();
+            const duration = dayjs(endTimeISO).diff(dayjs(startTimeISO), "minutes");
+
+
+            // if (duration > 1) {
+            //     message.warning("Auto-stopping: Time exceeded 1 hour!");
+            //     // return;
+            //     // setIsRunning(false); 
+            //     // return;
+            // }
+
+            const hours = (duration / 60).toFixed(2);
+
+            const updatedData = {
+                ...formData,
+                endTime: endTimeISO,
+                hours,
+            };
+            setFormData(updatedData);
+            try {
+                await AddTimelog(updatedData);
+                dispatch(fetchTimelogs({ date: formattedDate }));
+                message.success("Time log saved successfully!");
+            } catch {
+                message.error("Failed to save time log.");
+            }
+            setIsRunning(false);
+            setFormData((prev) => ({
+                ...prev,
+                category: 'coding',
+                description: '',
+                date: formattedDate,
+            }));
+
+        } else {
+            const startTimeISO = dayjs(`${formattedDate} ${dayjs().format("HH:mm")}`).format();
+            setFormData({
+                ...formData,
+                startTime: startTimeISO,
+                endTime: '',
+            });
+            setIsRunning(true);
+            message.success("Your TimeLog added Started Successfully")
+        }
+    };
+
     return (
         <div style={{ minHeight: "65vh" }}>
             <div
@@ -257,6 +318,7 @@ const Tasktable = ({ selectedDate }) => {
                             : null
                     }
                     required
+                    disabled={isRunning ? true : false}
                 />
 
                 <Select
@@ -264,6 +326,7 @@ const Tasktable = ({ selectedDate }) => {
                     showSearch
                     placeholder="Select Category"
                     optionFilterProp="label"
+                    disabled={isRunning ? true : false}
                     options={[
                         { value: 'learning', label: 'Learning' },
                         { value: 'coding', label: 'Coding' },
@@ -277,11 +340,21 @@ const Tasktable = ({ selectedDate }) => {
                     style={{ width: '450px' }}
                     value={formData.description}
                     onChange={handleChangeDescription}
+                    disabled={isRunning ? true : false}
                     required
                 />
-                <Button onClick={handleSubmit} type="primary">
+                <Button onClick={handleSubmit} disabled={isRunning ? true : false} type="primary">
                     Submit
                 </Button>
+                <Button
+                    className={isRunning ? 'button' : ''}
+                    onClick={handleToggle}
+                    type='primary'
+                    icon={isRunning ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+                >
+                    {isRunning ? "Stop" : "Start"}
+                </Button>
+
             </div>
             <div style={{
                 paddingTop: '10px',
