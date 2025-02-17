@@ -21,7 +21,7 @@ const Tasktable = ({ selectedDate }) => {
     const [formData, setFormData] = useState({
         startTime: '',
         endTime: '',
-        category: '',
+        category: 'coding',
         description: '',
         date: formattedDate,
     });
@@ -43,7 +43,7 @@ const Tasktable = ({ selectedDate }) => {
             endTime = dayjs('10:00', 'HH:mm');
         }
 
-        setFormData(prevFormData => ({ 
+        setFormData(prevFormData => ({
             ...prevFormData,
             startTime: startTime.format('HH:mm'),
             endTime: endTime.format('HH:mm'),
@@ -195,7 +195,7 @@ const Tasktable = ({ selectedDate }) => {
         setFormData({
             startTime: '',
             endTime: '',
-            category: '',
+            category: 'coding',
             description: '',
             date: formattedDate,
         });

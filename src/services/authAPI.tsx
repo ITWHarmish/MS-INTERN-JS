@@ -15,18 +15,6 @@ export const LoginApi = async (userData: Login) => {
     }
 }
 
-export const Verify = async () => {
-    try {
-        const res = await axios.get(`${API_END_POINT}/auth/verify`, {
-            withCredentials: true,
-        })
-        return res.data
-    } catch (error) {
-        console.error('Error While Verifying:', error);
-        throw error;
-    }
-}
-
 export const GetCurrentUser = async () => {
     try {
         const res = await axios.get(`${API_END_POINT}/auth/getCurrentUser`, {
