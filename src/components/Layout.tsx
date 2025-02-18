@@ -60,6 +60,7 @@ const Layout = () => {
   const toggleTheme = () => {
     setCurrentTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
   };
+  console.log("Check")
 
   return (
     <ConfigProvider
