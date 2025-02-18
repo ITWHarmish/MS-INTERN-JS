@@ -35,6 +35,7 @@ const Layout = () => {
   const [currentTheme, setCurrentTheme] = useState("light")
 
   const token = Cookies.get("ms_intern_jwt");
+  console.log("token", token)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,17 +51,17 @@ const Layout = () => {
       } catch (error) {
         console.error("Invalid token:", error);
         navigate("/login");
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
-    setLoading(false);
   }, [navigate, dispatch, token]);
 
 
   const toggleTheme = () => {
     setCurrentTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
   };
-  console.log("Check")
 
   return (
     <ConfigProvider
