@@ -33,8 +33,14 @@ const Layout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light")
+  const [token, setToken] = useState(Cookies.get("ms_intern_jwt"));
 
-  const token = Cookies.get("ms_intern_jwt");
+useEffect(() => {
+  setToken(Cookies.get("ms_intern_jwt"));
+}, []);
+
+
+  // const token = Cookies.get("ms_intern_jwt");
   console.log("token", token)
 
   useEffect(() => {
