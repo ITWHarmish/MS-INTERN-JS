@@ -6,8 +6,9 @@ import { setUser } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import Footer from "./shared/Footer";
-import { ConfigProvider, theme, Layout as Layouts, Spin } from "antd";
+import { ConfigProvider, theme, Layout as Layouts } from "antd";
 import Cookies from "js-cookie"
+import Spinner from "../utils/Spinner";
 
 const lightTheme = {
   algorithm: theme.defaultAlgorithm,
@@ -64,7 +65,7 @@ const Layout = () => {
     <ConfigProvider
       theme={currentTheme === "light" ? lightTheme : darkTheme}
     >
-      {loading ? <Spin className="full-page-spin" /> :
+      {loading ? <Spinner /> :
         <Layouts style={{ height: "100vh" }}>
           <Navbar onToggleTheme={toggleTheme} currentTheme={currentTheme} />
           <Outlet />

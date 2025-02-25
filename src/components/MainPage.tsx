@@ -1,4 +1,4 @@
-import { Col, Row, Spin } from "antd";
+import { Col, Row } from "antd";
 import "../index.css";
 import Timelog from "./Timelog";
 import TodoCard from "./TodoCard";
@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { fetchTodos } from "../redux/actions/todosAction";
+import Spinner from "../utils/Spinner";
 
 const token = Cookies.get('ms_intern_jwt')
 
@@ -82,7 +83,8 @@ const MainPage = () => {
 
   return (
     <>
-      <Spin size="large" tip="Loading..." spinning={loading} className="full-page-spin">
+      {loading ?
+        <Spinner /> :
         <Row className="Check" style={{ height: "calc(100vh - 100px )" }}>
           <Col md={15}>
             <div
@@ -99,7 +101,7 @@ const MainPage = () => {
             <TodoCard selectedDate={selectedDate} setLoading={setLoading} />
           </Col>
         </Row>
-      </Spin>
+      }
     </>
   );
 };
