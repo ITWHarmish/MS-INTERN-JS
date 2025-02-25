@@ -10,6 +10,7 @@ import { LogoutApi } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
 import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
+import Cookies from "js-cookie";
 
 const Navbar = ({ onToggleTheme, currentTheme }) => {
 
@@ -62,6 +63,7 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         await LogoutApi()
         dispatch(setUser(null));
         dispatch(clearTelegramData());
+        Cookies.remove("ms_intern_jwt");
         navigate("/login");
         message.success("Logged out successfully!");
     }

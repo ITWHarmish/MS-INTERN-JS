@@ -33,15 +33,8 @@ const Layout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light")
-  const [token, setToken] = useState(Cookies.get("ms_intern_jwt"));
 
-useEffect(() => {
-  setToken(Cookies.get("ms_intern_jwt"));
-}, []);
-
-
-  // const token = Cookies.get("ms_intern_jwt");
-  console.log("token", token)
+  const token = Cookies.get("ms_intern_jwt");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,13 +50,11 @@ useEffect(() => {
       } catch (error) {
         console.error("Invalid token:", error);
         navigate("/login");
-      } finally {
-        setLoading(false);
       }
     }
     fetchData();
+    setLoading(false);
   }, [navigate, dispatch, token]);
-
 
   const toggleTheme = () => {
     setCurrentTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
@@ -73,7 +64,7 @@ useEffect(() => {
     <ConfigProvider
       theme={currentTheme === "light" ? lightTheme : darkTheme}
     >
-      {loading ? <Spin /> :
+      {loading ? <Spin className="full-page-spin" /> :
         <Layouts style={{ height: "100vh" }}>
           <Navbar onToggleTheme={toggleTheme} currentTheme={currentTheme} />
           <Outlet />

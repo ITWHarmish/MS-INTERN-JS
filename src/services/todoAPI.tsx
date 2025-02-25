@@ -1,13 +1,20 @@
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
 import { Todo } from "../types/ITodo";
+import Cookies from "js-cookie";
 
+const getAuthHeaders = () => {
+  const token = Cookies.get('ms_intern_jwt');
+  return {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+  };
+};
 
 export const AddTodo = async (todo: Todo) => {
   try {
     const res = await axios.post(`${API_END_POINT}/todo/addTodo`, todo, {
-
-      withCredentials: true,
+      headers: getAuthHeaders(),
     })
     return res.data
   } catch (error) {
@@ -18,7 +25,9 @@ export const AddTodo = async (todo: Todo) => {
 
 export const GetTodo = async () => {
   try {
-    const res = await axios.get(`${API_END_POINT}/todo/getTodo`, { withCredentials: true });
+    const res = await axios.get(`${API_END_POINT}/todo/getTodo`, {
+      headers: getAuthHeaders(),
+    });
     return res.data;
   } catch (error) {
     console.error('Error while fetching time logs:', error);
@@ -29,7 +38,9 @@ export const GetTodo = async () => {
 
 export const UpdateTodo = async (id: string, status: string) => {
   try {
-    const res = await axios.put(`${API_END_POINT}/todo/updateTodo/${id}`, { status }, { withCredentials: true });
+    const res = await axios.put(`${API_END_POINT}/todo/updateTodo/${id}`, { status }, {
+      headers: getAuthHeaders(),
+    });
     return res.data;
   } catch (error) {
     console.error('Error while updating Todo:', error);
@@ -40,7 +51,9 @@ export const UpdateTodo = async (id: string, status: string) => {
 
 export const DeleteTodo = async (id: string) => {
   try {
-    const res = await axios.delete(`${API_END_POINT}/todo/deleteTodo/${id}`, { withCredentials: true });
+    const res = await axios.delete(`${API_END_POINT}/todo/deleteTodo/${id}`, {
+      headers: getAuthHeaders(),
+    });
     return res.data;
   } catch (error) {
     console.error('Error while Deleting Todo:', error);
@@ -50,7 +63,9 @@ export const DeleteTodo = async (id: string) => {
 
 export const UpdateTodoInProgressDate = async () => {
   try {
-    const res = await axios.put(`${API_END_POINT}/todo/updateInProgressDate`, {}, { withCredentials: true });
+    const res = await axios.put(`${API_END_POINT}/todo/updateInProgressDate`, {}, {
+      headers: getAuthHeaders(),
+    });
     return res.data;
   } catch (error) {
     console.error('Error while updating Todo InProgressDate:', error);

@@ -7,6 +7,7 @@ import { setUser } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import Cookies from 'js-cookie';
 
 const Login = () => {
 
@@ -31,12 +32,13 @@ const Login = () => {
         try {
             const response = await LoginApi(values);
             message.success('Login successful!');
+            Cookies.set('ms_intern_jwt', response.token)
             dispatch(setUser(response.user))
             if (response.user.internsDetails === "") {
                 navigate("/fillUpForm");
             }
             else {
-                navigate("/")
+                navigate("/");
             }
         } catch (error) {
             message.error('Login failed! Please try again.');

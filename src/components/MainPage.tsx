@@ -12,6 +12,10 @@ import { fetchTelegram } from "../redux/actions/telegramActions";
 import { TelegramSessionValidation } from "../services/telegramAPI";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { fetchTodos } from "../redux/actions/todosAction";
+
+const token = Cookies.get('ms_intern_jwt')
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -44,7 +48,10 @@ const MainPage = () => {
       try {
         await axios.get(`${API_END_POINT}/oauth2callback`, {
           params: { code },
-          withCredentials: true,
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
         dispatch(fetchTelegram());
         navigate("/");
@@ -65,6 +72,13 @@ const MainPage = () => {
       }
     }
   }, [user, navigate])
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchTelegram());
+      dispatch(fetchTodos());
+    }
+  }, [user, dispatch])
 
   return (
     <>
