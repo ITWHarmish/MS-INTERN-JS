@@ -32,7 +32,7 @@ const Login = () => {
         try {
             const response = await LoginApi(values);
             message.success('Login successful!');
-            Cookies.set('ms_intern_jwt', response.token)
+            Cookies.set('ms_intern_jwt', response.token, {expires: 15})
             dispatch(setUser(response.user))
             if (response.user.internsDetails === "") {
                 navigate("/fillUpForm");
