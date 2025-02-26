@@ -11,6 +11,7 @@ import { setUser } from "../../redux/slices/authSlice";
 import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
+import { VerifyRevokedToken } from "../../services/googleApi";
 
 const Navbar = ({ onToggleTheme, currentTheme }) => {
 
@@ -21,6 +22,13 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
     const { user } = useSelector((state: RootState) => state.auth)
     const { token } = theme.useToken();
+
+    useEffect(() => {
+      const checkGoogleToken = async () => {
+         await VerifyRevokedToken();
+      };
+      checkGoogleToken();
+    }, []);
 
     const fullName = user?.fullName;
 

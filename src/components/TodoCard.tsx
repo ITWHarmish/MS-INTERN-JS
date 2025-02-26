@@ -8,10 +8,8 @@ import { useDispatch } from "react-redux";
 import { fetchTodos } from "../redux/actions/todosAction";
 import { AppDispatch, RootState } from "../redux/store";
 import { updateTodoInState } from "../redux/slices/todoSlice";
-import "../index.css"
+import "../index.css";
 import { SendTodosToChat, SendTodosToGoogleChat } from "../services/telegramAPI";
-import { GetRefreshTokenAndUpdateAccessToken } from "../services/googleApi";
-import { fetchTelegram } from "../redux/actions/telegramActions";
 import dayjs from "dayjs";
 import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
@@ -21,13 +19,13 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
-  const { timelogs } = useSelector((state: RootState) => state.timelog)
-  const { token } = theme.useToken()
+  const { timelogs } = useSelector((state: RootState) => state.timelog);
+  const { token } = theme.useToken();
 
-  const currentDate = dayjs(Date.now()).format("YYYY-MM-DD")
+  const currentDate = dayjs(Date.now()).format("YYYY-MM-DD");
   const formattedDate = selectedDate.format("YYYY-MM-DD");
   const totalHours = timelogs.reduce((total, timelog) => {
-    const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
+    const hours = typeof timelog?.hours === "number" ? timelog.hours : 0;
     return total + hours;
   }, 0);
 
@@ -47,10 +45,9 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     if (!destination) return;
     if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
-
     const newTodos = [...todos];
-    const sourceList = newTodos.filter(task => task.status === source.droppableId);
-    const destinationList = newTodos.filter(task => task.status === destination.droppableId);
+    const sourceList = newTodos.filter((task) => task.status === source.droppableId);
+    const destinationList = newTodos.filter((task) => task.status === destination.droppableId);
 
     const [movedTask] = sourceList.splice(source.index, 1);
     const updatedTask = { ...movedTask, status: destination.droppableId };
@@ -61,8 +58,8 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
 
     try {
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
-      dispatch(fetchTodos())
-      message.success("Updated tasks successfully")
+      dispatch(fetchTodos());
+      message.success("Updated tasks successfully");
     } catch (error) {
       dispatch(updateTodoInState({ id: movedTask.todoId, updatedData: { status: movedTask.status } }));
       message.error("Failed to update task. Please try again.");
@@ -76,7 +73,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     const todo = {
       userId: user?._id,
       description: newTask,
-      date : currentDate
+      date: currentDate,
     };
     setNewTask("");
     setIsAddTodoModalOpen(false);
@@ -119,18 +116,11 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     }
 
     const formattedTasks = `𝗗𝗮𝘆 𝘀𝘁𝗮𝗿𝘁 𝘀𝘁𝗮𝘁𝘂𝘀:
-${description.map(task => `• ${task}`).join("\n")}
+${description.map((task) => `• ${task}`).join("\n")}
 `;
     try {
-      setIsDayStartModalOpen(false)
+      setIsDayStartModalOpen(false);
       setLoading(true);
-      try {
-        await GetRefreshTokenAndUpdateAccessToken(user?._id);
-        dispatch(fetchTelegram())
-      } catch (error) {
-        console.error("Genrating New Access Token:", error);
-        message.error("Failed to Genrate New Access Token. Please try again.");
-      }
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .then(() => true)
@@ -149,7 +139,7 @@ ${description.map(task => `• ${task}`).join("\n")}
         });
 
       const promiseResult = await Promise.all([sendToChat, sendToGoogleChat]);
-      const check = promiseResult.every((item) => item == false)
+      const check = promiseResult.every((item) => item == false);
       if (!check) {
         message.success("Tasks sent to chats successfully!");
       }
@@ -166,7 +156,7 @@ ${description.map(task => `• ${task}`).join("\n")}
       message.warning("No Timelogs to Send!");
       return;
     }
-    
+
     if (currentDate != formattedDate) {
       message.warning("Timelog must be Current Date!");
       return;
@@ -181,7 +171,7 @@ ${description.map(task => `• ${task}`).join("\n")}
       log.description,
     ]);
 
-    const messageText = ([...text]);
+    const messageText = [...text];
 
     const doneTodos = todos.filter((task) => task.status === "done");
     const inProgressTodos = todos.filter((task) => task.status === "inProgress");
@@ -192,26 +182,22 @@ ${description.map(task => `• ${task}`).join("\n")}
       return;
     }
     const formattedTasks = `𝗗𝗮𝘆 𝗲𝗻𝗱 𝘀𝘁𝗮𝘁𝘂𝘀:
-${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0 ? `
-${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("\n")}` : ""}
+${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${
+      inProgressTodos.length > 0
+        ? `
+${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("\n")}`
+        : ""
+    }
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
       setIsDayEndModalOpen(false);
       setLoading(true);
-      try {
-        await GetRefreshTokenAndUpdateAccessToken(user?._id);
-        dispatch(fetchTelegram())
-      } catch (error) {
-        console.error("Error Genrating New Access Token:", error);
-        message.error("Failed to Genrate New Access Token. Please try again.");
-      }
 
-      const SendTimelogToSpreadSheets = SendTimelogToSheet(messageText)
-        .catch((error) => {
-          message.error(error.response?.data || error.message || "Failed to send TimeLog. Please try again.");
-          return false;
-        });
+      const SendTimelogToSpreadSheets = SendTimelogToSheet(messageText).catch((error) => {
+        message.error(error.response?.data || error.message || "Failed to send TimeLog. Please try again.");
+        return false;
+      });
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .then(() => true)
@@ -230,7 +216,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
         });
 
       const promiseResult = await Promise.all([SendTimelogToSpreadSheets, sendToChat, sendToGoogleChat]);
-      const check = promiseResult.every((item) => item == false)
+      const check = promiseResult.every((item) => item == false);
       if (!check) {
         message.success("Tasks sent to chats successfully!");
       }
@@ -260,12 +246,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             title="Todos"
             extra={
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
-                {
-                  (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? <>
-                    <Button
-                      onClick={() => setIsDayStartModalOpen(true)}
-                      type="primary"
-                    >
+                {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
+                  <>
+                    <Button onClick={() => setIsDayStartModalOpen(true)} type="primary">
                       Day Start Status
                     </Button>
                     <ModalCard
@@ -275,46 +258,33 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                       onOk={handleSendTodo}
                     />
                   </>
-                    : <Button
-                      disabled
-                      type="primary"
-                    >
-                      Day Start Status
-                    </Button>
-                }
-                {
-                  (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ?
-
-                    <>
-                      <Button
-                        onClick={() => setIsDayEndModalOpen(true)}
-                        type="primary"
-                      >
-                        Day End Status
-                      </Button>
-                      <ModalCard
-                        title="Are you sure, Do you want to send the day-end status?"
-                        ModalOpen={isDayEndModalOpen}
-                        setModalOpen={setIsDayEndModalOpen}
-                        onOk={handleSendDayEndTodo}
-                      />
-                    </>
-                    : <Button
-                      disabled
-                      type="primary"
-                    >
+                ) : (
+                  <Button disabled type="primary">
+                    Day Start Status
+                  </Button>
+                )}
+                {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
+                  <>
+                    <Button onClick={() => setIsDayEndModalOpen(true)} type="primary">
                       Day End Status
                     </Button>
-                }
+                    <ModalCard
+                      title="Are you sure, Do you want to send the day-end status?"
+                      ModalOpen={isDayEndModalOpen}
+                      setModalOpen={setIsDayEndModalOpen}
+                      onOk={handleSendDayEndTodo}
+                    />
+                  </>
+                ) : (
+                  <Button disabled type="primary">
+                    Day End Status
+                  </Button>
+                )}
               </div>
             }
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "5px" }}>
-              <Card
-                className="ScrollInProgress"
-                style={{ flex: 1, minHeight: "65vh", position: "relative" }}
-              >
-
+              <Card className="ScrollInProgress" style={{ flex: 1, minHeight: "65vh", position: "relative" }}>
                 <div
                   style={{
                     display: "flex",
@@ -326,22 +296,26 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   <span style={{ fontSize: "16px", fontWeight: "600" }}>In Progress</span>
 
                   <Button size="small" onClick={showModal} type="primary" icon={<PlusOutlined />}></Button>
-                  <Modal style={{ fontWeight: "600" }} title="Add To Do" open={isAddTodoModalOpen} onOk={handleAddTodo} onCancel={handleCancel} okText="Submit">
-
-                    <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }} >Description:
-                      <TextArea rows={4} placeholder="Description"
-                        value={newTask}
-                        onChange={(e) => setNewTask(e.target.value)}
-                      />
+                  <Modal
+                    style={{ fontWeight: "600" }}
+                    title="Add To Do"
+                    open={isAddTodoModalOpen}
+                    onOk={handleAddTodo}
+                    onCancel={handleCancel}
+                    okText="Submit"
+                  >
+                    <p style={{ display: "flex", gap: "12px", padding: "12px", fontWeight: "normal" }}>
+                      Description:
+                      <TextArea rows={4} placeholder="Description" value={newTask} onChange={(e) => setNewTask(e.target.value)} />
                     </p>
-
                   </Modal>
                 </div>
                 <Droppable droppableId="inProgress">
                   {(provided) => (
                     <>
                       <div
-                        className="ScrollInProgress" style={{
+                        className="ScrollInProgress"
+                        style={{
                           height: "calc(65vh - 9vh)",
                           width: "100%",
                           overflowY: "auto",
@@ -350,22 +324,84 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                           right: "0",
                         }}
                         ref={provided.innerRef}
-                        {...provided.droppableProps} >
+                        {...provided.droppableProps}
+                      >
+                        {todos
+                          .filter((task) => task.status === "inProgress")
+                          .map((task, index) => (
+                            <Draggable key={task._id || task.todoId || index} draggableId={String(task._id || task.todoId || index)} index={index}>
+                              {(provided) => (
+                                <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
+                                  <Card
+                                    className={token.colorBgLayout === "White" ? "" : "BgCard"}
+                                    type="inner"
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        gap: "15px",
+                                        minHeight: "8vh",
+                                      }}
+                                    >
+                                      <div className="hello">
+                                        {task.description.length > 35 ? `${task.description.substring(0, 35)}...` : task.description}
+                                      </div>
+                                      <Button
+                                        size="small"
+                                        shape="circle"
+                                        icon={<DeleteOutlined className="check" />}
+                                        danger
+                                        onClick={() => handleDelete(task.todoId)}
+                                      />
+                                    </div>
+                                  </Card>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                        {provided.placeholder}
+                      </div>
+                    </>
+                  )}
+                </Droppable>
+              </Card>
+              <Card style={{ flex: 1, minHeight: "65vh", position: "relative" }}>
+                <div style={{ marginBottom: "10px" }}>
+                  <span style={{ fontSize: "16px", fontWeight: "600" }}>Done</span>
+                </div>
 
-                        {todos.filter(task => task.status === "inProgress").map((task, index) => (
-                          <Draggable key={task._id || task.todoId || index} draggableId={String(task._id || task.todoId || index)} index={index}>
+                <Droppable droppableId="done">
+                  {(provided) => (
+                    <div
+                      className="ScrollInProgress"
+                      style={{
+                        height: "calc(65vh - 9vh)",
+                        overflowY: "auto",
+                        overflowX: "hidden",
+                        position: "absolute",
+                        right: "0",
+                        width: "100%",
+                      }}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {todos
+                        .filter((task) => task.status === "done")
+                        .map((task, index) => (
+                          <Draggable key={task._id || `done-${index}`} draggableId={task._id ? String(task._id) : `done-${index}`} index={index}>
                             {(provided) => (
-
                               <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
-
                                 <Card
-                                className={token.colorBgLayout === "White" ? "" : "BgCard" }
+                                  className={token.colorBgLayout === "White" ? "" : "BgCard"}
                                   type="inner"
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                               
                                   <div
                                     style={{
                                       display: "flex",
@@ -374,88 +410,14 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       minHeight: "8vh",
                                     }}
                                   >
-                                    <div className="hello">
-                                      {task.description.length > 35
-                                        ? `${task.description.substring(0, 35)}...`
-                                        : task.description}
-                                    </div>
-                                    <Button
-                                      size="small"
-                                      shape="circle"
-                                      icon={<DeleteOutlined className="check" />}
-                                      danger
-                                      onClick={() => handleDelete(task.todoId)}
-                                    />
+                                    <div>{task.description.length > 35 ? `${task.description.substring(0, 35)}...` : task.description}</div>
+                                    <Button size="small" shape="circle" icon={<DeleteOutlined />} danger onClick={() => handleDelete(task.todoId)} />
                                   </div>
                                 </Card>
                               </div>
                             )}
                           </Draggable>
                         ))}
-                        {provided.placeholder}
-                      </div>
-                    </>
-                  )}
-                </Droppable>
-              </Card>
-              <Card
-                style={{ flex: 1, minHeight: "65vh", position: "relative" }}
-              >
-                <div style={{ marginBottom: "10px" }}>
-                  <span style={{ fontSize: "16px", fontWeight: "600" }}>Done</span>
-                </div>
-
-                <Droppable droppableId="done">
-                  {(provided) => (
-                    <div className="ScrollInProgress" style={{
-                      height: "calc(65vh - 9vh)",
-                      overflowY: "auto",
-                      overflowX: "hidden",
-                      position: "absolute",
-                      right: "0",
-                      width: "100%",
-                    }}
-                      ref={provided.innerRef}  {...provided.droppableProps}>
-
-                      {todos.filter(task => task.status === "done").map((task, index) => (
-                        <Draggable key={task._id || `done-${index}`}
-                          draggableId={task._id ? String(task._id) : `done-${index}`} index={index}>
-                          {(provided) => (
-                            <div style={{ marginBottom: "10px", marginRight: "10px", marginLeft: "10px" }}>
-
-                              <Card
-                                className={token.colorBgLayout === "White" ? "" : "BgCard" }
-                                type="inner"
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    gap: "15px",
-                                    minHeight: "8vh"
-                                  }}
-                                >
-                                  <div>
-                                    {task.description.length > 35
-                                      ? `${task.description.substring(0, 35)}...`
-                                      : task.description}
-                                  </div>
-                                  <Button
-                                    size="small"
-                                    shape="circle"
-                                    icon={<DeleteOutlined />}
-                                    danger
-                                    onClick={() => handleDelete(task.todoId)}
-                                  />
-                                </div>
-                              </Card>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
                       {provided.placeholder}
                     </div>
                   )}
@@ -464,7 +426,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             </div>
           </Card>
         </DragDropContext>
-      </div >
+      </div>
     </>
   );
 };
