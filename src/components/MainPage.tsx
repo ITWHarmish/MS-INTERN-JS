@@ -1,4 +1,4 @@
-import { Col, Row, Spin } from "antd";
+import { Col, Row } from "antd";
 import "../index.css";
 import Timelog from "./Timelog";
 import TodoCard from "./TodoCard";
@@ -12,6 +12,11 @@ import { fetchTelegram } from "../redux/actions/telegramActions";
 import { TelegramSessionValidation } from "../services/telegramAPI";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { fetchTodos } from "../redux/actions/todosAction";
+import Spinner from "../utils/Spinner";
+
+const token = Cookies.get('ms_intern_jwt')
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -44,7 +49,10 @@ const MainPage = () => {
       try {
         await axios.get(`${API_END_POINT}/oauth2callback`, {
           params: { code },
-          withCredentials: true,
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
         dispatch(fetchTelegram());
         navigate("/");
@@ -66,9 +74,17 @@ const MainPage = () => {
     }
   }, [user, navigate])
 
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchTelegram());
+      dispatch(fetchTodos());
+    }
+  }, [user, dispatch])
+
   return (
     <>
-      <Spin size="large" tip="Loading..." spinning={loading} className="full-page-spin">
+      {loading ?
+        <Spinner /> :
         <Row className="Check" style={{ height: "calc(100vh - 100px )" }}>
           <Col md={15}>
             <div
@@ -85,7 +101,7 @@ const MainPage = () => {
             <TodoCard selectedDate={selectedDate} setLoading={setLoading} />
           </Col>
         </Row>
-      </Spin>
+      }
     </>
   );
 };

@@ -2,11 +2,20 @@ import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
 import { Login } from "../types/ILogin";
 import { IProfileForm, IProfileUpdate } from "../types/IProfile";
+import Cookies from "js-cookie";
+
+const getAuthHeaders = () => {
+    const token = Cookies.get('ms_intern_jwt');
+    return {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+    };
+};
 
 export const LoginApi = async (userData: Login) => {
     try {
         const res = await axios.post(`${API_END_POINT}/auth/signin`, userData, {
-            withCredentials: true,
+            headers: getAuthHeaders(),
         })
         return res.data
     } catch (error) {
@@ -15,22 +24,10 @@ export const LoginApi = async (userData: Login) => {
     }
 }
 
-export const Verify = async () => {
-    try {
-        const res = await axios.get(`${API_END_POINT}/auth/verify`, {
-            withCredentials: true,
-        })
-        return res.data
-    } catch (error) {
-        console.error('Error While Verifying:', error);
-        throw error;
-    }
-}
-
 export const GetCurrentUser = async () => {
     try {
         const res = await axios.get(`${API_END_POINT}/auth/getCurrentUser`, {
-            withCredentials: true,
+            headers: getAuthHeaders(),
         })
         return res.data
     } catch (error) {
@@ -42,7 +39,7 @@ export const GetCurrentUser = async () => {
 export const LogoutApi = async () => {
     try {
         const res = await axios.post(`${API_END_POINT}/auth/logout`, {}, {
-            withCredentials: true,
+            headers: getAuthHeaders(),
         })
         return res.data
     } catch (error) {
@@ -54,7 +51,7 @@ export const LogoutApi = async () => {
 export const UpdateUserDetails = async (userData: IProfileForm) => {
     try {
         const res = await axios.put(`${API_END_POINT}/auth/updateUser`, userData, {
-            withCredentials: true,
+            headers: getAuthHeaders(),
         })
         return res.data
     } catch (error) {
@@ -66,7 +63,7 @@ export const UpdateUserDetails = async (userData: IProfileForm) => {
 export const UpdateAllUserDetails = async (userData: IProfileUpdate) => {
     try {
         const res = await axios.put(`${API_END_POINT}/auth/updateAllUsersDetails`, userData, {
-            withCredentials: true,
+            headers: getAuthHeaders(),
         })
         return res.data
     } catch (error) {

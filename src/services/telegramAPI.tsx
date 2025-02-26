@@ -1,11 +1,21 @@
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
+import Cookies from "js-cookie";
+
+const getAuthHeaders = () => {
+  const token = Cookies.get('ms_intern_jwt');
+  return {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+};
+
 
 export const LoginApiTelegram = async (phone: any) => {
   const payload = { telegram: { phone } };
   try {
     const res = await axios.post(`${API_END_POINT}/login`, payload, {
-      withCredentials: true,
+      headers: getAuthHeaders(),
     });
     return res.data;
   } catch (error) {
@@ -44,7 +54,7 @@ export const LogoutApiTelegram = async (phone: any) => {
 export const GetTelegram = async () => {
   try {
     const res = await axios.get(`${API_END_POINT}/getTelegram`, {
-      withCredentials: true,
+      headers: getAuthHeaders(),
     });
     return res.data;
   } catch (error) {
@@ -56,7 +66,7 @@ export const GetTelegram = async () => {
 export const SendTodosToChat = async (userData) => {
   try {
     const response = await axios.post(`${API_END_POINT}/sendTask`, userData, {
-      withCredentials: true,
+      headers: getAuthHeaders(),
     });
     return response.data;
   } catch (error) {
@@ -69,8 +79,9 @@ export const SendTodosToGoogleChat = async (userData) => {
   try {
     const response = await axios.post(
       `${API_END_POINT}/send-message`,
-      userData,
-      { withCredentials: true }
+      userData, {
+      headers: getAuthHeaders(),
+    }
     );
     return response.data;
   } catch (error) {
@@ -82,7 +93,7 @@ export const SendTodosToGoogleChat = async (userData) => {
 export const TelegramSessionValidation = async () => {
   try {
     const response = await axios.get(`${API_END_POINT}/check-Session-id`, {
-      withCredentials: true,
+      headers: getAuthHeaders(),
     });
     return response.data;
   } catch (error) {
