@@ -23,7 +23,7 @@ const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const { token } = theme.useToken();
 
@@ -66,7 +66,6 @@ const Profile = () => {
   }, [user])
 
   const handleSave = async () => {
-    setLoading(true);
     try {
       const response = await UpdateUserDetails(editedData);
       dispatch(setUser(response.user))
@@ -102,6 +101,7 @@ const Profile = () => {
         navigate("/profile");
       }
     }
+    setLoading(false);
   }, [user, navigate])
 
   return (

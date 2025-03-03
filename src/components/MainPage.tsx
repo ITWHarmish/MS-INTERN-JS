@@ -21,7 +21,7 @@ const token = Cookies.get('ms_intern_jwt')
 const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth)
@@ -29,10 +29,13 @@ const MainPage = () => {
   useEffect(() => {
     const telegramSessionCheck = async () => {
       try {
+        // setLoading(true);
         await TelegramSessionValidation();
         dispatch(fetchTelegram());
       } catch (error) {
         console.error("Failed to update todo date:", error);
+      } finally {
+        setLoading(false);
       }
     };
     telegramSessionCheck();
@@ -75,11 +78,25 @@ const MainPage = () => {
   }, [user, navigate])
 
   useEffect(() => {
-    if (user) {
-      dispatch(fetchTelegram());
-      dispatch(fetchTodos());
-    }
-  }, [user, dispatch])
+    const fetchData = async () => {
+      if (user) {
+        // setLoading(true);
+        try {
+          await Promise.all([
+            dispatch(fetchTelegram()),
+            dispatch(fetchTodos())
+          ]);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [user, dispatch]);
+
 
   return (
     <>

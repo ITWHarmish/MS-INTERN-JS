@@ -8,6 +8,7 @@ import Login from './components/auth/Login.tsx'
 import Profile from './components/profile/Profile.tsx'
 import { ConfigProvider } from 'antd'
 import FillUpForm from './components/profile/FillUpForm.tsx'
+import MonthlySummary from './components/monthlySummary/MonthlySummary.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />
+      },
+      {
+        path: "/monthlySummary",
+        element: <MonthlySummary />
       },
 
     ]
@@ -44,8 +49,8 @@ createRoot(document.getElementById('root')!).render(
           colorPrimary: '#474787', // LIBERTY COLOR
           borderRadius: 16,
           fontFamily: "Rubik",
-          colorPrimaryBg:"#ebf2ed",
-          colorBgLayout:"White",
+          colorPrimaryBg: "#ebf2ed",
+          colorBgLayout: "White",
         },
       }}
     >

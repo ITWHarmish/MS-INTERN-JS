@@ -24,10 +24,10 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
     const { token } = theme.useToken();
 
     useEffect(() => {
-      const checkGoogleToken = async () => {
-         await VerifyRevokedToken();
-      };
-      checkGoogleToken();
+        const checkGoogleToken = async () => {
+            await VerifyRevokedToken();
+        };
+        checkGoogleToken();
     }, []);
 
     const fullName = user?.fullName;
@@ -64,6 +64,9 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
             navigate("/profile");
         } else if (e.key === "timelog") {
             navigate("/");
+        }
+        else if (e.key === "monthly summary") {
+            navigate("/monthlySummary");
         }
     };
 
@@ -120,6 +123,9 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         dispatch(fetchTelegram());
         if (location.pathname === "/profile") {
             setCurrent("profile");
+        } 
+        else if (location.pathname === "/monthlySummary") {
+            setCurrent("monthly summary");
         } else {
             setCurrent("timelog");
         }
@@ -147,6 +153,7 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                     mode="horizontal"
                     items={[
                         { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
+                        { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
                     ]}
                 ></Menu>
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
@@ -216,7 +223,7 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                             </Modal>
                         </>
                     )}
-                    <div style={{ margin: "0px 0px" }}>
+                    <div style={{}}>
                         <Button onClick={onToggleTheme} style={{ border: "none" }}>
                             {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
                         </Button>
