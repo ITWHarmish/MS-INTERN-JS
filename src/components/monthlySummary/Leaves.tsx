@@ -48,8 +48,8 @@ const Leaves = ({ visible, onClose }) => {
         setError("");
 
         const payload: ILeave = {
-            from: dateRange[0].format(),
-            to: dateRange[1].format(),
+            from: dateRange[0].format("YYYY-MM-DD"),
+            to: dateRange[1].format("YYYY-MM-DD"),
             reason,
         }
         try {
@@ -84,8 +84,8 @@ const Leaves = ({ visible, onClose }) => {
         setError("");
         try {
             const payload: ILeave = {
-                from: dateRange[0].format(),
-                to: dateRange[1].format(),
+                from: dateRange[0].format("YYYY-MM-DD"),
+                to: dateRange[1].format("YYYY-MM-DD"),
                 leaveType: leaveType,
                 noOfDays: numDays,
                 reason,
@@ -97,7 +97,7 @@ const Leaves = ({ visible, onClose }) => {
                 dispatch(fetchLeaves());
                 message.success('Leave Application Sent Successful!');
                 if (message.success) {
-                    setDateRange([dayjs(), dayjs().add(1, 'day')]);
+                    setDateRange([dayjs(), dayjs()]);
                     setNumDays(1);
                     setLeaveType(null);
                     setSendMail(true);
@@ -111,7 +111,7 @@ const Leaves = ({ visible, onClose }) => {
                 dispatch(fetchLeaves());
                 message.success('Leave Application Apply Successful!');
                 if (message.success) {
-                    setDateRange([dayjs(), dayjs().add(1, 'day')]);
+                    setDateRange([dayjs(), dayjs()]);
                     setNumDays(1);
                     setLeaveType(null);
                     setSendMail(true);
@@ -141,7 +141,7 @@ const Leaves = ({ visible, onClose }) => {
                                 </label><br />
                             </div>
                             <RangePicker
-                                defaultValue={[dayjs(), dayjs().add(1, 'day')]}
+                                defaultValue={[dayjs(), dayjs()]}
                                 format={dateFormat}
                                 onChange={handleDateRangeChange}
                                 value={dateRange as [dayjs.Dayjs, dayjs.Dayjs]}
@@ -227,7 +227,7 @@ const Leaves = ({ visible, onClose }) => {
                                             }
                                             style={{ width: "25%" }}
                                         />
-                                        <Button onClick={handleGenerateEmail} style={{ marginLeft: '7px', borderRadius: "20px" }} type="primary" size="small">Generate Email with Ai <img style={{ height: "20px" }} src="../../../public/geminiIcon.svg" alt="" /></Button>
+                                        <Button onClick={handleGenerateEmail} style={{ marginLeft: '7px', borderRadius: "20px", height: "22px" }} type="primary" size="small"><span style={{ fontSize: "13px" }}>Generate Email with Ai </span><img style={{ height: "20px", color: "white" }} src="../../../public/geminiIcon.svg" alt="" /></Button>
                                     </div>
                                     {error && !reason && sendMail && <span style={{ color: 'red', fontSize: '12px', marginLeft: "7px" }}>{error}</span>}
                                 </>

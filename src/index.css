@@ -120,8 +120,22 @@ body {
   color: white;
 }
 
+.BgText {
+  background-color: white;
+  color: black;
+}
+
+
 .navbarSpanDark {
   color: white;
+}
+
+.dateColorWhite {
+  color: white;
+}
+
+.BoxColorTransparent {
+  background-color: #e6e6e6c4;
 }
 
 .containerCalendar {
@@ -148,4 +162,13 @@ body {
 .rbc-event,
 .rbc-day-slot .rbc-background-event {
   background-color: transparent !important;
+}
+
+.Monthcalendar {
+  /* .rbc-day-bg{
+    color: black;
+  } */
+  .rbc-off-range-bg {
+    background-color: #474646;
+  }
 }
