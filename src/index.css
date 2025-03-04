@@ -165,9 +165,6 @@ body {
 }
 
 .Monthcalendar {
-  /* .rbc-day-bg{
-    color: black;
-  } */
   .rbc-off-range-bg {
     background-color: #474646;
   }

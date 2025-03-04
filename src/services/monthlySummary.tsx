@@ -12,7 +12,6 @@ const getAuthHeaders = () => {
 };
 
 export const GetMonthlySummary = async (payload: IMonthlySummary) => {
-    console.log("payload: ", payload);
     try {
         const response = await axios.post(`${API_END_POINT}/monthlySummary`, payload, {
             headers: getAuthHeaders(),

@@ -39,7 +39,6 @@ export const SendLeaveToGmail = async (emailContent: string) => {
 }
 
 export const ApplyLeave = async (payload: ILeave) => {
-    console.log("payload: ", payload);
     try {
         const response = await axios.post(`${API_END_POINT}/applyLeave`, payload, {
             headers: getAuthHeaders(),

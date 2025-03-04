@@ -29,7 +29,6 @@ const MainPage = () => {
   useEffect(() => {
     const telegramSessionCheck = async () => {
       try {
-        // setLoading(true);
         await TelegramSessionValidation();
         dispatch(fetchTelegram());
       } catch (error) {
@@ -80,7 +79,6 @@ const MainPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
-        // setLoading(true);
         try {
           await Promise.all([
             dispatch(fetchTelegram()),
