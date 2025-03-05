@@ -98,6 +98,8 @@ const MonthlySummary = () => {
     const dayProp = (date) => {
         const day = dayjs(date).day();
         const isWeekend = day === 0 || day === 6;
+        const today = dayjs().startOf('day');
+        const isCurrentDay = dayjs(date).isSame(today, 'day');
 
         const isHalfLeave = eventList?.some(event => (event.type === 'half leave') &&
             dayjs(date).isBetween(event.start, event.end, 'day', '[]')
@@ -118,6 +120,7 @@ const MonthlySummary = () => {
                 },
             };
         }
+
         if (isHalfLeave) {
             return {
                 style: {
@@ -125,6 +128,15 @@ const MonthlySummary = () => {
                 },
             };
         }
+
+        else if (!isHalfLeave && isCurrentDay) {
+            return {
+                style: {
+                    backgroundColor: "transparent",
+                },
+            };
+        }
+
         if (isEventDay) {
             return {
                 style: {
@@ -149,11 +161,26 @@ const MonthlySummary = () => {
 
     const CustomEvent = ({ event }) => {
 
+        const holiday = officeHoliday?.find(holiday =>
+            dayjs(holiday.date).isSame(event.start, 'day')
+        );
+
         const isHiddenEvent = ["half leave", "casual leave", "sick leave"].includes(event.type);
+        const isWorkingHours = event.type === "workingHours"
+
+        let tooltipText = "";
+        if (holiday) {
+            tooltipText = holiday.holiday;
+        } else if (isHiddenEvent) {
+            tooltipText = event.type;
+        } else if (isWorkingHours) {
+            tooltipText = event.type;
+        }
+
 
         return (
             <Tooltip
-                title={`${event.type}`}
+                title={tooltipText || `Event`}
                 placement="top"
                 overlayInnerStyle={{ backgroundColor: "#474787" }}
             >
@@ -163,7 +190,7 @@ const MonthlySummary = () => {
                     alignItems: "center",
                     fontSize: "30px",
                     color: token.colorBgLayout === "White" ? "black" : "white",
-                    height: isHiddenEvent ? 50 : "auto",
+                    height: (holiday || isHiddenEvent) ? 50 : "auto",
                 }}>
                     {(event.title === "undefined" || event.title === "0") ? "" : event.title}
                 </span>

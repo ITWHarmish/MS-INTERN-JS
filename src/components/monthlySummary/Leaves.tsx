@@ -21,7 +21,7 @@ const Leaves = ({ visible, onClose }) => {
     const [loading, setLoading] = useState(false);
     const { user } = useSelector((state: RootState) => state.auth)
     const { RangePicker } = DatePicker;
-    const dateFormat = 'YYYY/MM/DD';
+    const dateFormat = 'YYYY-MM-DD';
     const dispatch = useDispatch<AppDispatch>();
 
 
@@ -145,6 +145,7 @@ const Leaves = ({ visible, onClose }) => {
                                 format={dateFormat}
                                 onChange={handleDateRangeChange}
                                 value={dateRange as [dayjs.Dayjs, dayjs.Dayjs]}
+                                disabledDate={(current) => current && current < dayjs().startOf("day")}
                             />
                             {error && !dateRange && error === "Date range is required" && <span style={{ color: 'red', fontSize: '12px' }}>{error}</span>}
                         </div>
