@@ -72,7 +72,6 @@ const MonthlySummary = () => {
                 start: new Date(day.date),
                 end: new Date(day.date),
                 title: `${day.totalHours}`,
-                type: `workingHours`,
             })) || [];
 
             const allEvents = [...dynamicLeaves, ...dynamicWorkHours];
@@ -166,21 +165,18 @@ const MonthlySummary = () => {
         );
 
         const isHiddenEvent = ["half leave", "casual leave", "sick leave"].includes(event.type);
-        const isWorkingHours = event.type === "workingHours"
 
         let tooltipText = "";
         if (holiday) {
             tooltipText = holiday.holiday;
         } else if (isHiddenEvent) {
             tooltipText = event.type;
-        } else if (isWorkingHours) {
-            tooltipText = event.type;
         }
 
 
         return (
             <Tooltip
-                title={tooltipText || `Event`}
+                title={tooltipText || ``}
                 placement="top"
                 overlayInnerStyle={{ backgroundColor: "#474787" }}
             >
