@@ -2,12 +2,13 @@ import axios from "axios"
 import { API_END_POINT } from "../utils/constants";
 import { TimeLog } from "../types/ITimelog";
 import Cookies from "js-cookie";
+import { ILeave } from "../types/ILeaves";
 
 const getAuthHeaders = () => {
   const token = Cookies.get('ms_intern_jwt');
   return {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
   };
 };
 
@@ -70,6 +71,19 @@ export const SendTimelogToSheet = async (messageText: any) => {
     return response.data;
   } catch (error) {
     console.error('Error while sending time log to sheet:', error);
+    throw error;
+  }
+}
+
+export const GetTotalHours = async (payload: ILeave) => {
+  const { from, to } = payload;
+  try {
+    const res = await axios.get(`${API_END_POINT}/getTotalHours?from=${from}&to=${to}`, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Error while fetching total hours:', error);
     throw error;
   }
 }

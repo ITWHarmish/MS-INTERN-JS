@@ -120,6 +120,53 @@ body {
   color: white;
 }
 
+.BgText {
+  background-color: white;
+  color: black;
+}
+
+
 .navbarSpanDark {
   color: white;
 }
+
+.dateColorWhite {
+  color: white;
+}
+
+.BoxColorTransparent {
+  background-color: #e6e6e6c4;
+}
+
+.containerCalendar {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0px;
+  height: 300px;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+}
+
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+  background-color: transparent !important;
+}
+
+.Monthcalendar {
+  .rbc-off-range-bg {
+    background-color: #474646;
+  }
+}
+
+.rbc-row-segment {
+  height: 0px !important;
+}
+
