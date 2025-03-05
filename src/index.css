@@ -155,10 +155,6 @@ body {
   z-index: 2000;
 }
 
-.rbc-today {
-  background-color: #6C6CCD !important;
-}
-
 .rbc-event,
 .rbc-day-slot .rbc-background-event {
   background-color: transparent !important;
@@ -172,4 +168,8 @@ body {
 
 .rbc-row-segment {
   height: 0px !important;
+}
+
+.rbc-today {
+  background-color: transparent !important;
 }
