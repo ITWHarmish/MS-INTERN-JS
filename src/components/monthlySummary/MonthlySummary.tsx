@@ -163,10 +163,8 @@ const MonthlySummary = () => {
                     alignItems: "center",
                     fontSize: "30px",
                     color: token.colorBgLayout === "White" ? "black" : "white",
-                    // height: event.type === "half leave" ? 0 : isHiddenEvent ? 50 : "auto",
                     height: isHiddenEvent ? 50 : "auto",
                 }}>
-                    {/* {event.title} */}
                     {(event.title === "undefined" || event.title === "0") ? "" : event.title}
                 </span>
             </Tooltip>

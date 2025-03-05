@@ -169,3 +169,7 @@ body {
     background-color: #474646;
   }
 }
+
+.rbc-row-segment {
+  height: 0px !important;
+}
