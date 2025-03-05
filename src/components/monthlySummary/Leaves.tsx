@@ -227,7 +227,7 @@ const Leaves = ({ visible, onClose }) => {
                                             }
                                             style={{ width: "25%" }}
                                         />
-                                        <Button onClick={handleGenerateEmail} style={{ marginLeft: '7px', borderRadius: "20px", height: "22px" }} type="primary" size="small"><span style={{ fontSize: "13px" }}>Generate Email with Ai </span><img style={{ height: "20px", color: "white" }} src="../../../public/geminiIcon.svg" alt="" /></Button>
+                                        <Button onClick={handleGenerateEmail} style={{ marginLeft: '7px', borderRadius: "20px", height: "22px" }} type="primary" size="small"><span style={{ fontSize: "13px" }}>Generate Email with Ai </span><img style={{ height: "20px", filter: "brightness(0) invert(1)" }} src="/geminiIcon.svg" alt="" /></Button>
                                     </div>
                                     {error && !reason && sendMail && <span style={{ color: 'red', fontSize: '12px', marginLeft: "7px" }}>{error}</span>}
                                 </>
