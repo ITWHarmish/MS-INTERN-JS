@@ -303,9 +303,9 @@ const Tasktable = ({ selectedDate }) => {
                         onClick={() => setShowCard(!showCard)}
                     />
                     <iframe
-                        src="https://www.chatbase.co/chatbot-iframe/F_pd4JUjqJyLMwM__lSOx"
+                        src={import.meta.env.VITE_REACT_APP_CHAT_BASE_URL}
                         width="100%"
-                        style={{ minHeight: "450px", fontSize:"2px" }}
+                        style={{ minHeight: "450px" }}
                         frameBorder="0"
                     ></iframe>
                 </Card>

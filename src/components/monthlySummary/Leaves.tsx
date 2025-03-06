@@ -45,11 +45,16 @@ const Leaves = ({ visible, onClose }) => {
             setError("Reason is required");
             return;
         }
+        if (sendMail && !leaveType) {
+            setError("Leave type is required");
+            return;
+        }
         setError("");
 
         const payload: ILeave = {
             from: dateRange[0].format("YYYY-MM-DD"),
             to: dateRange[1].format("YYYY-MM-DD"),
+            leaveType: leaveType,
             reason,
         }
         try {
@@ -250,7 +255,7 @@ const Leaves = ({ visible, onClose }) => {
 
                     <div style={{ display: "flex", justifyContent: "flex-end" }}>
                         <Button onClick={onClose} style={{ marginRight: "10px" }}>Cancel</Button>
-                        <Button type="primary" style={{ background: "#4B3F86", borderColor: "#4B3F86" }} onClick={handleApplyLeave} loading={loading} >Apply Leave</Button>
+                        <Button type="primary" onClick={handleApplyLeave} loading={loading} >Apply Leave</Button>
                     </div>
                 </div>
             }
