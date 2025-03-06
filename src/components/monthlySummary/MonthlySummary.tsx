@@ -220,7 +220,7 @@ const MonthlySummary = () => {
                             endAccessor="end"
                             date={currentDate}
                             onNavigate={handleNavigate}
-                            style={{ height: 450, width: 800 }}
+                            style={{ height: 450, width: 800, position:"relative", zIndex: "0" }}
                             components={{
                                 event: CustomEvent,
                                 toolbar: CalendarToolbar,
