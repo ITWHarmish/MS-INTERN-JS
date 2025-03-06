@@ -14,7 +14,7 @@ body {
   transition: right 0.3s ease-in-out;
 
   &.show-card {
-    right: 0px;
+    right: 5px;
     z-index: 1000;
   }
 
