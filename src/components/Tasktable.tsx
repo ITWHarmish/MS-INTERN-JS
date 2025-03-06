@@ -1,5 +1,5 @@
-import { DeleteOutlined, EditOutlined, LeftOutlined, RightOutlined, } from '@ant-design/icons';
-import { Button, Card, Col, Input, message, Row, Select, Table, TimePicker, Typography, } from 'antd';
+import { DeleteOutlined, EditOutlined, WechatWorkOutlined, } from '@ant-design/icons';
+import { Button, Input, message, Select, Table, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
 import dayjs from 'dayjs';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { fetchTimelogs } from '../redux/actions/timelogActions';
 import { AppDispatch, RootState } from '../redux/store';
 import type { TableProps } from 'antd';
-import { IColumns, ISetRowProps, TimeLog } from '../types/ITimelog';
+import { IColumns, TimeLog } from '../types/ITimelog';
 
 dayjs.extend(localizedFormat);
 
@@ -49,22 +49,6 @@ const Tasktable = ({ selectedDate }) => {
             endTime: endTime.format('HH:mm'),
         }));
     }, [timelogs]);
-
-    const SetRow: React.FC<ISetRowProps> = ({ label, value, textStyle, key }: ISetRowProps) => (
-        <Row gutter={16} key={key}>
-            <Col md={12} span={18}>
-                <Typography.Text style={textStyle}>{label}</Typography.Text>
-            </Col>
-            <Col md={12} span={6}>
-                <Typography.Text style={textStyle}>{value}</Typography.Text>
-            </Col>
-        </Row>
-    );
-
-    const totalHours = timelogs.reduce((total, timelog) => {
-        const hours = typeof timelog?.hours === 'number' ? timelog.hours : 0;
-        return total + hours;
-    }, 0);
 
     const columns: TableProps<IColumns>['columns'] = [
         {
@@ -307,23 +291,23 @@ const Tasktable = ({ selectedDate }) => {
                 />
             </div>
             <div>
-                <Card
-                    size="small"
+                <div
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
                         }`}
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <RightOutlined className="check" /> : <LeftOutlined className="check" />}
+                        icon={showCard ? <WechatWorkOutlined className="check" /> : <WechatWorkOutlined className="check" />}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
                     />
-                    <SetRow
-                        label="Total Hours: "
-                        value={`${totalHours.toFixed(2)} hours`}
-                        textStyle={{ fontWeight: '600' }}
-                    />
-                </Card>
+                    <iframe
+                        src="https://www.chatbase.co/chatbot-iframe/3twK3DhyrvaCB5Jt_ClQm"
+                        width="100%"
+                        style={{ minHeight: "450px" }}
+                        frameBorder="0"
+                    ></iframe>
+                </div>
             </div>
         </div>
     );

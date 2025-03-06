@@ -1,0 +1,65 @@
+General Introduction
+User: What is this platform?
+Chatbot: Welcome to the Toshal Management System! This platform helps you track your work, manage tasks, and integrate with Google & Telegram for efficient reporting.
+Navbar Section
+User: What options are available in the navbar?
+Chatbot:
+The navbar contains the following options:
+* Left Side: 
+o Timelog - Navigate to the main timelog tracking page.
+o Monthly Summary - View your monthly work summary in a calendar format.
+* Right Side: 
+o "Connect to Google" - Integrate with Google for time logging and reporting.
+o "Connect to Telegram" - Enable Telegram integration for reporting work updates.
+o Light/Dark Mode Toggle - Click the sun (??) or moon (??) icon to switch between light and dark mode.
+o Profile & Logout - Click your name/profile photo to access: 
+* Profile - Redirects to your profile page where you can view personal details.
+* Logout - Logs you out and redirects to the login page.
+Timelog Section
+User: How do I log or add my work hours or works?
+Chatbot:
+* Go to the Timelog section (left side).
+* Select a time range, choose a category (Coding, Management, Learning), and add a description.
+* Click Submit to save your entry. Logged tasks appear in the table below.
+* Use the date picker to filter logs by date.
+* Edit (pencil icon) or delete (dustbin icon) entries as needed.
+To-Do Section
+User: How does the To-Do section work?
+Chatbot:
+* Click the + button to add a new task (right side).
+* Tasks appear in the In Progress section.
+* Drag and drop completed tasks into the Done section.
+* Tasks cannot be edited-delete and re-add them if changes are needed.
+Google & Telegram Integration
+User: How do I connect to Google or Telegram?
+Chatbot:
+* Click "Connect to Google" or "Connect to Telegram" in the navbar.
+* Once connected, you can send reports using: 
+o "Day Start Status" ? Sends in-progress tasks to Google Chat & Telegram.
+o "Day End Status" ? Sends done & in-progress tasks to Google Chat, Telegram, and logs Timelog data in Google Sheets.
+Monthly Summary Page
+User: What does the Monthly Summary page show?
+Chatbot:
+* Displays a calendar view with daily work hours.
+* Status colors: 
+o Leave ? Blue Violet
+o Holiday ? Light Gray
+o Half Leave ? Bright Yellow
+* The bottom summary includes: 
+o Total Working Days
+o Total Hours Logged
+o Shortage/Extra Hours (Red for shortage, Green for extra)
+Apply Leave Feature
+User: How do I apply for leave?
+Chatbot:
+* Click "Apply Leave" (top-right corner of Monthly Summary).
+* Select a leave date range and choose a Leave Type: 
+o Casual Leave
+o Sick Leave
+o Half Leave
+* Toggle Email Notification: 
+o OFF ? Leave is recorded but no email is sent.
+o ON ? Enter a reason and select recipients.
+* Click "Generate Email with AI" for an auto-drafted email (editable).
+* Click "Apply Leave" to save (and send an email if enabled).
+

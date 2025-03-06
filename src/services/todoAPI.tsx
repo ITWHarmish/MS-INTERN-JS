@@ -60,15 +60,3 @@ export const DeleteTodo = async (id: string) => {
     throw error;
   }
 }
-
-export const UpdateTodoInProgressDate = async () => {
-  try {
-    const res = await axios.put(`${API_END_POINT}/todo/updateInProgressDate`, {}, {
-      headers: getAuthHeaders(),
-    });
-    return res.data;
-  } catch (error) {
-    console.error('Error while updating Todo InProgressDate:', error);
-    throw error;
-  }
-};
