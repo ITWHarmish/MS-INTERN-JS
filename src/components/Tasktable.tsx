@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, WechatWorkOutlined, } from '@ant-design/icons';
-import { Button, Card, Input, message, Select, Table, TimePicker } from 'antd';
+import { Button, Input, message, Select, Table, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
 import dayjs from 'dayjs';
@@ -291,8 +291,7 @@ const Tasktable = ({ selectedDate }) => {
                 />
             </div>
             <div>
-                <Card
-                    size="small"
+                <div
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
                         }`}
                 >
@@ -303,12 +302,12 @@ const Tasktable = ({ selectedDate }) => {
                         onClick={() => setShowCard(!showCard)}
                     />
                     <iframe
-                        src={import.meta.env.VITE_REACT_APP_CHAT_BASE_URL}
+                        src="https://www.chatbase.co/chatbot-iframe/3twK3DhyrvaCB5Jt_ClQm"
                         width="100%"
                         style={{ minHeight: "450px" }}
                         frameBorder="0"
                     ></iframe>
-                </Card>
+                </div>
             </div>
         </div>
     );
