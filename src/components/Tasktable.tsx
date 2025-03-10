@@ -297,9 +297,11 @@ const Tasktable = ({ selectedDate }) => {
                 >
                     <Button
                         type="primary"
-                        icon={showCard ? <WechatWorkOutlined className="check" /> : <WechatWorkOutlined className="check" />}
+                        icon={showCard ? <WechatWorkOutlined style={{fontSize:"22px"}} className="check" /> : <WechatWorkOutlined style={{fontSize:"22px"}} className="check" />}
                         className="arrow-toggle"
                         onClick={() => setShowCard(!showCard)}
+                        size='large'
+                        style={{borderRadius:"40px"}}
                     />
                     <iframe
                         src="https://www.chatbase.co/chatbot-iframe/3twK3DhyrvaCB5Jt_ClQm"

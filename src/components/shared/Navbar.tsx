@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FileTextOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -82,9 +82,11 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
     const popoverContent = (
         <div>
             <Space direction="vertical">
-                <Button onClick={() => onMenuClick({ key: "profile" })} type="text" icon={<UserOutlined />}>
-                    Profile
-                </Button>
+                {
+                    !user?.admin && <Button onClick={() => onMenuClick({ key: "profile" })} type="text" icon={<UserOutlined />}>
+                        Profile
+                    </Button>
+                }
                 <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
                     Logout
                 </Button>
@@ -123,10 +125,14 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         dispatch(fetchTelegram());
         if (location.pathname === "/profile") {
             setCurrent("profile");
-        } 
+        }
         else if (location.pathname === "/monthlySummary") {
             setCurrent("monthly summary");
-        } else {
+        }
+        else if (location.pathname === "/hrPolicy") {
+            setCurrent("hr policy");
+        }
+        else {
             setCurrent("timelog");
         }
     }, [dispatch]);
@@ -143,26 +149,31 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                     padding: "0px 20px",
                 }}
             >
-                <Menu
-                    onClick={onMenuClick}
-                    selectedKeys={[current]}
-                    className="check"
-                    style={{
-                        gap: "1px",
-                    }}
-                    mode="horizontal"
-                    items={[
-                        { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
-                        { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
-                    ]}
-                ></Menu>
+                {user && (
+                    <Menu
+                        onClick={onMenuClick}
+                        selectedKeys={[current]}
+                        className="check"
+                        style={{
+                            gap: "1px",
+                        }}
+                        mode="horizontal"
+                        items={[
+                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
+                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
+                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
+                        ]}
+                    ></Menu>
+                )}
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
 
                     {
-                        telegramUser?.google?.tokens?.access_token ?
-                            <Button style={{ fontFamily: "Rubik" }} disabled type="default">Connect Google</Button>
-                            :
-                            <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
+                        user && !user?.admin && (
+                            telegramUser?.google?.tokens?.access_token ?
+                                <Button style={{ fontFamily: "Rubik" }} disabled type="default">Connect Google</Button>
+                                :
+                                <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
+                        )
                     }
                     {telegramUser?.telegram?.session_id ? (
                         <Button style={{ fontFamily: "Rubik" }} type="default" disabled>
@@ -170,10 +181,12 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                         </Button>
                     ) : (
                         <>
-                            <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
-                                Connect Telegram
-                            </Button>
-
+                            {
+                                user && !user?.admin &&
+                                <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
+                                    Connect Telegram
+                                </Button>
+                            }
                             <Modal
                                 title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
                                 open={isModalOpen}
@@ -223,11 +236,13 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                             </Modal>
                         </>
                     )}
-                    <div style={{}}>
-                        <Button onClick={onToggleTheme} style={{ border: "none" }}>
-                            {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
-                        </Button>
-                    </div>
+                    {user &&
+                        <div>
+                            <Button onClick={onToggleTheme} style={{ border: "none" }}>
+                                {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
+                            </Button>
+                        </div>
+                    }
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>

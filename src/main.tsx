@@ -9,6 +9,7 @@ import Profile from './components/profile/Profile.tsx'
 import { ConfigProvider } from 'antd'
 import FillUpForm from './components/profile/FillUpForm.tsx'
 import MonthlySummary from './components/monthlySummary/MonthlySummary.tsx'
+import HrPolicies from './components/hrPolicies/HrPolicies.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
         path: "/monthlySummary",
         element: <MonthlySummary />
       },
-
+      {
+        path: "/hrPolicy",
+        element: <HrPolicies />
+      },
+     
     ]
   },
   {
@@ -46,7 +51,7 @@ createRoot(document.getElementById('root')!).render(
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#474787', // LIBERTY COLOR
+          colorPrimary: '#474787',
           borderRadius: 16,
           fontFamily: "Rubik",
           colorPrimaryBg: "#ebf2ed",

@@ -10,6 +10,12 @@ import { ILeave } from "../../types/ILeaves";
 import { useDispatch } from "react-redux";
 import { fetchLeaves } from "../../redux/actions/leaveActions";
 
+const toolBarOptions = [
+    [{ header: [1, 2, false] }],
+    ['bold', 'italic', 'underline'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+]
+
 const Leaves = ({ visible, onClose }) => {
     const [dateRange, setDateRange] = useState([dayjs(), dayjs()]);
     const [numDays, setNumDays] = useState(1);
@@ -248,7 +254,11 @@ const Leaves = ({ visible, onClose }) => {
                                         <span style={{ color: 'red' }}>*</span> Email Preview
                                     </label><br />
                                 </div>
-                                <QuillEditor content={emailPreview} onChange={setEmailPreview} />
+                                <QuillEditor
+                                    content={emailPreview}
+                                    onChange={setEmailPreview}
+                                    toolbarOptions={toolBarOptions}
+                                />
                                 {error && !emailPreview && sendMail && <span style={{ color: 'red', fontSize: '12px' }}>{error}</span>}
                             </div>
                         )}

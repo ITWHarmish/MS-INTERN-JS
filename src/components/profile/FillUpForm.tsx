@@ -103,22 +103,15 @@ const FillUpForm = () => {
                                     <Input placeholder="9876543210" />
                                 </Form.Item>
                                 <Form.Item
-                                    label="Address"
-                                    name="address"
-                                    rules={[{ required: true, message: "Please input your address!" }]}
-                                >
-                                    <Input placeholder="45 Main St, Apartment 101, Cityville, 12345" />
-                                </Form.Item>
-
-                            </Col>
-
-                            <Col span={12}>
-                                <Form.Item
                                     label="College Name"
                                     name="collegeName"
                                 >
                                     <Input placeholder="Enter your College fullName " />
                                 </Form.Item>
+                            </Col>
+
+                            <Col span={12}>
+
                                 <Form.Item
                                     label="GitHub URL"
                                     name="githubURL"
