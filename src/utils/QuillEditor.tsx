@@ -2,53 +2,60 @@ import { useEffect, useRef } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
-const QuillEditor = ({ onChange, content }) => {
+const QuillEditor = ({ onChange, content, toolbarOptions }) => {
     const editorRef = useRef(null);
-    const quillInstance = useRef(null);
+    const quillRef = useRef(null);
 
     useEffect(() => {
-        if (editorRef.current && !quillInstance.current) {
-            quillInstance.current = new Quill(editorRef.current, {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline'],
-                        [{ list: 'ordered' }, { list: 'bullet' }],
-                    ],
-                },
-            });
+        if (!editorRef.current) return;
 
-            if (content) {
-                quillInstance.current.root.innerHTML = content;
-            }
+        quillRef.current = new Quill(editorRef.current, {
+            theme: 'snow',
+            modules: {
+                toolbar: toolbarOptions,
+                clipboard: { matchVisual: false },
+            },
+        });
 
-            quillInstance.current.on('text-change', () => {
-                if (quillInstance.current) {
-                    const content =  quillInstance.current.root.innerHTML;
-                    if (onChange) {
-                        onChange(content);
-                    }
+        if (content) {
+            quillRef.current.root.innerHTML = content;
+        }
+
+        const handleChange = () => {
+            const editorContent = quillRef.current.root.innerHTML;
+            onChange?.(editorContent);
+        };
+
+        quillRef.current.on('text-change', handleChange);
+
+        quillRef.current.clipboard.addMatcher(Node.ELEMENT_NODE, (delta) => {
+            delta.ops.forEach(op => {
+                if (op.attributes) {
+                    delete op.attributes.color;
+                    delete op.attributes.background;
                 }
             });
+            return delta;
+        });
 
-        }
+
         return () => {
-            if (quillInstance.current) {
-                quillInstance.current.off('text-change');
-            }
+            quillRef.current.off('text-change', handleChange);
         };
-    }, [onChange, content]);
+    }, []);
 
     useEffect(() => {
-        if (quillInstance.current && content !== quillInstance.current.root.innerHTML) {
-            quillInstance.current.root.innerHTML = content || "";
+        if (quillRef.current && content !== undefined) {
+            const currentContent = quillRef.current.root.innerHTML;
+            if (content !== currentContent) {
+                quillRef.current.root.innerHTML = content;
+            }
         }
     }, [content]);
 
     return (
-        <div >
-            <div ref={editorRef}></div>
+        <div>
+            <div ref={editorRef} style={{ border: '1px solid #ccc' }}></div>
         </div>
     );
 };

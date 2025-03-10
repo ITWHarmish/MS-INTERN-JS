@@ -16,9 +16,14 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    console.log("user: ", user);
+
     useEffect(() => {
         if (user) {
-            if (user.internsDetails === undefined || user.internsDetails === "") {
+            if (user.admin) {
+                navigate("/hrPolicy");
+            }
+            else if (user.internsDetails === undefined || user.internsDetails === "") {
                 navigate("/fillUpForm");
             } else {
                 navigate("/");
@@ -32,8 +37,11 @@ const Login = () => {
         try {
             const response = await LoginApi(values);
             message.success('Login successful!');
-            Cookies.set('ms_intern_jwt', response.token, {expires: 15})
+            Cookies.set('ms_intern_jwt', response.token, { expires: 15 })
             dispatch(setUser(response.user))
+            if (response.user.admin) {
+                navigate("/hrPolicy");
+            }
             if (response.user.internsDetails === "") {
                 navigate("/fillUpForm");
             }

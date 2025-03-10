@@ -68,6 +68,10 @@ const MainPage = () => {
 
   useEffect(() => {
     if (user) {
+      if (user.admin) {
+        navigate("/hrPolicy");
+        return;
+      }
       if (user.internsDetails === undefined || user.internsDetails === "") {
         navigate("/fillUpForm");
       } else {

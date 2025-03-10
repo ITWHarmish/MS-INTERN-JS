@@ -12,7 +12,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { useDispatch } from 'react-redux';
 import { fetchLeaves } from '../../redux/actions/leaveActions';
 import isBetween from 'dayjs/plugin/isBetween';
-import { GetMonthlySummary } from '../../services/monthlySummary';
+import { GetMonthlySummary } from '../../services/monthlySummaryAPI';
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
@@ -245,7 +245,7 @@ const MonthlySummary = () => {
                             )}
                         </span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-start', padding: '5px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-start', paddingTop: '8px', }}>
                         <span style={{ marginRight: '15px', color: '#6C6CCD' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Leave</span></span>
                         <span style={{ marginRight: '15px', color: '#e6e6e6' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Holiday</span></span>
                         <span style={{ color: '#FFD9004C' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Halfday</span></span>
