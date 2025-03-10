@@ -55,7 +55,6 @@ export const DeletePolicy = async (id) => {
     });
     return res.data;
   } catch (error) {
-    console.log(error)
     message.error(error.response?.data?.message || "Failed to delete policy");
     return false;
   }

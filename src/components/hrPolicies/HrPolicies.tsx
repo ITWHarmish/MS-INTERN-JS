@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, message, Modal } from "antd";
+import { Button, Card, message, Modal, theme } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { DeletePolicy, GetPolicies, UpdatePoliciesOrder } from "../../services/hrPolicyAPI";
@@ -8,8 +8,9 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
 import Policy from "./Policy";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { IPolicy } from "../../types/IPolicy";
 
-// Reorder function for drag-and-drop
+
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -17,24 +18,18 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-// Styling for draggable items
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // userSelect: "none",
-  // padding: 16,
-  // marginBottom: 8,
-  // background: isDragging ? "#474787" : "white",
-  // border: "1px solid #ddd",
-  // borderRadius: 4,
+const getItemStyle = (draggableStyle) => ({
   marginBottom: "24px",
   ...draggableStyle
 });
 
-// Styling for droppable container
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? "#f0f0f0" : "white",
-  padding: 16,
-  borderRadius: 4
-});
+// interface IPolicy {
+//   _id: string;
+//   policyTitle: string;
+//   policyDescription: string;
+//   policyId
+// }
+
 
 const HrPolicies = () => {
   const { policies } = useSelector((state: RootState) => state.policy);
@@ -45,6 +40,8 @@ const HrPolicies = () => {
   const [orderedPolicies, setOrderedPolicies] = useState([]);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth)
+  const { token } = theme.useToken();
+
 
   const isAdmin = user?.admin;
 
@@ -55,7 +52,7 @@ const HrPolicies = () => {
         await GetPolicies();
         dispatch(fetchPolicies());
       } catch {
-        message.error("Failed to fetch policies");
+        console.error("Failed to fetch policies");
       } finally {
         setLoading(false);
       }
@@ -100,7 +97,7 @@ const HrPolicies = () => {
   const handleDragEnd = async (result) => {
     if (!result.destination) return;
 
-    const updatedPolicies = reorder(
+    const updatedPolicies:IPolicy[] = reorder(
       orderedPolicies,
       result.source.index,
       result.destination.index
@@ -108,20 +105,13 @@ const HrPolicies = () => {
 
     setOrderedPolicies(updatedPolicies);
 
-    console.log("updatedPolicies", updatedPolicies)
-
-    console.log("index wala hai ", updatedPolicies.map((policy, index) => ({ priority: index, policy })))
-
-    const payload = updatedPolicies.map((policy, index) => ({
-      policyId: policy._id,
+    const payload = updatedPolicies.map((policy:IPolicy, index) => ({
+      policyId: policy._id ,
       priority: index
     }));
 
-    console.log("payload: ", payload);
-
     try {
-      const res = await UpdatePoliciesOrder(payload);
-      console.log("res: ", res);
+      await UpdatePoliciesOrder(payload);
       dispatch(fetchPolicies());
       message.success("Policies Updated Successfully!");
     } catch (error) {
@@ -139,27 +129,25 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div style={{ padding: 16 }}>
-        <Card style={{ marginBottom: "50px" }}>
-          <h1 style={{ textAlign: "center" }}>HR Policies</h1>
+      <div style={{ padding: 16, backgroundColor: token.colorBgLayout === "White" ? "white" : "black" }}>
+        <Card style={{ marginBottom: "50px", padding:"20px" }}>
           {loading ? (
             <Spinner />
           ) : (
             isAdmin ? (
               <DragDropContext onDragEnd={handleDragEnd}>
                 <Droppable droppableId="policies-list">
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div ref={provided.innerRef} {...provided.droppableProps} >
                       {orderedPolicies.map((policy, index) => (
                         <Draggable key={policy._id} draggableId={policy._id.toString()} index={index}>
-                          {(provided, snapshot) => (
+                          {(provided) => (
                             <Card
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               title={policy.policyTitle}
-                              // style={{ marginBottom: "24px" }}
-                              style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                              style={getItemStyle(provided.draggableProps.style)}
                               extra={
                                 <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
                                   <Button shape="circle" icon={<EditOutlined />} size="small" onClick={() => handleEdit(policy)} />

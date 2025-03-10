@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FileTextOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import { setUser } from "../../redux/slices/authSlice";
 import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
-import { VerifyRevokedToken } from "../../services/googleAPI";
+import { VerifyRevokedToken } from "../../services/googleApi";
 
 const Navbar = ({ onToggleTheme, currentTheme }) => {
 
@@ -161,7 +161,7 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                         items={[
                             !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
                             !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
-                            { key: "hr policy", icon: <FieldTimeOutlined />, label: <Link to={"/hrPolicy"}>HR Policies</Link> },
+                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
                         ]}
                     ></Menu>
                 )}

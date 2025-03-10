@@ -1,6 +1,5 @@
 import {
   BankOutlined,
-  EnvironmentOutlined,
   MailOutlined,
   PhoneOutlined,
   UserOutlined,
@@ -154,43 +153,6 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                         onChange={(e) => handleChange(e, "address")}
                       />
                       : user?.internsDetails?.collegeName
-                  }
-                </Typography.Text>
-              }
-            />
-          </Card>
-          <Card className="cardWidth">
-            <Card.Meta
-              avatar={
-                <Flex
-                  justify="center"
-                  align="center"
-                  style={{
-                    fontSize: "20px",
-                    height: "100%",
-                    width: "auto",
-                    color: token.colorPrimary,
-                  }}
-                >
-                  <EnvironmentOutlined style={{ margin: "10px" }} />
-                </Flex>
-              }
-              title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
-                  Location
-                </Typography.Text>
-              }
-              description={
-                <Typography.Text strong style={{ fontSize: "16px" }}>
-                  {
-                    editMode
-                      ? <Input
-                        value={editedData?.address}
-                        size="middle"
-                        placeholder='Enter address'
-                        onChange={(e) => handleChange(e, "address")}
-                      />
-                      : user?.internsDetails?.address
                   }
                 </Typography.Text>
               }

@@ -16,8 +16,6 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    console.log("user: ", user);
-
     useEffect(() => {
         if (user) {
             if (user.admin) {

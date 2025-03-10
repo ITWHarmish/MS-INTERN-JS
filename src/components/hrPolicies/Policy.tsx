@@ -8,27 +8,23 @@ import { AppDispatch } from "../../redux/store";
 import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
 
 const toolBarOptions = [
-    "header", "bold", "italic", "underline", "strike",
-    "blockquote", "list", "bullet", "indent", "link",
-    "image", "video", "code-block", "color", "background", "align"
-];
+    [{ header: [1, 2, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video', 'formula'],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'font': [] }],
+    [{ 'align': [] }],
 
-// const toolBarOptions = [
-//     [{ header: [1, 2, false] }],
-//     ['bold', 'italic', 'underline', 'color', 'background'],
-//     ['image', 'code-block', 'link', 'video'],
-//     ['direction', 'align'],
-//     [{ list: 'ordered' }, { list: 'bullet' }],
-// ]
+    ['clean']
+]
 
 const Policy = ({ visible, onClose, isEditMode, policyData }) => {
     const [loading, setLoading] = useState(false);
     const [editedText, setEditedText] = useState("");
     const [policyTitle, setPolicyTitle] = useState("");
     const dispatch = useDispatch<AppDispatch>();
-
-    console.log("policy: ", policyData);
-    // console.log("policy: ", );
 
     useEffect(() => {
         if (isEditMode && policyData) {
@@ -41,6 +37,10 @@ const Policy = ({ visible, onClose, isEditMode, policyData }) => {
     }, [isEditMode, policyData]);
 
     const handleSubmit = async () => {
+        if (!policyTitle || !editedText) {
+            message.error("Policy Title and Description are required!");
+            return;
+        }
         setLoading(true);
         try {
             if (isEditMode && policyData) {
@@ -56,7 +56,6 @@ const Policy = ({ visible, onClose, isEditMode, policyData }) => {
                     policyTitle: policyTitle,
                     policyDescription: editedText,
                 };
-                console.log("values: ", values);
                 await CreatePolicy(values);
                 message.success("Policy Added Successfully")
             }
@@ -102,7 +101,6 @@ const Policy = ({ visible, onClose, isEditMode, policyData }) => {
                                 content={editedText}
 
                                 onChange={(value) => {
-                                    console.log("value: ", value)
                                     setEditedText(value)
                                 }}
                                 toolbarOptions={toolBarOptions}
