@@ -198,7 +198,7 @@ const MonthlySummary = () => {
     return (
         <>
 
-            <div className={token.colorBgLayout === "White" ? "" : "BgCard"}>
+            <div style={{ height: "100vh" }} className={token.colorBgLayout === "White" ? "" : "BgCard"}>
                 <div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
                     <Button onClick={showModal} type="primary">
                         Apply Leave
@@ -220,7 +220,7 @@ const MonthlySummary = () => {
                             endAccessor="end"
                             date={currentDate}
                             onNavigate={handleNavigate}
-                            style={{ height: 450, width: 800, position:"relative", zIndex: "0" }}
+                            style={{ height: 450, width: 800, position: "relative", zIndex: "0" }}
                             components={{
                                 event: CustomEvent,
                                 toolbar: CalendarToolbar,

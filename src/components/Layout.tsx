@@ -66,7 +66,7 @@ const Layout = () => {
       theme={currentTheme === "light" ? lightTheme : darkTheme}
     >
       {loading ? <Spinner /> :
-        <Layouts style={{ height: "100vh" }}>
+        <Layouts style={{ height: "" }}>
           <Navbar onToggleTheme={toggleTheme} currentTheme={currentTheme} />
           <Outlet />
           <Footer />

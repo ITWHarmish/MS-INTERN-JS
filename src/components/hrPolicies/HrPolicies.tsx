@@ -23,14 +23,6 @@ const getItemStyle = (draggableStyle) => ({
   ...draggableStyle
 });
 
-// interface IPolicy {
-//   _id: string;
-//   policyTitle: string;
-//   policyDescription: string;
-//   policyId
-// }
-
-
 const HrPolicies = () => {
   const { policies } = useSelector((state: RootState) => state.policy);
   const [loading, setLoading] = useState(false);
@@ -97,7 +89,7 @@ const HrPolicies = () => {
   const handleDragEnd = async (result) => {
     if (!result.destination) return;
 
-    const updatedPolicies:IPolicy[] = reorder(
+    const updatedPolicies: IPolicy[] = reorder(
       orderedPolicies,
       result.source.index,
       result.destination.index
@@ -105,8 +97,8 @@ const HrPolicies = () => {
 
     setOrderedPolicies(updatedPolicies);
 
-    const payload = updatedPolicies.map((policy:IPolicy, index) => ({
-      policyId: policy._id ,
+    const payload = updatedPolicies.map((policy: IPolicy, index) => ({
+      policyId: policy._id,
       priority: index
     }));
 
@@ -129,8 +121,8 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div style={{ padding: 16, backgroundColor: token.colorBgLayout === "White" ? "white" : "black" }}>
-        <Card style={{ marginBottom: "50px", padding:"20px" }}>
+      <div style={{ padding: "16px", height: "100vh", backgroundColor: token.colorBgLayout === "White" ? "white" : "black" }}>
+        <Card style={{ marginBottom: "50px", padding: "20px" }}>
           {loading ? (
             <Spinner />
           ) : (

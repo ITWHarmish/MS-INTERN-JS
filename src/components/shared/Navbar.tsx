@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, FileTextOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,13 +15,13 @@ import { VerifyRevokedToken } from "../../services/googleApi";
 
 const Navbar = ({ onToggleTheme, currentTheme }) => {
 
+    const { user } = useSelector((state: RootState) => state.auth)
+    const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
+    const { token } = theme.useToken();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
-
-    const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
-    const { user } = useSelector((state: RootState) => state.auth)
-    const { token } = theme.useToken();
+    const [current, setCurrent] = useState(user?.admin ? "hr policy" : "timelog");
 
     useEffect(() => {
         const checkGoogleToken = async () => {
@@ -56,10 +56,11 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         setIsModalOpen(true);
     };
 
-    const [current, setCurrent] = useState("timelog");
 
     const onMenuClick = (e) => {
+        if (e.key === "logo") return;
         setCurrent(e.key);
+
         if (e.key === "profile") {
             navigate("/profile");
         } else if (e.key === "timelog") {
@@ -129,17 +130,23 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         else if (location.pathname === "/monthlySummary") {
             setCurrent("monthly summary");
         }
+        else if (location.pathname === "/report") {
+            setCurrent("progress report");
+        }
         else if (location.pathname === "/hrPolicy") {
             setCurrent("hr policy");
         }
-        else {
+        else if (!user?.admin) {
             setCurrent("timelog");
         }
-    }, [dispatch]);
+        else {
+            setCurrent("hr policy");
+        }
+    }, [dispatch, user?.admin]);
 
     return (
         <>
-            <div
+            <div id="navbar"
                 style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -159,9 +166,14 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                         }}
                         mode="horizontal"
                         items={[
+                            {
+                                key: "logo",
+                                label: <img style={{ height: "30px", width: "auto", verticalAlign: "middle", cursor: "pointer", pointerEvents: "none", }} src="/toshalLogo.png" alt="Logo" />,
+                            },
                             !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
                             !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
                             { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
+                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>Progress Report</Link> },
                         ]}
                     ></Menu>
                 )}
@@ -170,7 +182,7 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                     {
                         user && !user?.admin && (
                             telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik" }} disabled type="default">Connect Google</Button>
+                                <Button style={{ fontFamily: "Rubik" }} disabled type="default">Google Connected</Button>
                                 :
                                 <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
                         )

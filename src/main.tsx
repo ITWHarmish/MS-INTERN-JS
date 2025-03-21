@@ -10,6 +10,12 @@ import { ConfigProvider } from 'antd'
 import FillUpForm from './components/profile/FillUpForm.tsx'
 import MonthlySummary from './components/monthlySummary/MonthlySummary.tsx'
 import HrPolicies from './components/hrPolicies/HrPolicies.tsx'
+import ProgressReports from './components/reports/ProgressReports.tsx'
+import ReportUserDetail from './components/reports/ReportUserDetail.tsx'
+import ReportTable from './components/reports/ReportTable.tsx'
+import ProgressReportPDF from './components/reports/ProgressReportPDF.tsx'
+import ReportEvaluation from './components/reports/ReportEvaluation.tsx'
+import ReportSubmitted from './components/reports/ReportSubmitted.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -35,13 +41,46 @@ const router = createBrowserRouter([
         path: "/hrPolicy",
         element: <HrPolicies />
       },
-     
+      {
+        path: "/report",
+        element: <ProgressReports />
+      },
+      {
+        path: "/reportuser",
+        element: <ReportUserDetail />
+      },
+      {
+        path: "/reportuser/:reportId",
+        element: <ReportUserDetail />
+      },
+      {
+        path: "/reporttable",
+        element: <ReportTable />
+      },
+      {
+        path: "/reporttable/:reportId",
+        element: <ReportTable />
+      },
+      {
+        path: "/reportevaluation/:reportId",
+        element: <ReportEvaluation />
+      },
+      {
+        path: "/report/pdf/:reportId",
+        element: <ProgressReportPDF />
+      },
+      {
+        path: "/report/submit",
+        element: <ReportSubmitted />
+      },
+
     ]
   },
   {
     path: "/fillUpForm",
     element: <FillUpForm />
-  }
+  },
+
 ])
 
 createRoot(document.getElementById('root')!).render(
