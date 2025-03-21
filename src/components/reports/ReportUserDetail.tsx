@@ -69,17 +69,6 @@ const ReportUserDetail = () => {
     const handleSubmit = async (values) => {
         const formatDate = values.duration.map(date => dayjs(date).format("YYYY-MM-DD"))
 
-        const payload = {
-            ...values,
-            mentorFullName: user.internshipDetails.mentor.mentorFullName,
-            mentorId: user.internshipDetails.mentor.mentorId,
-            duration: {
-                from: formatDate[0],
-                to: formatDate[1],
-            },
-
-        }
-
         try {
             setLoading(true);
             let response;
@@ -92,6 +81,16 @@ const ReportUserDetail = () => {
                     message.error("Report ID not found.");
                 }
                 return;
+            }
+            const payload = {
+                ...values,
+                mentorFullName: user.internshipDetails.mentor.mentorFullName,
+                mentorId: user.internshipDetails.mentor.mentorId,
+                duration: {
+                    from: formatDate[0],
+                    to: formatDate[1],
+                },
+
             }
 
             if (reportId) {
