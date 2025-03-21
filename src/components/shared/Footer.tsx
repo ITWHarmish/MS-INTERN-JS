@@ -4,7 +4,7 @@ const Footer = () => {
     const { token } = theme.useToken();
 
     return (
-        <div
+        <div id="footer"
             style={{
                 backgroundColor: token.colorPrimaryBg,
                 borderTop:"1px solid #fafafa",
