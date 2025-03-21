@@ -20,6 +20,7 @@ const ProgressReportPDF = () => {
 
         const numericValue = parseFloat(percentage);
 
+        if (numericValue == 100) return `${percentage}% (Excellent)`;
         if (numericValue >= 70) return `${percentage}% (Good)`;
         if (numericValue >= 50) return `${percentage}% (Average)`;
         return `${percentage}% (Poor)`;
@@ -120,7 +121,7 @@ const ProgressReportPDF = () => {
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "", gap: "3px" }} className="regular">
                             <span>Regularity:</span> <span style={{ width: "max-content" }} className="blank-remarks">{getRegularityLabel(data?.selfEvaluation?.regularity)}</span>
                         </div>
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "25px" }} className="regular">
+                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "18px" }} className="regular">
                             <span style={{ marginRight: "3px" }}>Punctuality:</span> {strikeThroughOptions(data?.selfEvaluation?.punctuality)}
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "20px" }} className="regular">

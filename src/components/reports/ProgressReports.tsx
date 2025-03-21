@@ -162,12 +162,13 @@ const ProgressReports = () => {
     };
 
     useEffect(() => {
+        if(!user?.admin) return;
         const fetchMentorList = async () => {
             const res = await GetMentorList();
             setMentorListName(res.data);
         }
         fetchMentorList();
-    }, [])
+    }, [user?.admin])
 
     const handleMentorChange = async (mentorId: string) => {
         setSelectedMentor(mentorId);
