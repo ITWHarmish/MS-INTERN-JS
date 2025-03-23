@@ -123,7 +123,7 @@ const ReportEvaluation = () => {
         <>
             {loading ?
                 <Spinner /> :
-                <div style={{ marginBottom: "10px", height: "90rem" }}>
+                <div style={{ marginBottom: "10px" }}>
                     <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", height: "100%" }}>
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
                             <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>

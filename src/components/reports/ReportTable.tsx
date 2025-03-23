@@ -202,7 +202,7 @@ const ReportTable = () => {
 
     return (
         <>
-            <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", marginBottom: "50px", height: "100vh" }}>
+            <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", marginBottom: "50px", height: "82vh" }}>
                 <div style={{ padding: "20px", height: "80vh", marginBottom: "50px" }}>
                     <Steps current={1} style={{ width: "99%", maxWidth: "1300px", marginBottom: "20px" }}>
                         <Step title="Fill Details" />
