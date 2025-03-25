@@ -27,11 +27,32 @@ const ProgressReports = () => {
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
     useEffect(() => {
-        dispatch(fetchProgressReport());
-    }, [dispatch])
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                await dispatch(fetchProgressReport());
+            } catch (error) {
+                console.error("Error fetching reports:", error);
+                message.error("Failed to fetch progress reports.");
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchData();
+    }, [dispatch]);
+    
 
 
     const columns: TableProps<IColumnsReports>['columns'] = [
+        {
+            title: 'Sr. No.',
+            dataIndex: 'srNo',
+            key: 'srNo',
+            align: 'center',
+            render: (_, __, index) => index + 1,
+            width:"80px"
+        },
         {
             title: 'File Name',
             dataIndex: 'duration',
@@ -198,7 +219,7 @@ const ProgressReports = () => {
 
     return (
         <>
-            <div style={{ padding: "20px", height: "100vh" }}>
+            <div style={{ padding: "20px", height: "88vh" }}>
 
                 <Card style={{ position: "relative", height: "65vh" }}
                     title={

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { GetProgressReport } from "../../services/progressReportAPI";
 import Spinner from "../../utils/Spinner";
 import dayjs from "dayjs";
+import { Button } from "antd";
 
 const ProgressReportPDF = () => {
     const { reportId } = useParams();
@@ -83,6 +84,18 @@ const ProgressReportPDF = () => {
     return (
         loading ? <Spinner /> :
             <div style={{ marginBottom: "25px" }} className="report">
+                <Button
+                    id="pdf-button"
+                    type="primary"
+                    onClick={() => window.print()}
+                    style={{
+                        position: "absolute",
+                        right: "15px",
+                        top: "15px",
+                    }}
+                >
+                    Download PDF
+                </Button>
                 <div style={{ width: "43rem" }}>
                     <div className="section name">
                         <div className="name"><span>Student Name:</span> {data?.studentName}</div>

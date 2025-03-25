@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, message, Modal, theme } from "antd";
+import { Button, Card, message, theme } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { DeletePolicy, GetPolicies, UpdatePoliciesOrder } from "../../services/hrPolicyAPI";
@@ -9,6 +9,7 @@ import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
 import Policy from "./Policy";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IPolicy } from "../../types/IPolicy";
+import ModalCard from "../../utils/ModalCard";
 
 
 const reorder = (list, startIndex, endIndex) => {
@@ -30,6 +31,8 @@ const HrPolicies = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [orderedPolicies, setOrderedPolicies] = useState([]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletePolicyId, setDeletePolicyId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth)
   const { token } = theme.useToken();
@@ -57,17 +60,16 @@ const HrPolicies = () => {
   }, [policies]);
 
   const handleDelete = (id) => {
-    Modal.confirm({
-      title: "Are you sure you want to delete this policy?",
-      okText: "Yes",
-      cancelText: "No",
-      onOk: async () => {
-        if (await DeletePolicy(id)) {
-          dispatch(fetchPolicies());
-          message.success("Policy Deleted Successfully");
-        }
-      }
-    });
+    setDeletePolicyId(id);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (deletePolicyId && (await DeletePolicy(deletePolicyId))) {
+      dispatch(fetchPolicies());
+      message.success("Policy Deleted Successfully");
+    }
+    setDeleteModalOpen(false);
   };
 
   const showModal = () => {
@@ -144,6 +146,12 @@ const HrPolicies = () => {
                                 <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
                                   <Button shape="circle" icon={<EditOutlined />} size="small" onClick={() => handleEdit(policy)} />
                                   <Button shape="circle" danger icon={<DeleteOutlined />} size="small" onClick={() => handleDelete(policy._id)} />
+                                  <ModalCard
+                                    title="Are you sure do you want to delete this policy?"
+                                    ModalOpen={deleteModalOpen}
+                                    setModalOpen={setDeleteModalOpen}
+                                    onOk={confirmDelete}
+                                  />
                                 </div>
                               }
                             >
