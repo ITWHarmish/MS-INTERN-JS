@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import Cookies from 'js-cookie';
-import toshalImg from "/toshal logo without bg.png";
+import toshalImg from "../../assets/toshal logo without bg.png";
 
 const Login = () => {
 
@@ -61,7 +61,7 @@ const Login = () => {
                 <img src={toshalImg} alt="" />
             </div>
                 <Card style={{ 
-                                width: 600, 
+                                width: 450, 
                                 padding: "50px 30px", 
                                 color: "white", 
                                 border: "1px solid rgba(255, 255, 255, 0.386)", 
@@ -81,8 +81,9 @@ const Login = () => {
                         layout="vertical"
                     >
                         <Form.Item
-                            style={{ color: "white" }}
-                            label="E-Mail"
+                          
+                          
+                            label="E-MAIL"
                             name="email"
                             rules={[
                                 { required: true, message: 'Please enter your email!' },
@@ -90,20 +91,34 @@ const Login = () => {
                             ]}
                         >
                             <Input
+                             style={{
+                                color: "white",
+                                borderBottomRightRadius: "12px",
+                                borderTopLeftRadius: "12px",
+                                borderTopRightRadius: "0px",
+                                borderBottomLeftRadius: "0px",
+                              }}
                                 prefix={<UserOutlined />}
-                                placeholder="E-Mail"
+                                placeholder="E-MAIL"
                                 size="large"
                             />
                         </Form.Item>
 
                         <Form.Item
-                            label="Password"
+                            label="PASSWORD"
                             name="password"
                             rules={[{ required: true, message: 'Please enter your password!' }]}
                         >
                             <Input.Password
+                             style={{
+                                color: "white",
+                                borderBottomRightRadius: "12px",
+                                borderTopLeftRadius: "12px",
+                                borderTopRightRadius: "0px",
+                                borderBottomLeftRadius: "0px",
+                              }}
                                 prefix={<LockOutlined />}
-                                placeholder="Password"
+                                placeholder="PASSWORD"
                                 size="large"
                             />
                         </Form.Item>
@@ -116,7 +131,7 @@ const Login = () => {
                                 size="large"
                                 loading={loading}
                             >
-                                Log in
+                                LOG IN
                             </Button>
                         </Form.Item>
                     </Form>
