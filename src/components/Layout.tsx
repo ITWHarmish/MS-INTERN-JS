@@ -66,7 +66,7 @@ const Layout = () => {
       theme={currentTheme === "light" ? lightTheme : darkTheme}
     >
       {loading ? <Spinner /> :
-        <Layouts>
+        <Layouts className="layout">
           <Navbar onToggleTheme={toggleTheme} currentTheme={currentTheme} />
           <Outlet />
           <Footer />

@@ -5,6 +5,11 @@ body {
   padding: 0px;
 }
 
+.layout{
+  width: 100%;
+  background: url('../public/toshalbg.png') no-repeat center center/cover;
+}
+
 .calculate-hours-card {
   position: fixed;
   max-width: 300px;
@@ -170,3 +175,83 @@ body {
   height: 0px !important;
 }
 
+/* login Chnages */
+
+.container{
+  min-height: 100vh;
+  width: 100%;
+  background: url('/toshalbg.png') no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-section{
+  width: 40%;
+}
+
+img{
+  max-width: 450px;
+}
+
+.right-section{
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ant-form-item-label label {
+  color: white !important;
+}
+
+/* Outer Wrapper which contains both icon and input */
+.ant-input-affix-wrapper{
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.386) !important;
+  border-bottom-right-radius: 12px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Input, Icon & Placeholder */
+.ant-input-affix-wrapper .anticon {
+  color: white !important;
+}
+
+.ant-input{
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  color: white !important;
+  margin-left: 5px !important;
+}
+
+.ant-input::placeholder{
+  color: rgba(255, 255, 255, 0.683) !important;
+}
+
+
+.ant-form-item .ant-form-item-explain-error{
+  color: white;
+}
+
+
+/* Button */
+.ant-btn{
+  background: white;
+  color: navy;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.ant-btn:hover{
+  background: rgb(40, 40, 125);
+  color: white;
+}
