@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
 
-const Navbar = ({ onToggleTheme, currentTheme }) => {
+const Navbar = () => {
 
     const { user } = useSelector((state: RootState) => state.auth)
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
@@ -239,13 +239,13 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                             </Modal>
                         </>
                     )}
-                    {user &&
+                    {/* {user &&
                         <div>
                             <Button onClick={onToggleTheme} style={{ border: "none" }}>
                                 {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
                             </Button>
                         </div>
-                    }
+                    } */}
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
