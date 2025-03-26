@@ -1,4 +1,4 @@
-import { Form, Input, Button, Row, Col, DatePicker, message, Card, Spin, Select } from "antd";
+import { Form, Input, Button, Row, Col, DatePicker, message, Spin, Select } from "antd";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { UpdateAllUserDetails } from "../../services/authAPI";

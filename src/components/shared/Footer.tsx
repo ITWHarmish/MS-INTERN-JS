@@ -1,13 +1,11 @@
-import { theme, Typography } from "antd"
+import { Typography } from "antd"
 
 const Footer = () => {
-    const { token } = theme.useToken();
-
     return (
         <div id="footer"
             style={{
-                backgroundColor: token.colorPrimaryBg,
-                borderTop:"1px solid #fafafa",
+                backgroundColor: "rgba(60, 60, 60, 0.274)",
+                borderTop:"1px solid #ffffffa1",
                 width: "100%",
                 height: "50px",
                 position: "fixed",
@@ -23,6 +21,7 @@ const Footer = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     fontSize: "15px",
+                    color: "white",
                 }}
             >
                 Toshal Management System ©{new Date().getFullYear()} Created by Toshal Infotech

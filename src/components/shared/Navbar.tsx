@@ -146,16 +146,7 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
 
     return (
         <>
-            <div id="navbar"
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderBottom: "1px solid #e0e0e0",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                    padding: "0px 20px",
-                }}
-            >
+            <div id="navbar" className="nav">
                 {user && (
                     <Menu
                         onClick={onMenuClick}
@@ -182,9 +173,9 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                     {
                         user && !user?.admin && (
                             telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik" }} disabled type="default">Google Connected</Button>
+                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default">Google Connected</Button>
                                 :
-                                <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
+                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">Connect Google</Button>
                         )
                     }
                     {telegramUser?.telegram?.session_id ? (

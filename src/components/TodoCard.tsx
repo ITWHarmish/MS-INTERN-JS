@@ -243,6 +243,13 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
       <div style={{ paddingTop: "10px", paddingRight: "10px" }}>
         <DragDropContext onDragEnd={onDragEnd}>
           <Card
+          className="custom-card"
+            style={{ 
+              borderBottomRightRadius: "0",
+              borderTopLeftRadius: "0",
+              borderTopRightRadius: "30px !important",
+              borderBottomLeftRadius: "30px"
+            }}
             title="Todos"
             extra={
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
