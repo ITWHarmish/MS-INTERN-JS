@@ -6,8 +6,8 @@ import Cookies from "js-cookie";
 const getAuthHeaders = () => {
   const token = Cookies.get('ms_intern_jwt');
   return {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
   };
 };
 
@@ -23,9 +23,10 @@ export const AddTodo = async (todo: Todo) => {
   }
 }
 
-export const GetTodo = async () => {
+export const GetTodo = async (userId: string) => {
   try {
     const res = await axios.get(`${API_END_POINT}/todo/getTodo`, {
+      params: { userId },
       headers: getAuthHeaders(),
     });
     return res.data;

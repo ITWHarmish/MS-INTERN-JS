@@ -16,6 +16,7 @@ import ReportTable from './components/reports/ReportTable.tsx'
 import ProgressReportPDF from './components/reports/ProgressReportPDF.tsx'
 import ReportEvaluation from './components/reports/ReportEvaluation.tsx'
 import ReportSubmitted from './components/reports/ReportSubmitted.tsx'
+import InternList from './components/admin/InternList.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
+        element: <Profile />
+      },
+      {
+        path: "/profile/:id",
         element: <Profile />
       },
       {
@@ -72,6 +77,10 @@ const router = createBrowserRouter([
       {
         path: "/report/submit",
         element: <ReportSubmitted />
+      },
+      {
+        path: "/intern/list",
+        element: <InternList />
       },
 
     ]

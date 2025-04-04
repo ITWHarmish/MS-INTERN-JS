@@ -9,7 +9,8 @@ export interface TimeLog {
 }
 
 export interface IDate {
-  date: string;
+  date?: string;
+  userId?: string;
 }
 
 export interface IColumns {

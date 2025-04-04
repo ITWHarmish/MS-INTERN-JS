@@ -1,6 +1,6 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Input, message, Modal, theme } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
@@ -15,7 +15,7 @@ import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
 import ModalCard from "../utils/ModalCard";
 
-const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
+const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
@@ -35,10 +35,6 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    dispatch(fetchTodos());
-  }, [dispatch]);
-
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
@@ -56,9 +52,15 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
 
     dispatch(updateTodoInState({ id: updatedTask.todoId, updatedData: { status: updatedTask.status } }));
 
+    const userId = user?.admin ? internId : user?._id;
+    if (!userId) {
+      message.error("User ID is missing.");
+      return;
+    }
+
     try {
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
-      dispatch(fetchTodos());
+      dispatch(fetchTodos({ userId }));
       message.success("Updated tasks successfully");
     } catch (error) {
       dispatch(updateTodoInState({ id: movedTask.todoId, updatedData: { status: movedTask.status } }));
@@ -70,8 +72,14 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const handleAddTodo = async () => {
     if (!newTask.trim()) return;
 
+    const userId = user?.admin ? internId : user?._id;
+    if (!userId) {
+      message.error("User ID is missing.");
+      return;
+    }
+
     const todo = {
-      userId: user?._id,
+      userId: userId,
       description: newTask,
       date: currentDate,
     };
@@ -81,7 +89,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     try {
       setLoading(true);
       await AddTodo(todo);
-      dispatch(fetchTodos());
+      dispatch(fetchTodos({ userId }));
       message.success("Task added successfully!");
     } catch (error) {
       console.error("Error adding todo:", error);
@@ -92,10 +100,15 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   };
 
   const handleDelete = async (id: string) => {
+    const userId = user?.admin ? internId : user?._id;
+    if (!userId) {
+      message.error("User ID is missing.");
+      return;
+    }
     setLoading(true);
     try {
       await DeleteTodo(id);
-      dispatch(fetchTodos());
+      dispatch(fetchTodos({ userId }));
       message.success("Task deleted successfully!");
     } catch (error) {
       console.error("Error deleting task:", error);
@@ -182,12 +195,11 @@ ${description.map((task) => `• ${task}`).join("\n")}
       return;
     }
     const formattedTasks = `𝗗𝗮𝘆 𝗲𝗻𝗱 𝘀𝘁𝗮𝘁𝘂𝘀:
-${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${
-      inProgressTodos.length > 0
+${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0
         ? `
 ${inProgressTodos.map((task) => `• ${task.description} - In Progress `).join("\n")}`
         : ""
-    }
+      }
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {

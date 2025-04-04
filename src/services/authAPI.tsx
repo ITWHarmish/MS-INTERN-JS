@@ -36,9 +36,33 @@ export const GetCurrentUser = async () => {
     }
 }
 
+export const GetCurrentUserId = async (id: string) => {
+    try {
+        const res = await axios.get(`${API_END_POINT}/auth/getCurrentUser/${id}`, {
+            headers: getAuthHeaders(),
+        })
+        return res.data
+    } catch (error) {
+        console.error('Error While Verifying:', error);
+        throw error;
+    }
+}
+
 export const LogoutApi = async () => {
     try {
         const res = await axios.post(`${API_END_POINT}/auth/logout`, {}, {
+            headers: getAuthHeaders(),
+        })
+        return res.data
+    } catch (error) {
+        console.error('Error While Logout:', error);
+        throw error;
+    }
+}
+
+export const UserRegister = async (payload) => {
+    try {
+        const res = await axios.post(`${API_END_POINT}/auth/signup`, payload, {
             headers: getAuthHeaders(),
         })
         return res.data

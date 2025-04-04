@@ -3,7 +3,7 @@ import { GetTimelogs } from "../../services/timelogAPI";
 import { IDate } from "../../types/ITimelog";
 
 export const fetchTimelogs = createAsyncThunk("fetchTimelogs",
-    async ({ date }: IDate) => {
-        const res = await GetTimelogs(date);
+    async ({ date, userId }: IDate) => {
+        const res = await GetTimelogs(date, userId);
         return res;
     })

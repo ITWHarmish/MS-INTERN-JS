@@ -22,6 +22,7 @@ const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(true);
+  const [internId, setInternId] = useState("");
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth)
@@ -68,10 +69,15 @@ const MainPage = () => {
 
   useEffect(() => {
     if (user) {
-      if (user.admin) {
-        navigate("/hrPolicy");
-        return;
-      }
+      if(user.admin) return;
+      // if (user.admin) {
+      //   navigate("/");
+      //   return;
+      // }
+      // if (user.admin) {
+      //   navigate("/report");
+      //   return;
+      // }
       if (user.internsDetails === undefined || user.internsDetails === "") {
         navigate("/fillUpForm");
       } else {
@@ -81,23 +87,26 @@ const MainPage = () => {
   }, [user, navigate])
 
   useEffect(() => {
+    if (!user) return;
+
+    const currentUserId = user.admin ? internId : user._id;
+    if (!currentUserId) return;
+
     const fetchData = async () => {
-      if (user) {
-        try {
-          await Promise.all([
-            dispatch(fetchTelegram()),
-            dispatch(fetchTodos())
-          ]);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-          setLoading(false);
-        }
+      try {
+        await Promise.all([
+          dispatch(fetchTelegram()),
+          dispatch(fetchTodos({ userId: currentUserId }))
+        ]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [user, dispatch]);
+  }, [user, internId, dispatch]);
 
 
   return (
@@ -113,11 +122,11 @@ const MainPage = () => {
                 zIndex: "3",
               }}
             >
-              <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+              <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate} setInternId={setInternId} internId={internId} />
             </div>
           </Col>
           <Col md={9}>
-            <TodoCard selectedDate={selectedDate} setLoading={setLoading} />
+            <TodoCard selectedDate={selectedDate} setLoading={setLoading} internId={internId} />
           </Col>
         </Row>
       }

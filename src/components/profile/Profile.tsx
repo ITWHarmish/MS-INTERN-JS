@@ -14,9 +14,9 @@ import dayjs from "dayjs";
 import ProfileHeader from "./ProfileTopBar";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { UpdateUserDetails } from "../../services/authAPI";
+import { GetCurrentUserId, UpdateUserDetails } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../utils/Spinner";
 
 const Profile = () => {
@@ -25,7 +25,31 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(user);
   const { token } = theme.useToken();
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      const fetchUser = async () => {
+        if (user) {
+          if (user.admin) {
+            try {
+              const res = await GetCurrentUserId(id);
+              setSelectedUser(res.user);
+            } catch (error) {
+              console.error("Error fetching user:", error);
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      }
+      fetchUser();
+    }
+  }, [user, id])
+
 
   const [editedData, setEditedData] = useState({
     fullName: user?.fullName || "",
@@ -95,10 +119,12 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      if (user.internsDetails === undefined || user.internsDetails === "") {
-        navigate("/fillUpForm");
-      } else {
-        navigate("/profile");
+      if (!user.admin) {
+        if (user.internsDetails === undefined || user.internsDetails === "") {
+          navigate("/fillUpForm");
+        } else {
+          navigate("/profile");
+        }
       }
     }
     setLoading(false);
@@ -127,6 +153,7 @@ const Profile = () => {
                 <Flex style={{ width: "auto", height: "fit-content", backgroundColor: token.colorBgLayout }} gap={70}>
                   <Flex>
                     <OtherLinks
+                      userDetails={selectedUser}
                     />
                   </Flex>
                   <Flex gap={70} style={{ width: "900px" }}>
@@ -135,6 +162,7 @@ const Profile = () => {
                         editMode={editMode}
                         editedData={editedData}
                         handleChange={handleChange}
+                        userDetails={selectedUser}
                       />
                     </Flex>
                     <Flex vertical style={{ width: "100%", marginRight: "35px" }}>
@@ -183,8 +211,8 @@ const Profile = () => {
                                         size="middle"
                                         onChange={(e) => handleDateChange(e, "joiningDate")}
                                       />
-                                      : user?.internsDetails?.joiningDate
-                                        ? dayjs(user?.internsDetails?.joiningDate).format("DD MMM YYYY")
+                                      : selectedUser?.internsDetails?.joiningDate
+                                        ? dayjs(selectedUser?.internsDetails?.joiningDate).format("DD MMM YYYY")
                                         : "N/A"
                                   }
                                 </Typography.Text>
@@ -224,7 +252,7 @@ const Profile = () => {
                                         placeholder='Enter Duration Here'
                                         onChange={(e) => handleChange(e, "duration")}
                                       />
-                                      : `${user?.internsDetails?.duration} months`
+                                      : `${selectedUser?.internsDetails?.duration} months`
                                   }
                                 </Typography.Text>
                               }
@@ -264,7 +292,7 @@ const Profile = () => {
                                         placeholder='Enter Stream Here'
                                         onChange={(e) => handleChange(e, "stream")}
                                       />
-                                      : user?.internsDetails?.stream
+                                      : selectedUser?.internsDetails?.stream
                                   }
                                 </Typography.Text>
                               }
@@ -366,7 +394,7 @@ const Profile = () => {
                                                 placeholder='Enter Mentor FullName'
                                                 onChange={(e) => handleChange(e, "mentorFullName")}
                                               />
-                                              : user?.internshipDetails?.mentor?.mentorFullName
+                                              : selectedUser?.internshipDetails?.mentor?.mentorFullName
                                           }
                                         </Typography.Text>
                                         <Typography.Text
@@ -383,7 +411,7 @@ const Profile = () => {
                                                 placeholder='Enter Mentor Email'
                                                 onChange={(e) => handleChange(e, "mentorEmail")}
                                               />
-                                              : user?.internshipDetails?.mentor?.mentorEmail
+                                              : selectedUser?.internshipDetails?.mentor?.mentorEmail
                                           }
                                         </Typography.Text>
                                       </Flex>
