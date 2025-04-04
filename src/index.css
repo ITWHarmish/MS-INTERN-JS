@@ -9,7 +9,7 @@ body {
   overflow: hidden;
   height: 100vh;
   width: 100%;
-  background: url('../public/toshalbg.png') no-repeat center center/cover;
+  background: url('../public/bg-01.png') no-repeat center center/cover;
 }
 
 .calculate-hours-card {
@@ -49,6 +49,17 @@ body {
   z-index: 1000;
   backdrop-filter: blur(7px);
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: white !important;  /* Keep text color */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;  /* Transparent background */
+  background-color: transparent !important;
+  transition: background-color 5000s ease-in-out 0s !important; /* Delay default autofill styles */
+}
+
 
 :where(.css-dev-only-do-not-override-82w5ug).ant-btn-sm.ant-btn-icon-only {
   width: 30px;
@@ -224,7 +235,7 @@ body {
 .container{
   min-height: 100vh;
   width: 100%;
-  background: url('/toshalbg.png') no-repeat center center/cover;
+  background: url('/bg-01.png') no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -235,7 +246,7 @@ body {
 }
 
 .left-section img{
-  max-width: 450px;
+  max-width: 350px;
 }
 
 .right-section{
@@ -283,9 +294,8 @@ body {
 
 /* Button */
 .ant-btn, .ant-btn.ant-btn-primary{
-  background: white;
-  color: navy;
-  border: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.386);
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
