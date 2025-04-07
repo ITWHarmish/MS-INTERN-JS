@@ -93,6 +93,7 @@ const Tasktable = ({ selectedDate }) => {
             render: (_, record) => (
                 <div style={{ display: 'flex', justifyContent: "center", gap: '20px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
+                        className='check2'
                         shape="circle"
                         icon={<EditOutlined className="check" />}
                         size="small"
@@ -223,12 +224,15 @@ const Tasktable = ({ selectedDate }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "65vh" }}>
+        <div style={{ minHeight: "63vh" }}>
             <div
                 style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
+                    paddingLeft: "22px",
+                    paddingRight: "20px",
+                    width: "100%",
                 }}
             >
                 <RangePicker
@@ -278,6 +282,7 @@ const Tasktable = ({ selectedDate }) => {
                     size="small"
                     loading={loading}
                     sticky={true}
+                    locale={{ emptyText: <></> }}
                     className="ScrollInProgress"
                     style={{
                         height: "calc(65vh - 50px)",

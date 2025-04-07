@@ -220,14 +220,13 @@ ${description.map((task) => `• ${task}`).join("\n")}
       return;
     }
     const formattedTasks = `𝗗𝗮𝘆 𝗲𝗻𝗱 𝘀𝘁𝗮𝘁𝘂𝘀:
-${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${
-      inProgressTodos.length > 0
+${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0
         ? `
 ${inProgressTodos
-  .map((task) => `• ${task.description} - In Progress `)
-  .join("\n")}`
+          .map((task) => `• ${task.description} - In Progress `)
+          .join("\n")}`
         : ""
-    }
+      }
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
@@ -238,8 +237,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
         (error) => {
           message.error(
             error.response?.data ||
-              error.message ||
-              "Failed to send TimeLog. Please try again."
+            error.message ||
+            "Failed to send TimeLog. Please try again."
           );
           return false;
         }
@@ -380,6 +379,42 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   onOk={handleSendDayEndTodo}
                 />
               </>
+              // <>
+              //   <Select
+              //     style={{ width: 200 }}
+              //     placeholder="Day Status"
+              //     onChange={(value) => {
+              //       if (value === "start") {
+              //         setIsDayStartModalOpen(true);
+              //       } else if (value === "end") {
+              //         setIsDayEndModalOpen(true);
+              //       }
+              //     }}
+              //     disabled={
+              //       !(
+              //         telegramUser?.telegram?.session_id ||
+              //         telegramUser?.google?.tokens?.access_token
+              //       ) || currentDate !== formattedDate
+              //     }
+              //   >
+              //     <Select.Option value="start">Day Start</Select.Option>
+              //     <Select.Option value="end">Day End</Select.Option>
+              //   </Select>
+
+              //   <ModalCard
+              //     title="Are you sure, Do you want to send the day start status?"
+              //     ModalOpen={isDayStartModalOpen}
+              //     setModalOpen={setIsDayStartModalOpen}
+              //     onOk={handleSendTodo}
+              //   />
+
+              //   <ModalCard
+              //     title="Are you sure, Do you want to send the day end status?"
+              //     ModalOpen={isDayEndModalOpen}
+              //     setModalOpen={setIsDayEndModalOpen}
+              //     onOk={handleSendDayEndTodo}
+              //   />
+              // </>
             }
           >
             <div
@@ -394,7 +429,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 className="ScrollInProgress"
                 style={{
                   flex: 1,
-                  minHeight: "32.3vh",
+                  minHeight: "31.4vh",
                   position: "relative",
                   width: "100%",
                   borderBottom: "1px solid rgba(255, 255, 255, 0.386)",
@@ -414,9 +449,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   </span>
 
                   <Button
+                    className='check2'
                     size="small"
                     onClick={showModal}
-                    type="primary"
                     icon={<PlusOutlined />}
                   ></Button>
                   <Modal
@@ -435,9 +470,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                         fontWeight: "normal",
                       }}
                     >
-                      Description:
                       <TextArea
-                        rows={4}
+                        rows={7}
                         placeholder="Description"
                         value={newTask}
                         onChange={(e) => setNewTask(e.target.value)}
@@ -500,9 +534,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       <div className="hello">
                                         {task.description.length > 35
                                           ? `${task.description.substring(
-                                              0,
-                                              35
-                                            )}...`
+                                            0,
+                                            35
+                                          )}...`
                                           : task.description}
                                       </div>
                                       <Button
@@ -532,7 +566,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 className=""
                 style={{
                   flex: 1,
-                  minHeight: "31.3vh",
+                  minHeight: "30vh",
                   position: "relative",
                   width: "100%",
                 }}
@@ -598,9 +632,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       <div>
                                         {task.description.length > 35
                                           ? `${task.description.substring(
-                                              0,
-                                              35
-                                            )}...`
+                                            0,
+                                            35
+                                          )}...`
                                           : task.description}
                                       </div>
                                       <Button

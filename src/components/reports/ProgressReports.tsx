@@ -38,10 +38,10 @@ const ProgressReports = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
     }, [dispatch]);
-    
+
 
 
     const columns: TableProps<IColumnsReports>['columns'] = [
@@ -51,7 +51,7 @@ const ProgressReports = () => {
             key: 'srNo',
             align: 'center',
             render: (_, __, index) => index + 1,
-            width:"80px"
+            width: "80px"
         },
         {
             title: 'File Name',
@@ -183,7 +183,7 @@ const ProgressReports = () => {
     };
 
     useEffect(() => {
-        if(!user?.admin) return;
+        if (!user?.admin) return;
         const fetchMentorList = async () => {
             const res = await GetMentorList();
             setMentorListName(res.data);
@@ -270,6 +270,7 @@ const ProgressReports = () => {
                             size="small"
                             loading={loading}
                             sticky={true}
+                            locale={{ emptyText: <></> }}
                             className="ScrollInProgress"
                             style={{
                                 height: "calc(65vh - 88px)",

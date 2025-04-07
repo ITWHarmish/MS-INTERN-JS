@@ -128,7 +128,7 @@ const Login = () => {
                             <Button
                                 type="primary"
                                 htmlType="submit"
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', marginTop:"15px" }}
                                 size="large"
                                 loading={loading}
                             >

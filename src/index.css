@@ -5,7 +5,7 @@ body {
   padding: 0px;
 }
 
-.layout{
+.layout {
   overflow: hidden;
   height: 100vh;
   width: 100%;
@@ -54,10 +54,13 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-text-fill-color: white !important;  /* Keep text color */
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;  /* Transparent background */
+  -webkit-text-fill-color: white !important;
+  /* Keep text color */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  /* Transparent background */
   background-color: transparent !important;
-  transition: background-color 5000s ease-in-out 0s !important; /* Delay default autofill styles */
+  transition: background-color 5000s ease-in-out 0s !important;
+  /* Delay default autofill styles */
 }
 
 
@@ -190,13 +193,13 @@ input:-webkit-autofill:active {
 
 /* Navbar CSS */
 
-.Done-card{
+.Done-card {
   border: none !important;
   /* background: transparent !important; */
-  
+
 }
 
-.nav{
+.nav {
   color: white;
   display: flex;
   justify-content: space-between;
@@ -206,7 +209,7 @@ input:-webkit-autofill:active {
   /* box-shadow: "0 2px 4px rgba(0, 0, 0, 0.2)"; */
 }
 
-.btn{
+.btn {
   color: white;
   background: transparent;
 }
@@ -221,18 +224,64 @@ input:-webkit-autofill:active {
   gap: 15px;
 }
 
-.ant-menu .ant-menu-item a::before{
+.ant-menu .ant-menu-item a::before {
   color: #fff;
 }
 
+/* navbar menu changes */
+
 .check .ant-menu-item {
-  color: white !important;
+  color: #204984 !important;
   transition: all 0.3s ease-in-out;
 }
 
+.ant-menu-item-icon svg {
+  color: #204984 !important;
+  fill: #204984 !important;
+}
+
+/* modal Changes */
+.ant-modal-mask {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.ant-modal .ant-modal-content {
+  background-color: rgb(0 0 0 / 40%) !important;
+}
+
+.ant-modal .ant-modal-header {
+  background-color: rgb(0 0 0 / 40%) !important;
+}
+/* 
+.ant-modal .ant-modal-title  {
+  background-color: rgb(0 0 0 / 40%) !important;
+  color: white !important;
+} */
+/* 
+.ant-modal-header {
+  background-color: rgb(0 0 0 / 40%) !important;
+} */
+
+.ant-modal-title {
+  color: white !important;
+}
+:where(.ant-modal) .ant-modal-header {
+  background-color: rgb(0 0 0 / 40%) !important;
+}
+
+
+
 /* login Chnages */
 
-.container{
+/* Change background color for Ant Design solid button on active state */
+.ant-btn.ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
+  background-color: #fff !important;
+  color: black !important;
+}
+
+
+.container {
   min-height: 100vh;
   width: 100%;
   background: url('/bg-01.png') no-repeat center center/cover;
@@ -241,15 +290,15 @@ input:-webkit-autofill:active {
   align-items: center;
 }
 
-.left-section{
+.left-section {
   width: 40%;
 }
 
-.left-section img{
+.left-section img {
   max-width: 350px;
 }
 
-.right-section{
+.right-section {
   width: 30%;
   display: flex;
   align-items: center;
@@ -261,7 +310,7 @@ input:-webkit-autofill:active {
 }
 
 /* Outer Wrapper which contains both icon and input */
-.ant-input-affix-wrapper{
+.ant-input-affix-wrapper {
   background: rgba(255, 255, 255, 0.1) !important;
   border: 1px solid rgba(255, 255, 255, 0.386) !important;
   border-bottom-right-radius: 12px !important;
@@ -275,7 +324,8 @@ input:-webkit-autofill:active {
   color: white !important;
 }
 
-.wrapper .ant-input, .ant-input-outlined{
+.wrapper .ant-input,
+.ant-input-outlined {
   /* border: none !important; */
   background: transparent !important;
   /* outline: none !important; */
@@ -287,13 +337,14 @@ input:-webkit-autofill:active {
   border-bottom-left-radius: 0 !important;
 }
 
-.ant-input::placeholder{
+.ant-input::placeholder {
   color: rgba(255, 255, 255, 0.683) !important;
 }
 
 
 /* Button */
-.ant-btn, .ant-btn.ant-btn-primary{
+.ant-btn,
+.ant-btn.ant-btn-primary {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.386);
   border-radius: 20px;
@@ -303,7 +354,7 @@ input:-webkit-autofill:active {
   transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.ant-btn:hover{
+.ant-btn:hover {
   background: rgb(40, 40, 125);
   color: white;
 }
@@ -311,55 +362,63 @@ input:-webkit-autofill:active {
 
 
 /* FillUpform CSS */
-.wrapper{
-    width: 70%;
-    margin: 0 auto;
-    background: rgba(0, 0, 0, 0.406);
-    backdrop-filter: blur(10px);
-    padding: 20px 40px;
-    border-top-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    border: 1px solid #ffffffa1;
+.wrapper {
+  width: 70%;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.406);
+  backdrop-filter: blur(10px);
+  padding: 20px 40px;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border: 1px solid #ffffffa1;
 }
 
-.wrapper img{
+.wrapper img {
   display: block;
   margin: 0 auto 20px;
   width: 170px;
 }
 
-h2{
+h2 {
   font-size: 22px;
   color: white;
   margin-bottom: 30px;
   font-family: "Rubik";
 }
 
- .ant-select-selector {
-  background-color: #f5f5f5 !important; /* Change to your desired color */
+.ant-select-selector {
+  background-color: #f5f5f5 !important;
+  /* Change to your desired color */
 }
 
-.ant-select-selection-item { /* Change label background */
-  color: white !important; /* Change text color */
-  border-radius: 5px; /* Optional: Add rounded corners */
-  padding: 5px 10px; /* Adjust padding */
+.ant-select-selection-item {
+  /* Change label background */
+  color: white !important;
+  /* Change text color */
+  border-radius: 5px;
+  /* Optional: Add rounded corners */
+  padding: 5px 10px;
+  /* Adjust padding */
 }
 
 
-.ant-select-selector, .ant-picker-outlined {
-  background: transparent !important;  /* Remove background */
+.ant-select-selector,
+.ant-picker-outlined {
+  background: transparent !important;
+  /* Remove background */
   border-bottom-right-radius: 12px !important;
   border-top-left-radius: 12px !important;
   border-top-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
 
-.ant-picker .ant-picker-input > input {
+.ant-picker .ant-picker-input>input {
   color: white !important;
 }
 
-.ant-select-dropdown{
-  border: 1px solid #ffffffa1;/* Keep border */
+.ant-select-dropdown {
+  border: 1px solid #ffffffa1;
+  /* Keep border */
   border-bottom-right-radius: 12px !important;
   border-top-left-radius: 12px !important;
   border-top-right-radius: 0 !important;
@@ -368,7 +427,7 @@ h2{
   backdrop-filter: blur(10px);
 }
 
-.ant-select-item{
+.ant-select-item {
   color: #ffffffb1 !important;
 }
 
@@ -376,27 +435,44 @@ h2{
   background-color: rgb(47, 47, 173) !important;
 }
 
-.ant-select-selection-placeholder, .ant-picker-input input::placeholder{
+.ant-select-selection-placeholder,
+.ant-picker-input input::placeholder {
   color: rgba(255, 255, 255, 0.683) !important;
 }
 
-.anticon svg{
+.anticon svg {
   color: #fff;
 }
 
-.ant-input{
+.ant-input {
   margin-right: 2px;
 }
 
 
 
 /* Navbar CSS */
-.check.ant-menu{
+.check.ant-menu {
   background: transparent;
 }
 
 /* Time Log CSS */
-.ant-card{
+
+.ant-btn-color-dangerous.ant-btn-variant-outlined {
+  /* background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.386) !important;
+  color: white !important; */
+  border: none !important;
+  background: transparent !important;
+}
+
+.check2 {
+  background: transparent !important;
+  border: none !important;
+}
+
+.ant-btn-color-dangerous.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {}
+
+.ant-card {
   background: rgba(60, 60, 60, 0.274);
   border: 1px solid #ffffffa1;
   border-top-left-radius: 0;
@@ -412,11 +488,11 @@ h2{
   border-top-right-radius: 0 !important;
 }
 
-.ant-card .ant-card-head-title{
+.ant-card .ant-card-head-title {
   color: White;
 }
 
-.ant-card-body{
+.ant-card-body {
   color: white;
 }
 
@@ -441,8 +517,8 @@ h2{
   border: none !important;
 }
 
-.ant-table-wrapper .ant-table-thead >tr >th {
-  background: transparent !important;  
+.ant-table-wrapper .ant-table-thead>tr>th {
+  background: transparent !important;
   /* background: rgba(255, 255, 255, 0) !important; */
   border-bottom: 1px solid #050505 !important;
   color: white !important;
@@ -451,13 +527,45 @@ h2{
   padding: 12px;
 }
 
-.ant-table-wrapper .ant-table-tbody >tr >td {
+/* .ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder {
+  background: transparent !important;
+  cursor: default !important;
+} */
+
+/* Override Ant Design hover effect on the placeholder row */
+/* .ant-table-wrapper .ant-table-tbody > tr.ant-table-placeholder:hover {
+  background: transparent !important;
+  cursor: default;
+} */
+
+
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover {
+  background: transparent !important;
+  cursor: default;
+}
+
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover td {
+  background: transparent !important;
+}
+
+/* Hides the empty placeholder row completely */
+/* .ant-table-placeholder {
+  display: none !important;
+} */
+/* Remove only the border (white line) */
+.ant-table-placeholder>td {
+  border: none !important;
+}
+
+
+
+.ant-table-wrapper .ant-table-tbody>tr>td {
   border-bottom: 1px solid rgba(255, 255, 255, 0.406);
   color: #fff;
   border-right: 0 !important;
 }
 
-.ant-table-cell td{
+.ant-table-cell td {
   border-bottom: 0 !important;
 }
 
@@ -466,22 +574,22 @@ h2{
   cursor: default !important;
 } */
 
-.ant-table-wrapper 
+/* .ant-table-wrapper 
 .ant-table-tbody > tr.ant-table-placeholder:hover {
     background-color: inherit !important;
     pointer-events: none;
-}
+} */
 
-.ant-empty-description{
+.ant-empty-description {
   color: #fff !important;
   border-bottom: 0 !important;
 }
 
-.ant-empty-normal{
+.ant-empty-normal {
   border-bottom: 0 !important;
 }
 
-.ant-table-header{
+.ant-table-header {
   background: rgba(60, 60, 60, 0.274) !important;
   border: 1px solid #ffffffa1 !important;
   border-top-left-radius: 12px !important;
@@ -491,14 +599,41 @@ h2{
   margin-bottom: 15px;
 }
 
-.ant-table-placeholder{
+/* Remove top-right corner from the last column header */
+.ant-table thead > tr > th:last-child {
+  border-top-right-radius: 0 !important;
+}
+
+/* Remove visible table header borders */
+/* th.ant-table-cell {
+  border: none !important;
+} */
+th.ant-table-cell {
+  border: none !important;
+  position: relative;
+}
+
+th.ant-table-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background-color: #fff;
+  /* background-color: rgba(255, 255, 255, 0.3);  */
+}
+
+
+
+.ant-table-placeholder {
   background-color: transparent !important;
 }
 
-.ant-table-placeholder{
+.ant-table-placeholder {
   border-bottom: 0 !important;
 }
 
-.ant-table-cell-row-hover{
+.ant-table-cell-row-hover {
   background: transparent !important;
 }

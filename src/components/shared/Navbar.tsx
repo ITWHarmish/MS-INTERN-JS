@@ -195,6 +195,7 @@ const Navbar = () => {
                                 open={isModalOpen}
                                 footer={null}
                                 onCancel={handleCancel}
+                                width={450}
                             >
                                 <Form
                                     onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
@@ -230,7 +231,7 @@ const Navbar = () => {
                                             <Input placeholder="Enter the code" />
                                         </Form.Item>
                                     )}
-                                    <Form.Item style={{ marginBottom: "10px" }}>
+                                    <Form.Item style={{ marginBottom: "10px", textAlign: "right" }}>
                                         <Button type="primary" htmlType="submit" >
                                             {isOtpStep ? "Submit OTP" : "Send Code"}
                                         </Button>
