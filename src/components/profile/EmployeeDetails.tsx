@@ -35,7 +35,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                 </Flex>
               }
               title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey"  }}>
+                <Typography.Text style={{ fontSize: "12px", color: "white"  }}>
                   Name
                 </Typography.Text>
               }
@@ -73,7 +73,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                 </Flex>
               }
               title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
+                <Typography.Text style={{ fontSize: "12px", color: "white" }}>
                   E-mail
                 </Typography.Text>
               }
@@ -101,7 +101,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                 </Flex>
               }
               title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
+                <Typography.Text style={{ fontSize: "12px", color: "white" }}>
                   Mobile No
                 </Typography.Text>
               }
@@ -138,7 +138,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                 </Flex>
               }
               title={
-                <Typography.Text style={{ fontSize: "12px", color: "grey" }}>
+                <Typography.Text style={{ fontSize: "12px", color: "white" }}>
                   College Name
                 </Typography.Text>
               }

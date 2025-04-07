@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, message, theme } from "antd";
+import { Button, Card, message } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { DeletePolicy, GetPolicies, UpdatePoliciesOrder } from "../../services/hrPolicyAPI";
@@ -35,7 +35,6 @@ const HrPolicies = () => {
   const [deletePolicyId, setDeletePolicyId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth)
-  const { token } = theme.useToken();
 
 
   const isAdmin = user?.admin;
@@ -123,59 +122,61 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div style={{ padding: "16px", height: "100vh", backgroundColor: token.colorBgLayout === "White" ? "white" : "black" }}>
-        <Card style={{ marginBottom: "50px", padding: "20px" }}>
-          {loading ? (
-            <Spinner />
-          ) : (
-            isAdmin ? (
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="policies-list">
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps} >
-                      {orderedPolicies.map((policy, index) => (
-                        <Draggable key={policy._id} draggableId={policy._id.toString()} index={index}>
-                          {(provided) => (
-                            <Card
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              title={policy.policyTitle}
-                              style={getItemStyle(provided.draggableProps.style)}
-                              extra={
-                                <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
-                                  <Button shape="circle" icon={<EditOutlined />} size="small" onClick={() => handleEdit(policy)} />
-                                  <Button shape="circle" danger icon={<DeleteOutlined />} size="small" onClick={() => handleDelete(policy._id)} />
-                                  <ModalCard
-                                    title="Are you sure do you want to delete this policy?"
-                                    ModalOpen={deleteModalOpen}
-                                    setModalOpen={setDeleteModalOpen}
-                                    onOk={confirmDelete}
-                                  />
-                                </div>
-                              }
-                            >
-                              <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
-                            </Card>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+      <div>
+        <div style={{ padding: "16px" }}>
+          <Card style={{ marginBottom: "50px", padding: "20px" }}>
+            {loading ? (
+              <Spinner />
             ) : (
-              <div>
-                {orderedPolicies.map((policy) => (
-                  <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px" }}>
-                    <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
-                  </Card>
-                ))}
-              </div>
-            )
-          )}
-        </Card>
+              isAdmin ? (
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="policies-list">
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.droppableProps} >
+                        {orderedPolicies.map((policy, index) => (
+                          <Draggable key={policy._id} draggableId={policy._id.toString()} index={index}>
+                            {(provided) => (
+                              <Card
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                title={policy.policyTitle}
+                                style={getItemStyle(provided.draggableProps.style)}
+                                extra={
+                                  <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
+                                    <Button shape="circle" icon={<EditOutlined />} size="small" onClick={() => handleEdit(policy)} />
+                                    <Button shape="circle" danger icon={<DeleteOutlined />} size="small" onClick={() => handleDelete(policy._id)} />
+                                    <ModalCard
+                                      title="Are you sure do you want to delete this policy?"
+                                      ModalOpen={deleteModalOpen}
+                                      setModalOpen={setDeleteModalOpen}
+                                      onOk={confirmDelete}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                              </Card>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <div>
+                  {orderedPolicies.map((policy) => (
+                    <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px" }}>
+                      <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                    </Card>
+                  ))}
+                </div>
+              )
+            )}
+          </Card>
+        </div>
       </div>
     </>
   );

@@ -57,7 +57,7 @@ const FillUpForm = () => {
             <div className="container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", backgroundColor: "#f0f2f5" }}>
                 <div className="wrapper">
                     <img src={toshalImg} />
-                    <h2>FILL UP YOUR DETAILS</h2>
+                    {/* <h2>FILL UP YOUR DETAILS</h2> */}
                         <Form
                             onFinish={handleSubmit}
                             layout="vertical"

@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -84,13 +84,13 @@ const Navbar = () => {
         <div>
             <Space direction="vertical">
                 {
-                    !user?.admin && <Button onClick={() => onMenuClick({ key: "profile" })} type="text" icon={<UserOutlined />}>
+                    !user?.admin && <a style={{color:"white"}}  onClick={() => onMenuClick({ key: "profile" })} type="text">
                         Profile
-                    </Button>
+                    </a>
                 }
-                <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
+                <a style={{color:"white"}} onClick={handleLogout} type="text">
                     Logout
-                </Button>
+                </a>
             </Space>
         </div>
     );

@@ -1,4 +1,4 @@
-import { Card, DatePicker, Divider, Flex, Input, Layout, message, Space, theme, Typography } from "antd";
+import { Card, DatePicker, Flex, Input, Layout, message, Space, theme, Typography } from "antd";
 import {
   CalendarOutlined,
   CodeOutlined,
@@ -106,7 +106,7 @@ const Profile = () => {
 
   return (
     <div
-      style={{ backgroundColor: token.colorBgLayout }}
+      style={{ overflow: 'auto', background: 'transparent' }}
     >
       {
         loading ? <Spinner /> :
@@ -116,15 +116,15 @@ const Profile = () => {
               setEditMode={setEditMode}
               handleSave={handleSave}
             />
-            <Layout style={{ height: "auto", overflow: "hidden" }}>
+            <Layout style={{ height: "auto", overflow: "hidden", background: "transparent", }}>
               <Content
                 style={{
-                  backgroundColor: "white",
                   width: "auto",
                   margin: "auto",
+                  background: "transparent",
                 }}
               >
-                <Flex style={{ width: "auto", height: "fit-content", backgroundColor: token.colorBgLayout }} gap={70}>
+                <Flex style={{ width: "auto", height: "fit-content" }} gap={70}>
                   <Flex>
                     <OtherLinks
                     />
@@ -151,7 +151,7 @@ const Profile = () => {
                           style={{ width: "100%" }}
                           size={15}
                         >
-                          <Card style={{ width: "100%" }}>
+                          <Card style={{ width: "100%" }} className="custom-card">
                             <Card.Meta
                               avatar={
                                 <Flex
@@ -169,7 +169,7 @@ const Profile = () => {
                               }
                               title={
                                 <Typography.Text
-                                  style={{ fontSize: "12px", color: "grey" }}
+                                  style={{ fontSize: "12px", color: "white" }}
                                 >
                                   Joining Date
                                 </Typography.Text>
@@ -191,7 +191,7 @@ const Profile = () => {
                               }
                             />
                           </Card>
-                          <Card style={{ width: "100%" }}>
+                          <Card style={{ width: "100%" }} className="custom-card">
                             <Card.Meta
                               avatar={
                                 <Flex
@@ -209,7 +209,7 @@ const Profile = () => {
                               }
                               title={
                                 <Typography.Text
-                                  style={{ fontSize: "12px", color: "grey" }}
+                                  style={{ fontSize: "12px", color: "white" }}
                                 >
                                   Duration
                                 </Typography.Text>
@@ -231,7 +231,7 @@ const Profile = () => {
                             />
                           </Card>
 
-                          <Card className="cardWidth">
+                          <Card className="cardWidth custom-card">
                             <Card.Meta
                               avatar={
                                 <Flex
@@ -249,7 +249,7 @@ const Profile = () => {
                               }
                               title={
                                 <Typography.Text
-                                  style={{ fontSize: "12px", color: "grey" }}
+                                  style={{ fontSize: "12px", color: "white" }}
                                 >
                                   Intern/Trainee
                                 </Typography.Text>
@@ -270,19 +270,9 @@ const Profile = () => {
                               }
                             />
                           </Card>
-                          <Card className="cardWidth">
+                          <Card className="cardWidth custom-card">
                             <Card.Meta
-                              title={
-                                <>
-                                  <Typography.Text
-                                    style={{ color: token.colorPrimary, fontSize: "20px" }}
-                                    strong
-                                  >
-                                    Team
-                                  </Typography.Text>
-                                  <Divider />
-                                </>
-                              }
+                              
                               description={
                                 <Space direction="vertical" size={20}>
                                   <Flex
@@ -292,9 +282,8 @@ const Profile = () => {
                                   >
                                     <div
                                       style={{
-                                        fontSize: "12px",
+                                        fontSize: "20px",
                                         borderRadius: "50%",
-                                        backgroundColor: token.colorPrimary,
                                         height: "auto",
                                         margin: "10px",
                                       }}
@@ -305,7 +294,7 @@ const Profile = () => {
                                     </div>
                                     <Flex vertical style={{ width: "100%" }} gap={2}>
                                       <Typography.Text
-                                        style={{ fontSize: "12px", color: "grey" }}
+                                        style={{ fontSize: "12px", color: "white", paddingTop:"5px" }}
                                         strong
                                       >
                                         HR
@@ -313,14 +302,14 @@ const Profile = () => {
                                       <Flex justify="space-between" vertical>
                                         <Typography.Text
                                           strong
-                                          style={{ fontSize: "14px" }}
+                                          style={{ fontSize: "14px", color: "black" }}
                                         >
                                           Ridhhi Jariwala
                                         </Typography.Text>
                                         <Typography.Text
                                           style={{
                                             fontSize: "12px",
-                                            color: "grey",
+                                            color: "black",
                                           }}
                                         >
                                           hr@toshalinfotech.com
@@ -335,20 +324,19 @@ const Profile = () => {
                                   >
                                     <div
                                       style={{
-                                        fontSize: "12px",
+                                        fontSize: "20px",
                                         borderRadius: "50%",
-                                        backgroundColor: token.colorPrimary,
                                         height: "auto",
                                         margin: "10px",
                                       }}
                                     >
                                       <UserOutlined
-                                        style={{ margin: "8px", color: "white" }}
+                                        style={{ margin: "8px", color: "black", }}
                                       />
                                     </div>
                                     <Flex vertical style={{ width: "100%" }} gap={2}>
                                       <Typography.Text
-                                        style={{ fontSize: "12px", color: "grey" }}
+                                        style={{ fontSize: "12px", color: "white" }}
                                         strong
                                       >
                                         Mentor
@@ -356,7 +344,7 @@ const Profile = () => {
                                       <Flex justify="space-between" vertical>
                                         <Typography.Text
                                           strong
-                                          style={{ fontSize: "14px" }}
+                                          style={{ fontSize: "14px", color: "black" }}
                                         >
                                           {
                                             editMode
@@ -372,7 +360,7 @@ const Profile = () => {
                                         <Typography.Text
                                           style={{
                                             fontSize: "12px",
-                                            color: "grey",
+                                            color: "black",
                                           }}
                                         >
                                           {

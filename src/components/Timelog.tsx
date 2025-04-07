@@ -35,10 +35,22 @@ const Timelog = ({ selectedDate, setSelectedDate }) => {
             <Card style={{ position: "relative", height: "100%" }}
                 title={<div>
                     <span>Timelog :</span>
-                    <span style={{ fontWeight: "normal", marginLeft:"7px" }}>{`${totalHours.toFixed(2)} hours`}</span>
+                    <span style={{ fontWeight: "normal", marginLeft: "7px" }}>{`${totalHours.toFixed(2)} hours`}</span>
                 </div>}
                 extra={
-                    <DatePicker defaultValue={selectedDate} onChange={handleDateChange} />
+                    <div
+                        style={{
+                            background: "transparent",
+                            borderBottomRightRadius: "12px",
+                            borderTopLeftRadius: "12px",
+                            borderTopRightRadius: "12px",
+                            borderBottomLeftRadius: "12px",
+                        }}
+                    >
+                        <DatePicker
+                            // style={{ border: '2px solid #1890ff', borderRadius: '8px 12px 7px 5px' }}
+                            className='picker-timelog' defaultValue={selectedDate} onChange={handleDateChange} />
+                    </div>
                 }>
                 <Tasktable selectedDate={selectedDate} />
             </Card >

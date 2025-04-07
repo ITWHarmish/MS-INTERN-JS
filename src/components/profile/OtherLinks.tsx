@@ -35,7 +35,7 @@ const OtherLinks = () => {
       />
       <Space style={{ width: "100%" }} direction="vertical" size={15}>
         {user?.internsDetails?.linkedinURL && user?.internsDetails?.githubURL &&
-          <Card className="cardWidth">
+          <Card className="cardWidth custom-card">
             <Card.Meta
               avatar={
                 <Flex
