@@ -136,11 +136,14 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         else if (location.pathname === "/hrPolicy") {
             setCurrent("hr policy");
         }
+        else if (location.pathname === "/intern/list") {
+            setCurrent("intern list");
+        }
         else if (!user?.admin) {
             setCurrent("timelog");
         }
         else {
-            setCurrent("hr policy");
+            setCurrent("progress report");
         }
     }, [dispatch, user?.admin]);
 
@@ -170,10 +173,11 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                                 key: "logo",
                                 label: <img style={{ height: "30px", width: "auto", verticalAlign: "middle", cursor: "pointer", pointerEvents: "none", }} src="/toshalLogo.png" alt="Logo" />,
                             },
-                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
-                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
+                            { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
+                            { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
                             { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
                             { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>Progress Report</Link> },
+                            user?.admin && { key: "intern list", icon: <UserOutlined />, label: <Link to={"/intern/list"}>Intern List</Link> },
                         ]}
                     ></Menu>
                 )}

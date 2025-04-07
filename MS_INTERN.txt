@@ -62,4 +62,37 @@ o OFF ? Leave is recorded but no email is sent.
 o ON ? Enter a reason and select recipients.
 * Click "Generate Email with AI" for an auto-drafted email (editable).
 * Click "Apply Leave" to save (and send an email if enabled).
-
+Progress Report Feature
+User: How do Add a New Progress Report?
+Chatbot:
+* Navigate to the Progress Report section from the navbar.
+* Click the "Add New Report" button (top-right corner).
+* Fill in the form with your user details and select the time period for the report.
+* Click Next to proceed to the Task Assigned Table.
+* In the Task Assigned Table, enter the tasks completed during the selected period.
+* Click Next to navigate to the submission confirmation page.
+* Review the details and click Submit to complete the report submission.
+User: How can I download my report?
+Chatbot:
+* After submitting your report, you can download it immediately, even before mentor approval.
+* To download the report:
+o Navigate to the Progress Report section.
+o In the report table, find the file name (it represents the selected report date and duration).
+o Click on the file name to open the report in a new page.
+o On the new page, locate the Download button at the top-right corner of the PDF page.
+* Click the Download button to save the report to your device.
+User: How can I edit my report?
+Chatbot:
+* Users can edit their report directly from the Progress Report section based on its status.
+* Editable States:
+o Progress
+o Preview
+o Rejected
+* Non-Editable State:
+o Approved (Editing is not allowed after approval, but you can still download the report.)
+* Steps to Edit a Report:
+o Navigate to the Progress Report section.
+o Find your report in the table.
+o In the Actions column, locate the Edit (pencil) icon next to your report.
+o Click the Edit icon to modify the report details.
+o Save the changes, and your report will be updated.

@@ -19,7 +19,7 @@ const Login = () => {
     useEffect(() => {
         if (user) {
             if (user.admin) {
-                navigate("/hrPolicy");
+                navigate("/report");
             }
             else if (user.internsDetails === undefined || user.internsDetails === "") {
                 navigate("/fillUpForm");
@@ -38,7 +38,7 @@ const Login = () => {
             Cookies.set('ms_intern_jwt', response.token, { expires: 15 })
             dispatch(setUser(response.user))
             if (response.user.admin) {
-                navigate("/hrPolicy");
+                navigate("/report");
             }
             if (response.user.internsDetails === "") {
                 navigate("/fillUpForm");

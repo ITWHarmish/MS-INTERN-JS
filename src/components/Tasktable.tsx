@@ -13,7 +13,7 @@ import { IColumns, TimeLog } from '../types/ITimelog';
 
 dayjs.extend(localizedFormat);
 
-const Tasktable = ({ selectedDate }) => {
+const Tasktable = ({ selectedDate, internId }) => {
 
     const formattedDate = selectedDate.format("YYYY-MM-DD");
     const [showCard, setShowCard] = useState(false);
@@ -26,10 +26,11 @@ const Tasktable = ({ selectedDate }) => {
         date: formattedDate,
     });
     const { timelogs } = useSelector((state: RootState) => state.timelog)
-
+    const { user } = useSelector((state: RootState) => state.auth)
     const [editingId, setEditingId] = useState<string | null>(null);
-
+    const dispatch = useDispatch<AppDispatch>();
     const { RangePicker } = TimePicker;
+    const userId = user?.admin ? internId : user?._id;
 
     useEffect(() => {
         let startTime, endTime;
@@ -132,8 +133,6 @@ const Tasktable = ({ selectedDate }) => {
         setFormData({ ...formData, category: value });
     };
 
-    const dispatch = useDispatch<AppDispatch>();
-
     const handleSubmit = async () => {
         if (!formData.startTime || !formData.endTime || !formData.category || !formData.description || !formData.date) {
             message.error("All fields are required!");
@@ -158,7 +157,7 @@ const Tasktable = ({ selectedDate }) => {
         if (editingId) {
             try {
                 await UpdateTimelog(editingId, payload);
-                dispatch(fetchTimelogs({ date: formattedDate }))
+                dispatch(fetchTimelogs({ date: formattedDate, userId }))
                 message.success('TimeLog Updated successful!');
 
             } catch (error) {
@@ -168,7 +167,7 @@ const Tasktable = ({ selectedDate }) => {
         } else {
             try {
                 await AddTimelog(payload);
-                dispatch(fetchTimelogs({ date: formattedDate }))
+                dispatch(fetchTimelogs({ date: formattedDate, userId }))
                 message.success('TimeLog Added successful!');
             } catch (error) {
                 console.error('Error While Submitting the time log:', error);
@@ -207,7 +206,7 @@ const Tasktable = ({ selectedDate }) => {
         try {
             setLoading(true);
             await DeleteTimelog(record);
-            dispatch(fetchTimelogs({ date: formattedDate }))
+            dispatch(fetchTimelogs({ date: formattedDate, userId }))
             message.success('TimeLog Deleted successful!');
         } catch (error) {
             message.error('Delete Failed! Please try again.');

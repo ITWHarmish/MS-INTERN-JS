@@ -1,4 +1,4 @@
-import { Button, theme, Tooltip } from 'antd';
+import { Button, message, Select, theme, Tooltip } from 'antd';
 import Leaves from './Leaves';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
@@ -13,12 +13,15 @@ import { useDispatch } from 'react-redux';
 import { fetchLeaves } from '../../redux/actions/leaveActions';
 import isBetween from 'dayjs/plugin/isBetween';
 import { GetMonthlySummary } from '../../services/monthlySummaryAPI';
+import { GetInternsByMentorId } from '../../services/adminAPI';
+import { GetLeaveRequests } from '../../services/leaveAPI';
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
     const localizer = dayjsLocalizer(dayjs)
     const dispatch = useDispatch<AppDispatch>();
     const { leaves } = useSelector((state: RootState) => state.leave)
+    const { user } = useSelector((state: RootState) => state.auth)
     const { token } = theme.useToken();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -26,7 +29,29 @@ const MonthlySummary = () => {
     const [calendarLoading, setCalendarLoading] = useState(false);
     const [officeHoliday, setOfficeHoliday] = useState(null);
     const [eventList, setEventList] = useState([]);
+    const [internId, setInternId] = useState("");
+    const [students, setStudents] = useState<{ _id: string; fullName: string }[]>([]);
+    const [customLeaves, setCustomLeaves] = useState([]);
 
+    const fetchInterns = async () => {
+        if (!user || !user._id) {
+            console.warn("User or Mentor ID is missing, skipping API call");
+            return;
+        }
+        try {
+            if (user.admin) {
+                const res = await GetInternsByMentorId(user._id);
+                setStudents(res.data || []);
+            }
+        } catch (error) {
+            console.error("Error Intern List:", error);
+            message.error("Failed to fetch Intern List.");
+        }
+    };
+
+    useEffect(() => {
+        fetchInterns();
+    }, [user]);
 
     const handleNavigate = useCallback(async (date) => {
         try {
@@ -35,8 +60,11 @@ const MonthlySummary = () => {
 
             const selectedMonth = dayjs(date).month() + 1;
             const selectedYear = dayjs(date).year();
+            const userId = user?.admin ? internId : user?._id;
+            const payload = { year: selectedYear, month: selectedMonth, userId: userId };
 
-            const payload = { year: selectedYear, month: selectedMonth };
+            const response = await GetLeaveRequests(payload);
+            setCustomLeaves(response);
 
             const res = await GetMonthlySummary(payload);
             setMonthlySummary(res);
@@ -49,19 +77,28 @@ const MonthlySummary = () => {
             setTimeout(() => setCalendarLoading(false), 500);
         }
 
-    }, []);
+    }, [internId, user?._id, user?.admin]);
+
+
 
     useEffect(() => {
         dispatch(fetchLeaves());
     }, [dispatch])
+
+
+    useEffect(() => {
+        if (!user?.admin && leaves) {
+            setCustomLeaves(leaves);
+        }
+    }, [leaves, user]);
 
     useEffect(() => {
         handleNavigate(currentDate);
     }, [handleNavigate, currentDate]);
 
     useEffect(() => {
-        if (leaves && leaves.length > 0 || (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)) {
-            const dynamicLeaves = leaves.map((leave) => ({
+        if (customLeaves && customLeaves.length > 0 || (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)) {
+            const dynamicLeaves = customLeaves.map((leave) => ({
                 start: new Date(leave.from),
                 end: new Date(leave.to),
                 title: "",
@@ -78,7 +115,7 @@ const MonthlySummary = () => {
 
             setEventList(allEvents);
         }
-    }, [leaves, monthlySummary]);
+    }, [customLeaves, monthlySummary]);
 
     useEffect(() => {
         const holiday = monthlySummary?.daysArray?.filter(day => day.holiday)
@@ -195,16 +232,36 @@ const MonthlySummary = () => {
 
     };
 
+    const handleStudentChange = (value) => {
+        setInternId(value);
+    }
+
     return (
         <>
 
             <div style={{ height: "100vh" }} className={token.colorBgLayout === "White" ? "" : "BgCard"}>
-                <div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
-                    <Button onClick={showModal} type="primary">
-                        Apply Leave
-                    </Button>
-                    <Leaves visible={isModalOpen} onClose={handleCancel} />
-                </div>
+                {user && !user.admin &&
+                    < div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
+                        <Button onClick={showModal} type="primary">
+                            Apply Leave
+                        </Button>
+                        <Leaves visible={isModalOpen} onClose={handleCancel} />
+                    </div>
+                }
+                {user && user.admin &&
+                    < div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
+                        <Select
+                            showSearch
+                            style={{ marginLeft: "15px" }}
+                            placeholder="Select Student"
+                            options={students.map((student) => ({
+                                value: student._id,
+                                label: student.fullName,
+                            }))}
+                            onChange={handleStudentChange}
+                        />
+                    </div>
+                }
                 <div style={{ width: '800px', margin: 'auto', marginTop: "20px", marginBottom: "65px" }}>
                     <div className='containerCalendar'>
                         {calendarLoading && (
@@ -251,7 +308,7 @@ const MonthlySummary = () => {
                         <span style={{ color: '#FFD9004C' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Halfday</span></span>
                     </div>
                 </div>
-            </div>
+            </div >
 
         </>
     );

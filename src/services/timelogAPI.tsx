@@ -24,10 +24,10 @@ export const AddTimelog = async (timelog: TimeLog) => {
   }
 }
 
-export const GetTimelogs = async (date) => {
+export const GetTimelogs = async (date: string, userId: string) => {
   try {
     const res = await axios.get(`${API_END_POINT}/getTimelog`, {
-      params: { date },
+      params: { date, userId },
       headers: getAuthHeaders(),
     });
     return res.data;
