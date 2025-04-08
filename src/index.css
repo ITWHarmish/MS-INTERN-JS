@@ -256,10 +256,8 @@ input:-webkit-autofill:active {
   padding: 20px !important;
 }
 
-:where(.css-dev-only-do-not-override-6li4e).ant-popover .ant-popover-arrow::after {
+:where(.css-dev-only-do-not-override-6li4e).ant-popover .ant-popover-arrow:after {
   background: rgba(0, 0, 0, 0.4) !important;
-
-
 }
 
 
