@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Steps, theme } from "antd"
+import { Button, Card, Col, DatePicker, Form, Input, message, Row, Steps } from "antd"
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -20,7 +20,6 @@ const ReportUserDetail = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const { user } = useSelector((state: RootState) => state.auth)
     const { progressReport } = useSelector((state: RootState) => state.report)
-    const { token } = theme.useToken();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -126,7 +125,7 @@ const ReportUserDetail = () => {
         <>
             {
                 loading ? <Spinner /> :
-                    <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", marginBottom: "50px", overflow: "", height: "100vh" }}>
+                    <div style={{ marginBottom: "50px", overflow: "", height: "100vh" }}>
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
                             <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
                                 <Step title="Fill Details" />

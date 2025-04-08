@@ -315,7 +315,20 @@ input:-webkit-autofill:active {
 }
 
 .ant-modal .ant-modal-header {
-  background-color: rgb(0 0 0 / 40%) !important;
+  background-color: transparent !important;
+  /* background-color: rgb(0 0 0 / 40%) !important; */
+}
+
+:where(.css-dev-only-do-not-override-6li4e).ant-picker-dropdown .ant-picker-panel-container {
+  overflow: hidden;
+  vertical-align: top;
+  background: #3c3c3c46 !important;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  transition: margin 0.3s;
+  display: inline-block;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
 }
 
 /* 
@@ -708,4 +721,31 @@ th.ant-table-cell:not(:last-child)::after {
 
 .ant-table-cell-row-hover {
   background: transparent !important;
+}
+
+/* hr policy modal */
+
+/* Override Quill toolbar button color */
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item,
+.ql-toolbar .ql-formats button {
+  color: white !important;
+}
+
+/* Set the background color of the toolbar to black */
+.ql-toolbar {
+  /* background-color: black !important; */
+  background-color: rgb(0 0 0 / 40%) !important;
+  color: white !important;
+}
+
+/* Change the button color on hover to white */
+.ql-toolbar .ql-picker-item:hover,
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar .ql-formats button:hover {
+  color: white !important;
+}
+
+.ql-picker-label, .ql-toolbar .ql-picker-item, .ql-toolbar .ql-formats button {
+  color: black !important;
 }

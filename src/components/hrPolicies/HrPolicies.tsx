@@ -122,7 +122,7 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div>
+      <div className="ScrollInProgress" style={{  height: "100vh", overflowY: "auto" }}>
         <div style={{ padding: "16px" }}>
           <Card style={{ marginBottom: "50px", padding: "20px" }}>
             {loading ? (
@@ -144,7 +144,7 @@ const HrPolicies = () => {
                                 style={getItemStyle(provided.draggableProps.style)}
                                 extra={
                                   <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
-                                    <Button shape="circle" icon={<EditOutlined />} size="small" onClick={() => handleEdit(policy)} />
+                                    <Button className="check2" icon={<EditOutlined />} size="small" onClick={() => handleEdit(policy)} />
                                     <Button shape="circle" danger icon={<DeleteOutlined />} size="small" onClick={() => handleDelete(policy._id)} />
                                     <ModalCard
                                       title="Are you sure do you want to delete this policy?"
@@ -155,7 +155,7 @@ const HrPolicies = () => {
                                   </div>
                                 }
                               >
-                                <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                                <div style={{marginLeft:"15px"}} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
                               </Card>
                             )}
                           </Draggable>
@@ -169,7 +169,7 @@ const HrPolicies = () => {
                 <div>
                   {orderedPolicies.map((policy) => (
                     <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px" }}>
-                      <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                      <div style={{marginLeft:"15px"}} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
                     </Card>
                   ))}
                 </div>

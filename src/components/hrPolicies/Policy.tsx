@@ -80,7 +80,7 @@ const Policy = ({ visible, onClose, isEditMode, policyData }) => {
                 {loading ? <Spinner /> :
                     <div style={{ padding: "20px" }}>
                         <div style={{ marginBottom: "7px" }} >
-                            <label><span style={{ color: 'red' }}>*</span> Policy Title
+                            <label style={{color:"white"}}><span style={{ color: 'red' }}>*</span> Policy Title
                             </label><br />
                         </div>
                         <Input
@@ -93,7 +93,7 @@ const Policy = ({ visible, onClose, isEditMode, policyData }) => {
                             placeholder="Enter Policy Title"
                         />
                         <div style={{ marginBottom: "7px" }} >
-                            <label><span style={{ color: 'red' }}>*</span> Policy Description
+                            <label style={{color:"white"}}><span style={{ color: 'red' }}>*</span> Policy Description
                             </label><br />
                         </div>
                         <div style={{ marginBottom: "20px" }}>

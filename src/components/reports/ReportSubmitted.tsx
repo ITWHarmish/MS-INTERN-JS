@@ -1,4 +1,4 @@
-import { Button, Card, Steps, theme } from "antd"
+import { Button, Card, Steps } from "antd"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 const ReportSubmitted = () => {
     const { Step } = Steps;
-    const { token } = theme.useToken();
     const [currentStep, setCurrentStep] = useState(3);
     const navigate = useNavigate();
     const { user } = useSelector((state: RootState) => state.auth)
@@ -18,7 +17,7 @@ const ReportSubmitted = () => {
 
     return (
         <>
-            <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", marginBottom: "50px", height: "82vh" }}>
+            <div style={{ marginBottom: "50px", height: "82vh" }}>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
                     <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
                         <Step title="Fill Details" />

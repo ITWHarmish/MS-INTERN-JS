@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Card, DatePicker, Input, Table, Form, message, theme, Steps } from "antd";
+import { Button, Card, DatePicker, Input, Table, Form, message, Steps } from "antd";
 import dayjs from "dayjs";
 import type { TableProps } from 'antd';
 import { IColumnsReports, IProgressReport } from "../../types/IReport";
@@ -18,7 +18,6 @@ const ReportTable = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { token } = theme.useToken();
     const { user } = useSelector((state: RootState) => state.auth)
     const { progressReport } = useSelector((state: RootState) => state.report)
     const [loading, setLoading] = useState(false);
@@ -202,7 +201,7 @@ const ReportTable = () => {
 
     return (
         <>
-            <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", marginBottom: "50px", height: "82vh" }}>
+            <div style={{ marginBottom: "50px", height: "82vh" }}>
                 <div style={{ padding: "20px", height: "80vh", marginBottom: "50px" }}>
                     <Steps current={1} style={{ width: "99%", maxWidth: "1300px", marginBottom: "20px" }}>
                         <Step title="Fill Details" />
@@ -289,6 +288,7 @@ const ReportTable = () => {
                                     size="small"
                                     loading={loading}
                                     sticky={true}
+                                    locale={{ emptyText: <></> }}
                                     className="ScrollInProgress"
                                     style={{
                                         height: "calc(65vh - 135px)",

@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, message, Row, Select, Steps, theme } from "antd"
+import { Button, Card, Col, Form, Input, message, Row, Select, Steps } from "antd"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,7 +9,6 @@ import Spinner from "../../utils/Spinner";
 
 const ReportEvaluation = () => {
     const { Step } = Steps;
-    const { token } = theme.useToken();
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [form] = Form.useForm();
@@ -123,8 +122,8 @@ const ReportEvaluation = () => {
         <>
             {loading ?
                 <Spinner /> :
-                <div style={{ marginBottom: "10px" }}>
-                    <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", height: "100%" }}>
+                <div className="ScrollInProgress" style={{ marginBottom: "10px" , overflowY: "auto"}}>
+                    <div style={{ height: "100%"}}>
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
                             <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
                                 <Step title="Fill Details" />

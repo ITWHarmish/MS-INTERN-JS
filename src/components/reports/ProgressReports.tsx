@@ -70,8 +70,6 @@ const ProgressReports = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-
-            align: 'center',
             render: (_, record) => (
                 <div>
                     {
@@ -101,7 +99,7 @@ const ProgressReports = () => {
             render: (_, record) => (
                 <div style={{ display: 'flex', justifyContent: "center", gap: '10px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
-                        shape="circle"
+                        className="check2"
                         icon={<EditOutlined className="check" />}
                         size="small"
                         onClick={() => {
@@ -110,7 +108,6 @@ const ProgressReports = () => {
                         disabled={user?.admin ? false : record?.status === "approved"}
                     />
                     <Button
-                        shape="circle"
                         danger
                         icon={<DeleteOutlined className="check" />}
                         size="small"
