@@ -161,10 +161,10 @@ const Navbar = () => {
                                 key: "logo",
                                 label: <img style={{ height: "30px", width: "auto", verticalAlign: "middle", cursor: "pointer", pointerEvents: "none", }} src="/toshalLogo.png" alt="Logo" />,
                             },
-                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
-                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
-                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
-                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>Progress Report</Link> },
+                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>TIMELOG</Link> },
+                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>MONTHLY SUMMARY</Link> },
+                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>WORK POLICIES</Link> },
+                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>PROGRESS REPORT</Link> },
                         ]}
                     ></Menu>
                 )}
@@ -173,21 +173,21 @@ const Navbar = () => {
                     {
                         user && !user?.admin && (
                             telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default">Google Connected</Button>
+                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default">GOOGLE CONNECTED</Button>
                                 :
-                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">Connect Google</Button>
+                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">CONNECT GOOGLE</Button>
                         )
                     }
                     {telegramUser?.telegram?.session_id ? (
                         <Button style={{ fontFamily: "Rubik" }} type="default" disabled>
-                            Telegram Connected
+                            TELEGRAM CONNECTED
                         </Button>
                     ) : (
                         <>
                             {
                                 user && !user?.admin &&
                                 <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
-                                    Connect Telegram
+                                    CONNECT TELEGRAM
                                 </Button>
                             }
                             <Modal

@@ -34,8 +34,8 @@ const Timelog = ({ selectedDate, setSelectedDate }) => {
         <>
             <Card style={{ position: "relative", height: "100%" }}
                 title={<div>
-                    <span>Timelog :</span>
-                    <span style={{ fontWeight: "normal", marginLeft: "7px" }}>{`${totalHours.toFixed(2)} hours`}</span>
+                    <span >TIMELOG :</span>
+                    <span style={{ fontWeight: "normal", marginLeft: "7px" }}>{`${totalHours.toFixed(2)} HOURS`}</span>
                 </div>}
                 extra={
                     <div

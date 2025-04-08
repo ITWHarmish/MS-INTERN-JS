@@ -305,7 +305,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               borderTopRightRadius: "30px !important",
               borderBottomLeftRadius: "30px",
             }}
-            title="Todos"
+            title="TO DO"
             extra={
               // <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
               //   {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
@@ -346,7 +346,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               <>
                 <Select
                   style={{ width: 200 }}
-                  placeholder="Day Status"
+                  placeholder="DAY STATUS"
                   onChange={(value) => {
                     if (value === "start") {
                       setIsDayStartModalOpen(true);
@@ -361,8 +361,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     ) || currentDate !== formattedDate
                   }
                 >
-                  <Select.Option value="start">Day Start</Select.Option>
-                  <Select.Option value="end">Day End</Select.Option>
+                  <Select.Option value="start">DAY START</Select.Option>
+                  <Select.Option value="end">DAY END</Select.Option>
                 </Select>
 
                 <ModalCard
@@ -444,8 +444,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     marginBottom: "10px",
                   }}
                 >
-                  <span style={{ fontSize: "16px", fontWeight: "600" }}>
-                    In Progress
+                  <span style={{ fontSize: "16px", fontWeight: "600",marginLeft:"12px" }}>
+                    IN PROGRESS
                   </span>
 
                   <Button
@@ -456,11 +456,12 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   ></Button>
                   <Modal
                     style={{ fontWeight: "600" }}
-                    title="Add To Do"
+                    title="ADD TO DO"
                     open={isAddTodoModalOpen}
                     onOk={handleAddTodo}
                     onCancel={handleCancel}
-                    okText="Submit"
+                    okText="SUBMIT"
+                    cancelText="CANCEL"
                   >
                     <p
                       style={{
@@ -472,7 +473,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     >
                       <TextArea
                         rows={7}
-                        placeholder="Description"
+                        placeholder="DESCRIPTION"
                         value={newTask}
                         onChange={(e) => setNewTask(e.target.value)}
                       />
@@ -572,8 +573,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 }}
               >
                 <div style={{ marginBottom: "10px" }}>
-                  <span style={{ fontSize: "16px", fontWeight: "600" }}>
-                    Done
+                  <span style={{ fontSize: "16px", fontWeight: "600",marginLeft:"12px" }}>
+                    DONE
                   </span>
                 </div>
                 <div>
