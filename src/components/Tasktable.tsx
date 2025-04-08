@@ -224,7 +224,7 @@ const Tasktable = ({ selectedDate }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "63vh" }}>
+        <div style={{ minHeight: "63vh", paddingTop:"10px"}}>
             <div
                 style={{
                     display: 'flex',
@@ -236,6 +236,7 @@ const Tasktable = ({ selectedDate }) => {
                 }}
             >
                 <RangePicker
+                    style={{ width: '240px' }}
                     format="HH:mm A"
                     minuteStep={15}
                     onChange={handleRangeChange}
@@ -249,7 +250,7 @@ const Tasktable = ({ selectedDate }) => {
 
                 <Select
                     style={{ width: '180px' }}
-                    showSearch
+                    // style={{ flex: 1, minWidth: '200px' }}
                     placeholder="Select Category"
                     optionFilterProp="label"
                     options={[
@@ -262,7 +263,7 @@ const Tasktable = ({ selectedDate }) => {
                 />
                 <Input
                     placeholder="Description"
-                    style={{ width: '450px' }}
+                    style={{ flex: 1, minWidth: '450px' }}
                     value={formData.description}
                     onChange={handleChangeDescription}
                     required
@@ -285,7 +286,7 @@ const Tasktable = ({ selectedDate }) => {
                     locale={{ emptyText: <></> }}
                     className="ScrollInProgress"
                     style={{
-                        height: "calc(65vh - 50px)",
+                        height: "calc(65vh - 62px)",
                         position: "absolute",
                         overflowY: "auto",
                         overflowX: "hidden",

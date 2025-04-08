@@ -31,7 +31,7 @@ body {
 
 .layout {
   overflow: hidden;
-  height: 100vh;
+  height: calc(100vh - 42px);
   width: 100%;
   background: url('/bg-01.png') no-repeat center center/cover;
 }
@@ -256,7 +256,7 @@ input:-webkit-autofill:active {
   padding: 20px !important;
 }
 
-:where(.css-dev-only-do-not-override-6li4e).ant-popover .ant-popover-arrow:after {
+.ant-popover .ant-popover-arrow:after {
   background: rgba(0, 0, 0, 0.4) !important;
 }
 
@@ -431,9 +431,9 @@ input:-webkit-autofill:active {
   transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.ant-btn:hover {
-  background: rgb(40, 40, 125);
-  color: white;
+.ant-btn-variant-outlined:disabled {
+  background: transparent !important;
+
 }
 
 .picker-timelog {
@@ -515,7 +515,7 @@ h2 {
 }
 
 .ant-select-item-option:hover {
-  background-color: rgb(47, 47, 173) !important;
+  /* background-color:  !important; */
 }
 
 .ant-select-selection-placeholder,
@@ -590,6 +590,13 @@ h2 {
   padding: 12px;
 } */
 
+/* Remove the bottom border from the table header row */
+/* .ant-table-thead > tr > th {
+  border: none !important;
+  box-shadow: none !important;
+} */
+
+
 .ant-table {
   background: transparent !important;
 }
@@ -603,7 +610,6 @@ h2 {
 .ant-table-wrapper .ant-table-thead>tr>th {
   background: transparent !important;
   /* background: rgba(255, 255, 255, 0) !important; */
-  border-bottom: 1px solid #050505 !important;
   color: white !important;
   font-weight: bold;
   text-align: left;
@@ -746,4 +752,50 @@ th.ant-table-cell:not(:last-child)::after {
 
 .ql-picker-label, .ql-toolbar .ql-picker-item, .ql-toolbar .ql-formats button {
   color: black !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell{
+  color: #ffffffb3 !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view {
+  color: white !important;
+}
+
+.ant-picker-dropdown .ant-picker-content th {
+  color: white !important;
+}
+
+.ant-picker-dropdown .ant-picker-header button{
+  color: #ffffffff !important;
+}
+.ant-picker-now-btn{
+  color: #ffffffff !important;
+}
+
+.ant-btn-color-default{
+  color: white !important;
+}
+
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover{
+  color: black !important;
+  border: none !important;
+}
+
+.ant-card .ant-card-head {
+  font-weight: normal !important;
+}
+
+.ant-picker-dropdown .ant-picker-time-panel-column >li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner{
+  color: white !important;
+}
+.ant-picker-dropdown .ant-picker-time-panel-column >li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner{
+  background: #111731 !important;
+}
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner{
+  background: #111731 !important;
+}
+
+.ant-picker-dropdown .ant-picker-range-arrow::before {
+  background: rgba(0, 0, 0, 0.4) !important;
 }

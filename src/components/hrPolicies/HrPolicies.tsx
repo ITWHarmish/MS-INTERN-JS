@@ -21,6 +21,10 @@ const reorder = (list, startIndex, endIndex) => {
 
 const getItemStyle = (draggableStyle) => ({
   marginBottom: "24px",
+  background: "#3c3c3c46",
+  backdropFilter: "blur(12px)",
+  // background: "white",
+  // padding: "20px",
   ...draggableStyle
 });
 
@@ -122,7 +126,7 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div className="ScrollInProgress" style={{  height: "100vh", overflowY: "auto" }}>
+      <div className="ScrollInProgress" style={{ height: "calc(100vh - 50px)", overflowY: "auto"}}>
         <div style={{ padding: "16px" }}>
           <Card style={{ marginBottom: "50px", padding: "20px" }}>
             {loading ? (
@@ -155,7 +159,7 @@ const HrPolicies = () => {
                                   </div>
                                 }
                               >
-                                <div style={{marginLeft:"15px"}} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                                <div style={{ marginLeft: "15px" }} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
                               </Card>
                             )}
                           </Draggable>
@@ -168,8 +172,8 @@ const HrPolicies = () => {
               ) : (
                 <div>
                   {orderedPolicies.map((policy) => (
-                    <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px" }}>
-                      <div style={{marginLeft:"15px"}} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                    <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px", background:"#3c3c3c46", backdropFilter: "blur(12px)" }}>
+                      <div style={{ marginLeft: "15px" }} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
                     </Card>
                   ))}
                 </div>

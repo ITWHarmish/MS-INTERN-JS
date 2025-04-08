@@ -7,7 +7,7 @@ const Footer = () => {
                 backgroundColor: "rgba(60, 60, 60, 0.274)",
                 borderTop:"1px solid #ffffffa1",
                 width: "100%",
-                height: "50px",
+                height: "42px",
                 position: "fixed",
                 bottom: "0px",
                 display: "flex",

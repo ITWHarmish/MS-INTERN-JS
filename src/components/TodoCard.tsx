@@ -299,12 +299,12 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
         <DragDropContext onDragEnd={onDragEnd}>
           <Card
             className="custom-card"
-            style={{
-              borderBottomRightRadius: "0",
-              borderTopLeftRadius: "0",
-              borderTopRightRadius: "30px !important",
-              borderBottomLeftRadius: "30px",
-            }}
+            // style={{
+            //   borderBottomRightRadius: "0",
+            //   borderTopLeftRadius: "0",
+            //   borderTopRightRadius: "30px !important",
+            //   borderBottomLeftRadius: "30px",
+            // }}
             title="Todos"
             extra={
               // <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
@@ -345,7 +345,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               // </div>
               <>
                 <Select
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                   placeholder="Day Status"
                   onChange={(value) => {
                     if (value === "start") {

@@ -58,7 +58,6 @@ const Navbar = () => {
 
 
     const onMenuClick = (e) => {
-        if (e.key === "logo") return;
         setCurrent(e.key);
 
         if (e.key === "profile") {
@@ -84,11 +83,11 @@ const Navbar = () => {
         <div>
             <Space direction="vertical">
                 {
-                    !user?.admin && <a style={{color:"white"}}  onClick={() => onMenuClick({ key: "profile" })} type="text">
+                    !user?.admin && <a style={{ color: "white" }} onClick={() => onMenuClick({ key: "profile" })} type="text">
                         Profile
                     </a>
                 }
-                <a style={{color:"white"}} onClick={handleLogout} type="text">
+                <a style={{ color: "white" }} onClick={handleLogout} type="text">
                     Logout
                 </a>
             </Space>
@@ -157,10 +156,6 @@ const Navbar = () => {
                         }}
                         mode="horizontal"
                         items={[
-                            {
-                                key: "logo",
-                                label: <img style={{ height: "30px", width: "auto", verticalAlign: "middle", cursor: "pointer", pointerEvents: "none", }} src="/toshalLogo.png" alt="Logo" />,
-                            },
                             !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
                             !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
                             { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
@@ -173,14 +168,14 @@ const Navbar = () => {
                     {
                         user && !user?.admin && (
                             telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default">Google Connected</Button>
+                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default"><span style={{ color: "grey" }}>Google Connected</span></Button>
                                 :
                                 <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">Connect Google</Button>
                         )
                     }
                     {telegramUser?.telegram?.session_id ? (
-                        <Button style={{ fontFamily: "Rubik" }} type="default" disabled>
-                            Telegram Connected
+                        <Button style={{ fontFamily: "Rubik" }} disabled>
+                            <span style={{ color: "grey"}}>Telegram Connected</span>
                         </Button>
                     ) : (
                         <>
@@ -250,11 +245,11 @@ const Navbar = () => {
                     {user &&
                         <Popover content={popoverContent} trigger="click">
                             <span>
-                                <span style={{
+                                {/* <span style={{
                                     marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"
                                 }}
                                     className={token.colorBgLayout === "White" ? "" : "navbarSpanDark"}
-                                >{user.fullName}</span>
+                                >{user.fullName}</span> */}
                                 <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "7px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
                             </span>
                         </Popover>
