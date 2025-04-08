@@ -168,21 +168,21 @@ const Navbar = () => {
                     {
                         user && !user?.admin && (
                             telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default"><span style={{ color: "grey" }}>Google Connected</span></Button>
+                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default"><span style={{ color: "grey" }}>GOOGLE CONNECTED</span></Button>
                                 :
-                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">Connect Google</Button>
+                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">CONNECT GOOGLE</Button>
                         )
                     }
                     {telegramUser?.telegram?.session_id ? (
                         <Button style={{ fontFamily: "Rubik" }} disabled>
-                            <span style={{ color: "grey"}}>Telegram Connected</span>
+                            <span style={{ color: "grey"}}>TELEGRAM CONNECTED</span>
                         </Button>
                     ) : (
                         <>
                             {
                                 user && !user?.admin &&
                                 <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
-                                    Connect Telegram
+                                    CONNECT TELEGRAM
                                 </Button>
                             }
                             <Modal

@@ -52,7 +52,7 @@ const Tasktable = ({ selectedDate }) => {
 
     const columns: TableProps<IColumns>['columns'] = [
         {
-            title: 'Start Time',
+            title: 'START TIME',
             dataIndex: 'startTime',
             width: 100,
             key: 'startTime',
@@ -60,7 +60,7 @@ const Tasktable = ({ selectedDate }) => {
                 dayjs(startTime).format('hh:mm A'),
         },
         {
-            title: 'End Time',
+            title: 'END TIME',
             dataIndex: 'endTime',
             width: 100,
             key: 'endTime',
@@ -68,24 +68,24 @@ const Tasktable = ({ selectedDate }) => {
                 dayjs(endTime).format('hh:mm A'),
         },
         {
-            title: 'Hours',
+            title: 'HOURS',
             dataIndex: 'hours',
             key: 'hours',
             width: 70,
         },
         {
-            title: 'Category',
+            title: 'CATEGORY',
             dataIndex: 'category',
             key: 'category',
             width: 120,
         },
         {
-            title: 'Description',
+            title: 'DESCRIPTION',
             dataIndex: 'description',
             key: 'description',
         },
         {
-            title: 'Actions',
+            title: 'ACTIONS',
             dataIndex: 'actions',
             key: 'actions',
             width: 100,
@@ -254,9 +254,9 @@ const Tasktable = ({ selectedDate }) => {
                     placeholder="Select Category"
                     optionFilterProp="label"
                     options={[
-                        { value: 'learning', label: 'Learning' },
-                        { value: 'coding', label: 'Coding' },
-                        { value: 'management', label: 'Management' },
+                        { value: 'learning', label: 'LEARNING' },
+                        { value: 'coding', label: 'CODING' },
+                        { value: 'management', label: 'MANAGEMENT' },
                     ]}
                     onChange={handleChangeCategory}
                     value={formData.category || undefined}
@@ -269,7 +269,7 @@ const Tasktable = ({ selectedDate }) => {
                     required
                 />
                 <Button onClick={handleSubmit} type="primary">
-                    Submit
+                    SUBMIT
                 </Button>
             </div>
             <div style={{

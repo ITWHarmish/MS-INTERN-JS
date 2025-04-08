@@ -4,9 +4,9 @@ const Footer = () => {
     return (
         <div id="footer"
             style={{
-                backgroundColor: "rgba(60, 60, 60, 0.274)",
+                margin:"0px 10px",
                 borderTop:"1px solid #ffffffa1",
-                width: "100%",
+                width: "-webkit-fill-available",
                 height: "42px",
                 position: "fixed",
                 bottom: "0px",
