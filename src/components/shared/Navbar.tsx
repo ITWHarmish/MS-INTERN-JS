@@ -155,10 +155,10 @@ const Navbar = () => {
                         }}
                         mode="horizontal"
                         items={[
-                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
-                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
-                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
-                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>Progress Report</Link> },
+                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>TIMELOG</Link> },
+                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>MONTHLY SUMMARY</Link> },
+                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>WORK POLICIES</Link> },
+                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>PROGRESS REPORT</Link> },
                         ]}
                     ></Menu>
                 )}
