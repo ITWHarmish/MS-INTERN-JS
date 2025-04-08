@@ -319,7 +319,7 @@ input:-webkit-autofill:active {
   /* background-color: rgb(0 0 0 / 40%) !important; */
 }
 
-:where(.css-dev-only-do-not-override-6li4e).ant-picker-dropdown .ant-picker-panel-container {
+.ant-picker-dropdown .ant-picker-panel-container {
   overflow: hidden;
   vertical-align: top;
   background: #3c3c3c46 !important;
