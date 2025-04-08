@@ -1,5 +1,5 @@
 import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined } from "@ant-design/icons";
-import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
+import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
@@ -17,7 +17,6 @@ const Navbar = () => {
 
     const { user } = useSelector((state: RootState) => state.auth)
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
-    const { token } = theme.useToken();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -243,14 +242,14 @@ const Navbar = () => {
                         </div>
                     } */}
                     {user &&
-                        <Popover content={popoverContent} trigger="click">
+                        <Popover style={{marginLeft:"20px"}} content={popoverContent} trigger="click">
                             <span>
                                 {/* <span style={{
                                     marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"
                                 }}
                                     className={token.colorBgLayout === "White" ? "" : "navbarSpanDark"}
                                 >{user.fullName}</span> */}
-                                <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "7px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
+                                <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "20px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
                             </span>
                         </Popover>
                     }
