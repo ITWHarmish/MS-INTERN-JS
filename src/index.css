@@ -238,6 +238,12 @@ input:-webkit-autofill:active {
 .ant-select-item-option-selected {
   background-color: #111731 !important;
   color: white !important;
+  border-top: 0.5px solid #ffffff !important;
+  border-bottom: 0.5px solid #ffffff !important;
+}
+
+.ant-select-dropdown .ant-select-item {
+  border-radius: 0px !important;
 }
 
 /* Hover background */
@@ -259,6 +265,11 @@ input:-webkit-autofill:active {
 
 .ant-popover .ant-popover-arrow:after {
   background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.ant-popover-arrow {
+  position: absolute !important;
+  left: 50px !important;
 }
 
 
@@ -516,6 +527,7 @@ h2 {
 
 .ant-select-item-option:hover {
   /* background-color:  !important; */
+  border-radius: none !important;
 }
 
 .ant-select-selection-placeholder,

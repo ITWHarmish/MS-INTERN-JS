@@ -47,7 +47,7 @@ const Timelog = ({ selectedDate, setSelectedDate }) => {
                             borderBottomLeftRadius: "12px",
                         }}
                     >
-                        <DatePicker
+                        <DatePicker style={{marginRight:"8px",}}
                             // style={{ border: '2px solid #1890ff', borderRadius: '8px 12px 7px 5px' }}
                             className='picker-timelog' defaultValue={selectedDate} onChange={handleDateChange} />
                     </div>
