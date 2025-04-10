@@ -258,7 +258,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             title="Todos"
             extra={
               <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
-                {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
+                {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && !user.admin && currentDate === formattedDate ? (
                   <>
                     <Button onClick={() => setIsDayStartModalOpen(true)} type="primary">
                       Day Start Status
@@ -275,7 +275,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     Day Start Status
                   </Button>
                 )}
-                {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
+                {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && !user.admin && currentDate === formattedDate ? (
                   <>
                     <Button onClick={() => setIsDayEndModalOpen(true)} type="primary">
                       Day End Status

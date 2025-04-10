@@ -184,12 +184,10 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
 
                     {
-                        user && !user?.admin && (
-                            telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik" }} disabled type="default">Google Connected</Button>
-                                :
-                                <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
-                        )
+                        telegramUser?.google?.tokens?.access_token ?
+                            <Button style={{ fontFamily: "Rubik" }} disabled type="default">Google Connected</Button>
+                            :
+                            <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
                     }
                     {telegramUser?.telegram?.session_id ? (
                         <Button style={{ fontFamily: "Rubik" }} type="default" disabled>

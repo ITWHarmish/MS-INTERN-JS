@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { GetInternsByMentorId } from "../../services/adminAPI";
+import { GetInternsByMentorId, GetSpaceId } from "../../services/adminAPI";
 import AddIntern from "./AddIntern";
 
 const InternList = () => {
@@ -14,6 +14,7 @@ const InternList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [students, setStudents] = useState<{ _id: string; fullName: string }[]>([]);
+    const [space, setSpace] = useState<string | null>(null);
 
     const fetchInterns = async () => {
         if (!user || !user._id) {
@@ -34,8 +35,23 @@ const InternList = () => {
 
     useEffect(() => {
         fetchInterns();
+        fetchSpaceId();
     }, [user]);
 
+    const fetchSpaceId = async () => {
+        if (user && user.admin) {
+            setLoading(true);
+            try {
+                const res = await GetSpaceId();
+                const spaces = res.data?.filter(item => item.name);
+                setSpace(spaces)
+            } catch (error) {
+                console.error("Error fetching space ID:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
 
 
     const columns: TableProps<IColumnsReports>['columns'] = [
@@ -97,7 +113,7 @@ const InternList = () => {
                             >
                                 Add Intern
                             </Button>
-                            <AddIntern visible={isModalOpen} onClose={handleCancel} fetchInterns={fetchInterns} />
+                            <AddIntern space={space} visible={isModalOpen} onClose={handleCancel} fetchInterns={fetchInterns} />
 
                         </>
                     }

@@ -24,9 +24,10 @@ export const LoginApi = async (userData: Login) => {
     }
 }
 
-export const GetCurrentUser = async () => {
+export const GetCurrentUser = async (userId?: string) => {
     try {
         const res = await axios.get(`${API_END_POINT}/auth/getCurrentUser`, {
+            params: userId ? { userId } : {},
             headers: getAuthHeaders(),
         })
         return res.data

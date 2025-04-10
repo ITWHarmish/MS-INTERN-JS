@@ -123,7 +123,7 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div style={{ padding: "16px", height: "100vh", backgroundColor: token.colorBgLayout === "White" ? "white" : "black" }}>
+      <div style={{ padding: "16px", backgroundColor: token.colorBgLayout === "White" ? "white" : "black", marginBottom: "30px" }}>
         <Card style={{ marginBottom: "50px", padding: "20px" }}>
           {loading ? (
             <Spinner />
