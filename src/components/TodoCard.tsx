@@ -304,6 +304,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               borderTopLeftRadius: "0",
               borderTopRightRadius: "30px !important",
               borderBottomLeftRadius: "30px",
+              minHeight: "calc(100vh - 144.5px)",
             }}
             title="TO DO"
             extra={
@@ -429,7 +430,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 className="ScrollInProgress"
                 style={{
                   flex: 1,
-                  minHeight: "31.4vh",
+                  minHeight: "calc(31vh)",
                   position: "relative",
                   width: "100%",
                   borderBottom: "1px solid rgba(255, 255, 255, 0.386)",
@@ -486,7 +487,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                       <div
                         className="ScrollInProgress"
                         style={{
-                          height: "calc(65vh - 40vh)",
+                          height: "calc(65vh - 40.5vh)",
                           width: "100%",
                           overflowY: "auto",
                           overflowX: "hidden",
@@ -508,6 +509,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                             >
                               {(provided) => (
                                 <div
+                                  className="todo-card"
                                   style={{
                                     marginBottom: "10px",
                                     marginRight: "10px",
@@ -583,7 +585,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                       <div
                         className="ScrollInProgress"
                         style={{
-                          height: "calc(65vh - 40vh)",
+                          height: "calc(65vh - 250px)",
                           overflowY: "auto",
                           overflowX: "hidden",
                           position: "absolute",
@@ -605,6 +607,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                             >
                               {(provided) => (
                                 <div
+                                className="todo-card"
                                   style={{
                                     marginBottom: "10px",
                                     marginRight: "10px",

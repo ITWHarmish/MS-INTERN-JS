@@ -46,6 +46,7 @@ const Timelog = ({ selectedDate, setSelectedDate }) => {
                             borderTopRightRadius: "12px",
                             borderBottomLeftRadius: "12px",
                         }}
+                        className='nested-card'
                     >
                         <DatePicker style={{marginRight:"8px",}}
                             // style={{ border: '2px solid #1890ff', borderRadius: '8px 12px 7px 5px' }}

@@ -41,28 +41,13 @@ const Layout = () => {
       {loading ? (
         <Spinner />
       ) : (
-        // <Layouts className="layout">
-        //   <Navbar />
-        //   <Outlet />
-        //   <Footer />
-        // </Layouts>
-        <div className="video-layout">
-          <video autoPlay loop muted playsInline className="bg-video"
-            ref={(videoRef) => {
-              if (videoRef) videoRef.playbackRate = 0.5; // 0.5 means 50% speed
-            }}
-          >
-            {/* <source src="/Gen-3.mp4" type="video/mp4" /> */}
-          </video>
-
-          <div className="content-over-video">
-            <Layouts className="layout">
-              <Navbar />
-              <Outlet />
-              <Footer />
-            </Layouts>
+        <Layouts className="layout">
+          <div style={{ minHeight: "100vh", display: "flex", justifyContent: "space-between", flexDirection: "column" }}>
+            <Navbar />
+            <Outlet />
+            <Footer />
           </div>
-        </div>
+        </Layouts>
       )}
     </ConfigProvider>
   );

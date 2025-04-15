@@ -106,6 +106,7 @@ const Profile = () => {
 
   return (
     <div
+    className="ScrollInProgress"
       style={{ overflow: 'auto', background: 'transparent' }}
     >
       {

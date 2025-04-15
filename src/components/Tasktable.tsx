@@ -224,7 +224,7 @@ const Tasktable = ({ selectedDate }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "63vh", paddingTop:"10px"}}>
+        <div style={{ minHeight: "calc(100vh - 220px)", paddingTop:"10px"}}>
             <div
                 style={{
                     display: 'flex',
@@ -286,7 +286,7 @@ const Tasktable = ({ selectedDate }) => {
                     locale={{ emptyText: <></> }}
                     className="ScrollInProgress"
                     style={{
-                        height: "calc(65vh - 62px)",
+                        height: "calc(100vh - 280px)",
                         position: "absolute",
                         overflowY: "auto",
                         overflowX: "hidden",

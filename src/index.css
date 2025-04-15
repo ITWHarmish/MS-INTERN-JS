@@ -34,11 +34,14 @@ body {
   /* height: calc(100vh - 42px); */
   height: 100vh;
   width: 100%;
-  background: url('/bg-01.png') no-repeat center center/cover;
+  background: url('/bg-02.png') no-repeat top center/cover;
+  background-attachment: fixed;
 }
 
 .container-img {
-  background: url('/bg-01.png') no-repeat center center/cover;
+  background: url('/bg-02.png') no-repeat top center/cover;
+  background-attachment: fixed;
+
 }
 
 .calculate-hours-card {
@@ -155,14 +158,14 @@ input:-webkit-autofill:active {
   justify-content: center;
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 50px;
 }
 
 .ant-menu-light.ant-menu-horizontal>.ant-menu-item {
   justify-content: center;
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 50px;
 }
 
 .BgCard {
@@ -261,6 +264,11 @@ input:-webkit-autofill:active {
 .ant-popover-inner {
   background-color: rgba(0, 0, 0, 0.4) !important;
   padding: 20px !important;
+  margin-right: 20px !important;
+  border-top-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
 .ant-popover .ant-popover-arrow:after {
@@ -269,7 +277,7 @@ input:-webkit-autofill:active {
 
 .ant-popover-arrow {
   position: absolute !important;
-  left: 50px !important;
+  left: 67px !important;
 }
 
 
@@ -278,7 +286,8 @@ input:-webkit-autofill:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: "0px 20px";
+  margin-right: 3px;
+  /* padding: 0px 20px; */
   /* box-shadow: "0 2px 4px rgba(0, 0, 0, 0.2)"; */
 }
 
@@ -304,13 +313,22 @@ input:-webkit-autofill:active {
 /* navbar menu changes */
 
 .check .ant-menu-item {
-  color: #204984 !important;
+  color: #49494B !important;
   transition: all 0.3s ease-in-out;
 }
 
 .ant-menu-item-icon svg {
-  color: #204984 !important;
-  fill: #204984 !important;
+  color: #49494B !important;
+  /* color: #204984 !important; */
+  fill: #49494B !important;
+}
+
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
+  border-bottom-color: #49494B !important;
+}
+
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+  border-bottom-color: #49494B !important;
 }
 
 /* modal Changes */
@@ -372,7 +390,8 @@ input:-webkit-autofill:active {
 .container {
   min-height: 100vh;
   width: 100%;
-  background: url('/bg-01.png') no-repeat center center/cover;
+  background: url('/bg-02.png') no-repeat top center/cover;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -762,11 +781,13 @@ th.ant-table-cell:not(:last-child)::after {
   color: white !important;
 }
 
-.ql-picker-label, .ql-toolbar .ql-picker-item, .ql-toolbar .ql-formats button {
+.ql-picker-label,
+.ql-toolbar .ql-picker-item,
+.ql-toolbar .ql-formats button {
   color: black !important;
 }
 
-.ant-picker-dropdown .ant-picker-cell{
+.ant-picker-dropdown .ant-picker-cell {
   color: #ffffffb3 !important;
 }
 
@@ -778,18 +799,19 @@ th.ant-table-cell:not(:last-child)::after {
   color: white !important;
 }
 
-.ant-picker-dropdown .ant-picker-header button{
-  color: #ffffffff !important;
-}
-.ant-picker-now-btn{
+.ant-picker-dropdown .ant-picker-header button {
   color: #ffffffff !important;
 }
 
-.ant-btn-color-default{
+.ant-picker-now-btn {
+  color: #ffffffff !important;
+}
+
+.ant-btn-color-default {
   color: white !important;
 }
 
-.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover{
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
   color: black !important;
   border: none !important;
 }
@@ -798,16 +820,37 @@ th.ant-table-cell:not(:last-child)::after {
   font-weight: normal !important;
 }
 
-.ant-picker-dropdown .ant-picker-time-panel-column >li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner{
+.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
   color: white !important;
 }
-.ant-picker-dropdown .ant-picker-time-panel-column >li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner{
+
+.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
   background: #111731 !important;
 }
-.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner{
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
   background: #111731 !important;
 }
 
 .ant-picker-dropdown .ant-picker-range-arrow::before {
   background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.ant-table-thead {
+  backdrop-filter: blur(10px);
+}
+
+.nested-card .ant-picker-outlined {
+  border-top-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
+.todo-card .ant-card {
+  border-top-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-bottom-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+
 }
