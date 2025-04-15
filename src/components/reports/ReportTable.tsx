@@ -222,7 +222,14 @@ const ReportTable = () => {
                                     Next
                                 </Button>
                                 :
-                                <Button onClick={() => navigate(`/report/submit`)} type="primary">
+                                <Button onClick={() => {
+                                    if (!tasks.length) {
+                                        message.warning("Please add at least one task before proceeding.");
+                                        return;
+                                    }
+                                    navigate(`/report/submit`)
+                                }
+                                } type="primary">
                                     Next
                                 </Button>
                         }

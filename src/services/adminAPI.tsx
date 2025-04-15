@@ -45,3 +45,15 @@ export const GetInternReport = async (internId: string) => {
         throw error;
     }
 }
+
+export const GetSpaceId = async () => {
+    try {
+        const res = await axios.get(`${API_END_POINT}/getSpaces`, {
+            headers: getAuthHeaders(),
+        })
+        return res.data
+    } catch (error) {
+        console.error('Error While Fetching Space Id and Name:', error);
+        throw error;
+    }
+}

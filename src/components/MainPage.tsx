@@ -70,14 +70,6 @@ const MainPage = () => {
   useEffect(() => {
     if (user) {
       if(user.admin) return;
-      // if (user.admin) {
-      //   navigate("/");
-      //   return;
-      // }
-      // if (user.admin) {
-      //   navigate("/report");
-      //   return;
-      // }
       if (user.internsDetails === undefined || user.internsDetails === "") {
         navigate("/fillUpForm");
       } else {

@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import ProfileHeader from "./ProfileTopBar";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { GetCurrentUserId, UpdateUserDetails } from "../../services/authAPI";
+import { GetCurrentUser, UpdateUserDetails } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../utils/Spinner";
@@ -30,13 +30,17 @@ const Profile = () => {
   const { id } = useParams();
 
   useEffect(() => {
+    setSelectedUser(user)
+  },[user])
+
+  useEffect(() => {
     if (id) {
       setLoading(true);
       const fetchUser = async () => {
         if (user) {
           if (user.admin) {
             try {
-              const res = await GetCurrentUserId(id);
+              const res = await GetCurrentUser(id);
               setSelectedUser(res.user);
             } catch (error) {
               console.error("Error fetching user:", error);
@@ -49,7 +53,6 @@ const Profile = () => {
       fetchUser();
     }
   }, [user, id])
-
 
   const [editedData, setEditedData] = useState({
     fullName: user?.fullName || "",
@@ -67,27 +70,6 @@ const Profile = () => {
     dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
     joiningDate: user?.internshipDetails?.joiningDate ? dayjs(user?.internshipDetails?.joiningDate).format("YYYY-MM-DD") : "",
   });
-
-  useEffect(() => {
-    if (user) {
-      setEditedData({
-        fullName: user?.fullName || "",
-        duration: user?.internsDetails?.duration || "",
-        stream: user?.internsDetails?.stream || "",
-        phoneNumber: user?.internsDetails?.phoneNumber || "",
-        address: user?.internsDetails?.address || "",
-        githubURL: user?.internsDetails?.githubURL || "",
-        linkedinURL: user?.internsDetails?.linkedinURL || "",
-        hrEmail: user?.hrEmail || "",
-        hrFullName: user?.hrFullName || "",
-        mentorEmail: user?.internshipDetails?.mentorEmail || "",
-        mentorFullName: user?.internshipDetails?.mentorFullName || "",
-        collegeName: user?.internsDetails?.collegeName || "",
-        dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
-        joiningDate: user?.internshipDetails?.joiningDate ? dayjs(user?.internshipDetails?.joiningDate).format("YYYY-MM-DD") : "",
-      })
-    }
-  }, [user])
 
   const handleSave = async () => {
     try {
@@ -131,7 +113,7 @@ const Profile = () => {
   }, [user, navigate])
 
   return (
-    <div
+     <div
       style={{ backgroundColor: token.colorBgLayout }}
     >
       {
@@ -394,7 +376,7 @@ const Profile = () => {
                                                 placeholder='Enter Mentor FullName'
                                                 onChange={(e) => handleChange(e, "mentorFullName")}
                                               />
-                                              : selectedUser?.internshipDetails?.mentor?.mentorFullName
+                                              : selectedUser?.internshipDetails?.mentor?.fullName
                                           }
                                         </Typography.Text>
                                         <Typography.Text
@@ -411,7 +393,7 @@ const Profile = () => {
                                                 placeholder='Enter Mentor Email'
                                                 onChange={(e) => handleChange(e, "mentorEmail")}
                                               />
-                                              : selectedUser?.internshipDetails?.mentor?.mentorEmail
+                                              : selectedUser?.internshipDetails?.mentor?.email
                                           }
                                         </Typography.Text>
                                       </Flex>

@@ -106,10 +106,10 @@ const ProgressReportPDF = () => {
                     <div className="section">
                         <div className="company">
                             <span>Enrollment No.:</span> {data?.enrollmentNo}
-                            <span style={{ marginLeft: "70px" }}>Project Title:</span> {data?.projectTitle}
                             <span style={{ marginLeft: "40px" }}>Class:</span> {data?.course}
                             <span style={{ marginLeft: "40px" }}>Div:</span> {data?.division}
                         </div>
+                            <span style={{ marginBottom: "14px" }}>Project Title:</span> {data?.projectTitle}
                     </div>
                     <div className="section">
                         <span>Duration:</span> <span>From:</span> {formatDate(data?.duration?.from)}

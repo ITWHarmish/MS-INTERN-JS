@@ -1,26 +1,33 @@
-import { Input, Button, Modal, Form, Row, Col, message } from "antd";
+import { Input, Button, Modal, Form, Row, Col, message, Switch, Select } from "antd";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Spinner from "../../utils/Spinner";
 import { UserRegister } from "../../services/authAPI";
 import { RootState } from "../../redux/store";
+import { IProfile } from "../../types/ILogin";
 
-const AddIntern = ({ visible, onClose, fetchInterns }) => {
+const AddIntern = ({ space, visible, onClose, fetchInterns }) => {
 
     const [loading, setLoading] = useState(false);
     const { user } = useSelector((state: RootState) => state.auth)
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const handleSubmit = async (values) => {
-        const payload = {
+        let payload: IProfile = {
             fullName: values.fullName,
-            password: values.password,
             email: values.email,
-            spaceId: values.spaceId,
-            spreadId: values.spreadId,
-            mentorFullName: user.fullName,
-            mentorEmail: user.email,
-            mentorId: user._id,
+            password: values.password,
+        };
 
+        if (isAdmin) {
+            payload.admin = true;
+        } else {
+            payload = {
+                ...payload,
+                spreadId: values.spreadId,
+                spaceId: values.spaceId,
+                mentorId: user._id,
+            };
         }
         try {
             setLoading(true);
@@ -61,14 +68,24 @@ const AddIntern = ({ visible, onClose, fetchInterns }) => {
                                 >
                                     <Input.Password placeholder="Password" />
                                 </Form.Item>
-                                <Form.Item
-                                    label="Spread Id"
-                                    name="spreadId"
-                                    rules={[
-                                        { required: true, message: "Please Enter the Spread Id!" },
-                                    ]}
-                                >
-                                    <Input placeholder="1608285224" />
+                                {!isAdmin &&
+                                    <Form.Item
+                                        label="Spread Id"
+                                        name="spreadId"
+                                        rules={[
+                                            { required: true, message: "Please Enter the Spread Id!" },
+                                        ]}
+                                    >
+                                        <Input placeholder="1608285224" />
+                                    </Form.Item>
+                                }
+                                <Form.Item>
+                                    <>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
+                                            <label>Admin</label>
+                                            <Switch style={{ width: "20px" }} checked={isAdmin} onChange={setIsAdmin} />
+                                        </div>
+                                    </>
                                 </Form.Item>
                             </Col>
 
@@ -105,15 +122,23 @@ const AddIntern = ({ visible, onClose, fetchInterns }) => {
                                 >
                                     <Input.Password placeholder="Confirm Password" />
                                 </Form.Item>
-                                <Form.Item
-                                    label="Space Id"
-                                    name="spaceId"
-                                    rules={[
-                                        { required: true, message: "Please Enter the Space Id!" },
-                                    ]}
-                                >
-                                    <Input placeholder="AAAAivSqCkQ" />
-                                </Form.Item>
+                                {!isAdmin &&
+                                    <Form.Item
+                                        label="Space Id"
+                                        name="spaceId"
+                                        rules={[
+                                            { required: true, message: "Please Enter the Space Id!" },
+                                        ]}
+                                    >
+                                        <Select showSearch placeholder="Select a space">
+                                            {space && space.map(item => (
+                                                <Select.Option key={item.id} value={item.id}>
+                                                    {item.name}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                }
                             </Col>
                         </Row>
                         <Form.Item>

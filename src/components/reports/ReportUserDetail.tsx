@@ -84,8 +84,8 @@ const ReportUserDetail = () => {
             }
             const payload = {
                 ...values,
-                mentorFullName: user.internshipDetails.mentor.mentorFullName,
-                mentorId: user.internshipDetails.mentor.mentorId,
+                mentorFullName: user.internshipDetails.mentor.fullName,
+                mentorId: user.internshipDetails.mentor._id,
                 duration: {
                     from: formatDate[0],
                     to: formatDate[1],
