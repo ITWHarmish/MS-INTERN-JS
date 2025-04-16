@@ -218,7 +218,7 @@ const ProgressReports = () => {
         <>
             <div style={{ padding: "20px", height: "88vh" }}>
 
-                <Card style={{ position: "relative", height: "65vh" }}
+                <Card style={{ position: "relative", height: "calc(100vh - 150px)" }}
                     title={
                         "Progress Report"
                     }
