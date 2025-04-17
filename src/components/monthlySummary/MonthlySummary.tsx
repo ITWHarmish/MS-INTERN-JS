@@ -105,11 +105,13 @@ const MonthlySummary = () => {
                 type: leave.leaveType,
             })) || [];
 
-            const dynamicWorkHours = monthlySummary?.daysArray?.map((day) => ({
-                start: new Date(day.date),
-                end: new Date(day.date),
-                title: `${day.totalHours}`,
-            })) || [];
+            const dynamicWorkHours = (monthlySummary?.daysArray || [])
+                .filter(day => Number(day.totalHours) > 0)
+                .map(day => ({
+                    start: new Date(day.date),
+                    end: new Date(day.date),
+                    title: `${Number(day.totalHours).toFixed(2)}`,
+                }));
 
             const allEvents = [...dynamicLeaves, ...dynamicWorkHours];
 
@@ -165,7 +167,7 @@ const MonthlySummary = () => {
             };
         }
 
-        else if (!isHalfLeave && isCurrentDay) {
+        else if (!isHalfLeave && !isEventDay && isCurrentDay) {
             return {
                 style: {
                     backgroundColor: "transparent",
@@ -296,9 +298,9 @@ const MonthlySummary = () => {
                         <span style={{ marginRight: '15px' }}>Total Hours: <b>{monthlySummary?.totalWorkingHours || 0}</b></span>
                         <span>
                             {monthlySummary?.shortage < 0 ? (
-                                <>Extra: <b style={{ color: '#50C150' }}>{Math.abs(monthlySummary.shortage)} Hours</b></>
+                                <>Extra: <b style={{ color: '#50C150' }}>{Math.abs(monthlySummary.shortage).toFixed(2)} Hours</b></>
                             ) : (
-                                <>Shortage: <b style={{ color: '#E65A5A' }}>{monthlySummary?.shortage || 0} Hours</b></>
+                                <>Shortage: <b style={{ color: '#E65A5A' }}>{(monthlySummary?.shortage || 0).toFixed(2)} Hours</b></>
                             )}
                         </span>
                     </div>

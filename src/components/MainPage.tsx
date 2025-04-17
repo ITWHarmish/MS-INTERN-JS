@@ -81,7 +81,7 @@ const MainPage = () => {
   useEffect(() => {
     if (!user) return;
 
-    const currentUserId = user.admin ? internId : user._id;
+    const currentUserId = user?.admin ? internId : user._id;
     if (!currentUserId) return;
 
     const fetchData = async () => {

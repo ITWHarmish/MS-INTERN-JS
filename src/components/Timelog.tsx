@@ -20,7 +20,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
             return;
         }
         try {
-            if (user.admin) {
+            if (user && user.admin) {
                 const res = await GetInternsByMentorId(user._id);
                 setStudents(res.data || []);
             }
