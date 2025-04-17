@@ -34,12 +34,12 @@ body {
   /* height: calc(100vh - 42px); */
   height: 100vh;
   width: 100%;
-  background: url('/bg-02.png') no-repeat top center/cover;
+  background: url('/BURN1.png') no-repeat top center/cover;
   background-attachment: fixed;
 }
 
 .container-img {
-  background: url('/bg-02.png') no-repeat top center/cover;
+  background: url('/BURN1.png') no-repeat top center/cover;
   background-attachment: fixed;
 
 }
@@ -263,12 +263,13 @@ input:-webkit-autofill:active {
 
 .ant-popover-inner {
   background-color: rgba(0, 0, 0, 0.4) !important;
-  padding: 20px !important;
+  padding: 13px 20px !important;
   margin-right: 20px !important;
   border-top-left-radius: 12px !important;
   border-bottom-right-radius: 12px !important;
   border-bottom-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
+  backdrop-filter: blur(10px) !important;
 }
 
 .ant-popover .ant-popover-arrow:after {
@@ -277,7 +278,7 @@ input:-webkit-autofill:active {
 
 .ant-popover-arrow {
   position: absolute !important;
-  left: 67px !important;
+  left: 85px !important;
 }
 
 
@@ -286,7 +287,11 @@ input:-webkit-autofill:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 3px;
+  margin-right: 18px;
+  margin-left: 18px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
   /* padding: 0px 20px; */
   /* box-shadow: "0 2px 4px rgba(0, 0, 0, 0.2)"; */
 }
@@ -297,13 +302,12 @@ input:-webkit-autofill:active {
 }
 
 .check.ant-menu {
-  background-color: rgba(0, 0, 0, 0.406);
-  backdrop-filter: blur(10px);
+  /* background-color: rgba(0, 0, 0, 0.406); */
+  /* backdrop-filter: blur(10px); */
   border: none !important;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  padding: 0px 0px 3px 20px !important;
+  /* padding: 10px 20px; */
+  margin-top: 13px;
 }
 
 .ant-menu .ant-menu-item a::before {
@@ -390,7 +394,7 @@ input:-webkit-autofill:active {
 .container {
   min-height: 100vh;
   width: 100%;
-  background: url('/bg-02.png') no-repeat top center/cover;
+  background: url('/BURN1.png') no-repeat top center/cover;
   background-attachment: fixed;
   display: flex;
   justify-content: center;
@@ -642,7 +646,7 @@ h2 {
   background: transparent !important;
   /* background: rgba(255, 255, 255, 0) !important; */
   color: white !important;
-  font-weight: 600;
+  font-weight: 400;
   text-align: left;
   padding: 12px;
 }

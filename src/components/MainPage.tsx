@@ -104,11 +104,11 @@ const MainPage = () => {
     <>
       {loading ?
         <Spinner /> :
-        <Row className="Check" style={{ height: "calc(100vh - 100px )", padding:"10px", }}>
+        <Row className="Check" style={{ height: "calc(100vh - 125px )", padding:"10px 18px 10px 18px", }}>
           <Col md={18}>
             <div
               style={{
-                padding: "10px",
+                marginRight: "4px",
                 position: "relative",
                 zIndex: "3",
               }}

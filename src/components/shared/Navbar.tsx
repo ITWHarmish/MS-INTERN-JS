@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -83,11 +83,17 @@ const Navbar = () => {
             <Space direction="vertical">
                 {
                     !user?.admin && <a style={{ color: "white" }} onClick={() => onMenuClick({ key: "profile" })} type="text">
-                        Profile
+                        <span style={{ display: "flex", alignItems: "center", gap: "7px", borderBottom: "1px solid white", paddingBottom: "10px", marginBottom:"3px" }}>
+                            <ProfileOutlined style={{ fontSize: "16px" }} />
+                            PROFILE
+                        </span>
                     </a>
                 }
                 <a style={{ color: "white" }} onClick={handleLogout} type="text">
-                    Logout
+                    <span style={{ display: "flex", alignItems: "center", gap: "7px", marginTop:"0px" }}>
+                        <LogoutOutlined style={{ fontSize: "16px" }} />
+                        LOGOUT
+                    </span>
                 </a>
             </Space>
         </div>
@@ -152,6 +158,7 @@ const Navbar = () => {
                         className="check"
                         style={{
                             gap: "1px",
+                            // lineHeight: "60px",
                         }}
                         mode="horizontal"
                         items={[
@@ -174,7 +181,7 @@ const Navbar = () => {
                     }
                     {telegramUser?.telegram?.session_id ? (
                         <Button style={{ fontFamily: "Rubik" }} disabled>
-                            <span style={{ color: "grey"}}>TELEGRAM CONNECTED</span>
+                            <span style={{ color: "grey" }}>TELEGRAM CONNECTED</span>
                         </Button>
                     ) : (
                         <>
@@ -242,7 +249,7 @@ const Navbar = () => {
                         </div>
                     } */}
                     {user &&
-                        <Popover style={{marginLeft:"20px"}} content={popoverContent} trigger="click">
+                        <Popover style={{ marginLeft: "20px" }} content={popoverContent} trigger="click">
                             <span>
                                 {/* <span style={{
                                     marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"

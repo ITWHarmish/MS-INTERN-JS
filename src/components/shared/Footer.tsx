@@ -4,14 +4,19 @@ const Footer = () => {
     return (
         <div id="footer"
             style={{
-                margin:"0px 20px",
-                borderTop:"1px solid #ffffffa1",
+                // margin:"0px 20px",
+                borderTop: "1px solid #ffffffa1",
                 width: "-webkit-fill-available",
-                height: "60px",
+                height: "65px",
                 bottom: "0px",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                marginRight: "18px",
+                marginLeft: "18px",
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderTopRightRadius: "20px",
+                borderTopLeftRadius: "20px",
             }}
         >
             <Typography.Text
@@ -20,10 +25,11 @@ const Footer = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     fontSize: "15px",
-                    color: "white",
+                    color: "#49494B",
+                    letterSpacing: "2px",
                 }}
             >
-                Toshal Management System ©{new Date().getFullYear()} Created by Toshal Infotech
+                Toshal Management System ©{new Date().getFullYear()} Created By Toshal Infotech
             </Typography.Text>
         </div>
     )

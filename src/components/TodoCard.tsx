@@ -295,7 +295,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
 
   return (
     <>
-      <div style={{ paddingTop: "10px", paddingRight: "10px" }}>
+      <div style={{ paddingTop: "0px", paddingRight: "0px" }}>
         <DragDropContext onDragEnd={onDragEnd}>
           <Card
             className="custom-card"
@@ -304,7 +304,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               borderTopLeftRadius: "0",
               borderTopRightRadius: "30px !important",
               borderBottomLeftRadius: "30px",
-              minHeight: "calc(100vh - 144.5px)",
+              minHeight: "calc(100vh - 143.5px)",
             }}
             title="TO DO"
             extra={
