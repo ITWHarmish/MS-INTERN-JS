@@ -1,31 +1,31 @@
-import { Card, DatePicker, Flex, Input, Layout, message, Space, theme, Typography } from "antd";
-import {
-  CalendarOutlined,
-  CodeOutlined,
-  FieldTimeOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Content } from "antd/es/layout/layout";
-import OtherLinks from "./OtherLinks";
-import EmployeeDetails from "./EmployeeDetails";
+import { message, theme } from "antd";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import ProfileHeader from "./ProfileTopBar";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { UpdateUserDetails } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../../utils/Spinner";
+import "./Profile.css";
 
 const Profile = () => {
-  const { user } = useSelector((state: RootState) => state.auth)
+  const { user } = useSelector((state: RootState) => state.auth);
+  console.log("user:", user); // Log unused variable
+
   const navigate = useNavigate();
+  console.log("navigate:", navigate); // Log unused variable
+
   const dispatch = useDispatch();
+  console.log("dispatch:", dispatch); // Log unused variable
+
   const [loading, setLoading] = useState(true);
+  console.log("loading:", loading); // Log unused variable
+
   const [editMode, setEditMode] = useState(false);
+  console.log("editMode:", editMode); // Log unused variable
   const { token } = theme.useToken();
+  console.log("token:", token); // Log unused variable
 
   const [editedData, setEditedData] = useState({
     fullName: user?.fullName || "",
@@ -78,6 +78,7 @@ const Profile = () => {
       setLoading(false);
     }
   };
+  console.log("handleSave:", handleSave); // Log unused variable
 
   const handleChange = (e, field: string) => {
     setEditedData({
@@ -86,12 +87,17 @@ const Profile = () => {
     });
   };
 
+  console.log("handleChange", handleChange)
+
   const handleDateChange = (date: dayjs.Dayjs | null, field: string) => {
     setEditedData({
       ...editedData,
       [field]: date ? date.toISOString() : null,
     });
   };
+
+  console.log("handleChange", handleDateChange)
+
 
   useEffect(() => {
     if (user) {
@@ -105,293 +111,16 @@ const Profile = () => {
   }, [user, navigate])
 
   return (
-    <div
-    className="ScrollInProgress"
-      style={{ overflow: 'auto', background: 'transparent' }}
-    >
-      {
-        loading ? <Spinner /> :
-          <Flex vertical style={{ marginBottom: "65px", overflowX: "hidden" }}>
-            <ProfileHeader
-              editMode={editMode}
-              setEditMode={setEditMode}
-              handleSave={handleSave}
-            />
-            <Layout style={{ height: "auto", overflow: "hidden", background: "transparent", }}>
-              <Content
-                style={{
-                  width: "auto",
-                  margin: "auto",
-                  background: "transparent",
-                }}
-              >
-                <Flex style={{ width: "auto", height: "fit-content" }} gap={70}>
-                  <Flex>
-                    <OtherLinks
-                    />
-                  </Flex>
-                  <Flex gap={70} style={{ width: "900px" }}>
-                    <Flex gap={30} vertical style={{ width: "100%" }}>
-                      <EmployeeDetails
-                        editMode={editMode}
-                        editedData={editedData}
-                        handleChange={handleChange}
-                      />
-                    </Flex>
-                    <Flex vertical style={{ width: "100%", marginRight: "35px" }}>
-                      <Space direction="vertical" size={15} style={{ width: "100%" }}>
-                        <Typography.Text
-                          style={{ color: token.colorPrimary, fontSize: "20px" }}
-                          strong
-                        >
-                          Internship Details
-                        </Typography.Text>
+    <>
+      <div className="image-container">
+        <div className="overlay">
+          kjdfhkj
+        </div>
 
-                        <Space
-                          direction="vertical"
-                          style={{ width: "100%" }}
-                          size={15}
-                        >
-                          <Card style={{ width: "100%" }} className="custom-card">
-                            <Card.Meta
-                              avatar={
-                                <Flex
-                                  justify="center"
-                                  align="center"
-                                  style={{
-                                    fontSize: "20px",
-                                    height: "100%",
-                                    width: "auto",
-                                    color: token.colorPrimary,
-                                  }}
-                                >
-                                  <CalendarOutlined style={{ margin: "10px" }} />
-                                </Flex>
-                              }
-                              title={
-                                <Typography.Text
-                                  style={{ fontSize: "12px", color: "white" }}
-                                >
-                                  Joining Date
-                                </Typography.Text>
-                              }
-                              description={
-                                <Typography.Text strong style={{ fontSize: "16px" }}>
-                                  {
-                                    editMode
-                                      ? <DatePicker
-                                        value={editedData?.joiningDate ? dayjs(editedData?.joiningDate) : null}
-                                        size="middle"
-                                        onChange={(e) => handleDateChange(e, "joiningDate")}
-                                      />
-                                      : user?.internsDetails?.joiningDate
-                                        ? dayjs(user?.internsDetails?.joiningDate).format("DD MMM YYYY")
-                                        : "N/A"
-                                  }
-                                </Typography.Text>
-                              }
-                            />
-                          </Card>
-                          <Card style={{ width: "100%" }} className="custom-card">
-                            <Card.Meta
-                              avatar={
-                                <Flex
-                                  justify="center"
-                                  align="center"
-                                  style={{
-                                    fontSize: "20px",
-                                    height: "100%",
-                                    width: "auto",
-                                    color: token.colorPrimary,
-                                  }}
-                                >
-                                  <FieldTimeOutlined style={{ margin: "10px" }} />
-                                </Flex>
-                              }
-                              title={
-                                <Typography.Text
-                                  style={{ fontSize: "12px", color: "white" }}
-                                >
-                                  Duration
-                                </Typography.Text>
-                              }
-                              description={
-                                <Typography.Text strong style={{ fontSize: "16px" }}>
-                                  {
-                                    editMode
-                                      ? <Input
-                                        value={editedData?.duration}
-                                        size="middle"
-                                        placeholder='Enter Duration Here'
-                                        onChange={(e) => handleChange(e, "duration")}
-                                      />
-                                      : `${user?.internsDetails?.duration} months`
-                                  }
-                                </Typography.Text>
-                              }
-                            />
-                          </Card>
+      </div>
 
-                          <Card className="cardWidth custom-card">
-                            <Card.Meta
-                              avatar={
-                                <Flex
-                                  justify="center"
-                                  align="center"
-                                  style={{
-                                    fontSize: "20px",
-                                    height: "100%",
-                                    width: "auto",
-                                    color: token.colorPrimary,
-                                  }}
-                                >
-                                  <CodeOutlined style={{ margin: "10px" }} />
-                                </Flex>
-                              }
-                              title={
-                                <Typography.Text
-                                  style={{ fontSize: "12px", color: "white" }}
-                                >
-                                  Intern/Trainee
-                                </Typography.Text>
-                              }
-                              description={
-                                <Typography.Text strong style={{ fontSize: "16px" }}>
-                                  {
-                                    editMode
-                                      ? <Input
-                                        value={editedData?.stream}
-                                        size="middle"
-                                        placeholder='Enter Stream Here'
-                                        onChange={(e) => handleChange(e, "stream")}
-                                      />
-                                      : user?.internsDetails?.stream
-                                  }
-                                </Typography.Text>
-                              }
-                            />
-                          </Card>
-                          <Card className="cardWidth custom-card">
-                            <Card.Meta
-                              
-                              description={
-                                <Space direction="vertical" size={20}>
-                                  <Flex
-                                    align="center"
-                                    gap={10}
-                                    style={{ width: "100%" }}
-                                  >
-                                    <div
-                                      style={{
-                                        fontSize: "20px",
-                                        borderRadius: "50%",
-                                        height: "auto",
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      <UserOutlined
-                                        style={{ margin: "8px", color: "white" }}
-                                      />
-                                    </div>
-                                    <Flex vertical style={{ width: "100%" }} gap={2}>
-                                      <Typography.Text
-                                        style={{ fontSize: "12px", color: "white", paddingTop:"5px" }}
-                                        strong
-                                      >
-                                        HR
-                                      </Typography.Text>
-                                      <Flex justify="space-between" vertical>
-                                        <Typography.Text
-                                          strong
-                                          style={{ fontSize: "14px", color: "black" }}
-                                        >
-                                          Ridhhi Jariwala
-                                        </Typography.Text>
-                                        <Typography.Text
-                                          style={{
-                                            fontSize: "12px",
-                                            color: "black",
-                                          }}
-                                        >
-                                          hr@toshalinfotech.com
-                                        </Typography.Text>
-                                      </Flex>
-                                    </Flex>
-                                  </Flex>
-                                  <Flex
-                                    align="center"
-                                    gap={10}
-                                    style={{ width: "100%" }}
-                                  >
-                                    <div
-                                      style={{
-                                        fontSize: "20px",
-                                        borderRadius: "50%",
-                                        height: "auto",
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      <UserOutlined
-                                        style={{ margin: "8px", color: "black", }}
-                                      />
-                                    </div>
-                                    <Flex vertical style={{ width: "100%" }} gap={2}>
-                                      <Typography.Text
-                                        style={{ fontSize: "12px", color: "white" }}
-                                        strong
-                                      >
-                                        Mentor
-                                      </Typography.Text>
-                                      <Flex justify="space-between" vertical>
-                                        <Typography.Text
-                                          strong
-                                          style={{ fontSize: "14px", color: "black" }}
-                                        >
-                                          {
-                                            editMode
-                                              ? <Input
-                                                value={editedData?.mentorFullName}
-                                                size="middle"
-                                                placeholder='Enter Mentor FullName'
-                                                onChange={(e) => handleChange(e, "mentorFullName")}
-                                              />
-                                              : user?.internshipDetails?.mentor?.mentorFullName
-                                          }
-                                        </Typography.Text>
-                                        <Typography.Text
-                                          style={{
-                                            fontSize: "12px",
-                                            color: "black",
-                                          }}
-                                        >
-                                          {
-                                            editMode
-                                              ? <Input
-                                                value={editedData?.mentorEmail}
-                                                size="middle"
-                                                placeholder='Enter Mentor Email'
-                                                onChange={(e) => handleChange(e, "mentorEmail")}
-                                              />
-                                              : user?.internshipDetails?.mentor?.mentorEmail
-                                          }
-                                        </Typography.Text>
-                                      </Flex>
-                                    </Flex>
-                                  </Flex>
-                                </Space>
-                              }
-                            />
-                          </Card>
-                        </Space>
-                      </Space>
-                    </Flex>
-                  </Flex>
-                </Flex>
-              </Content>
-            </Layout>
-          </Flex>
-      }
-    </div>
+
+    </>
   );
 };
 
