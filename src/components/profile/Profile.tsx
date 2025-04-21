@@ -405,7 +405,7 @@ const Profile = () => {
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
                             <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
-                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0" }}><span style={{ fontWeight: "100px" }}>HALF DAY</span> <span style={{ fontSize: "25px", marginLeft: "7px", }}><AccountBookOutlined /></span></Text>
+                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0" }}><span style={{ fontWeight: "100px", fontSize: "12px" }}>HALF DAY</span> <span style={{ fontSize: "25px", marginLeft: "7px", }}><AccountBookOutlined /></span></Text>
                           </div>
                         </Card>
                       </Col>
@@ -421,7 +421,7 @@ const Profile = () => {
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
                             <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
-                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}> <span style={{ fontWeight: "100px" }}>LEAVE</span> <span style={{ fontSize: "25px", marginLeft: "7px" }}><AccountBookOutlined /></span></Text>
+                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}> <span style={{ fontWeight: "100px", fontSize: "12px" }}>LEAVE</span> <span style={{ fontSize: "25px", marginLeft: "7px" }}><AccountBookOutlined /></span></Text>
                           </div>
                         </Card>
                       </Col>
@@ -460,7 +460,7 @@ const Profile = () => {
                           <div style={{ display: "flex", alignItems: "center", }}>
                             <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
-                              <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontWeight:"100px" }}>ATTENDANCE <span style={{ marginLeft: "7px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span></Text>
+                              <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontWeight: "100px", fontSize: "12px" }}>ATTENDANCE <span style={{ marginLeft: "7px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span></Text>
                             </div>
                           </div>
                         </Card>
