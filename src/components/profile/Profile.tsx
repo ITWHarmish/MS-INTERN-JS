@@ -404,8 +404,8 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
-                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}>HALF DAY <span style={{ fontSize: "25px", marginLeft: "10px", }}><AccountBookOutlined /></span></Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
+                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0" }}><span style={{ fontWeight: "100px" }}>HALF DAY</span> <span style={{ fontSize: "25px", marginLeft: "7px", }}><AccountBookOutlined /></span></Text>
                           </div>
                         </Card>
                       </Col>
@@ -420,8 +420,8 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
-                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}>LEAVE <span style={{ fontSize: "25px", marginLeft: "10px" }}><AccountBookOutlined /></span></Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
+                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}> <span style={{ fontWeight: "100px" }}>LEAVE</span> <span style={{ fontSize: "25px", marginLeft: "7px" }}><AccountBookOutlined /></span></Text>
                           </div>
                         </Card>
                       </Col>
@@ -438,11 +438,11 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
-                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "20px" }}>TASK COMPLETION</Text>
-                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "2px" }}>RATE</Text>
-                              <span style={{ position: "absolute", right: "7px", bottom: "7px", marginLeft: "10px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span>
+                              <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontSize: "12px" }}> <span style={{ fontWeight: "100px" }}>TASK COMPLETION</span>
+                                <span style={{}}><CheckSquareOutlined style={{ fontSize: "25px", marginLeft: "7px" }} /></span>
+                              </Text>
                             </div>
                           </div>
                         </Card>
@@ -458,11 +458,9 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
-                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "20px" }}>ATTENDANCE</Text>
-                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "2px" }}>RATE</Text>
-                              <span style={{ position: "absolute", right: "7px", bottom: "7px", marginLeft: "10px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span>
+                              <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontWeight:"100px" }}>ATTENDANCE <span style={{ marginLeft: "7px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span></Text>
                             </div>
                           </div>
                         </Card>
