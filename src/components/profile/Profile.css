@@ -43,3 +43,22 @@
     mask-size: contain;
     /* mask-position: calc(100% - 20px) center; */
 }
+
+
+
+.custom-card-img1 {
+    background: url('/card_4.png') no-repeat center center/cover;
+  }
+  
+  .custom-card-img2 {
+    background: url('/card_2.png') no-repeat center center/cover;
+  }
+  
+  .custom-card-img3 {
+    background: url('/card_1.png') no-repeat center center/cover;
+  }
+  
+  .custom-card-img4 {
+    background: url('/card_3.png') no-repeat center center/cover;
+  }
+

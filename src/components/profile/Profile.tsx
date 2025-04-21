@@ -8,13 +8,13 @@ import { UpdateUserDetails } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-import { BankOutlined, BarsOutlined, CalendarOutlined, CodeOutlined, FieldTimeOutlined, FileTextOutlined, GithubOutlined, LinkedinOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import { AccountBookOutlined, BankOutlined, BarsOutlined, CalendarOutlined, CheckSquareOutlined, CodeOutlined, FieldTimeOutlined, FileTextOutlined, GithubOutlined, LinkedinOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 
 const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const { Text } = Typography;
-  const [activeTab, setActiveTab] = useState("internship");
+  const [activeTab, setActiveTab] = useState("userAnalytics");
   console.log("user:", user); // Log unused variable
 
   const fullName = user?.fullName;
@@ -142,13 +142,13 @@ const Profile = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    marginRight: "5px"
                   }}
                 >
                   <div
                     style={{
                       height: "100%",
                       padding: "2rem",
-                      width: "300px",
                       textAlign: "center",
                     }}
                   >
@@ -277,7 +277,7 @@ const Profile = () => {
 
                   {/* Monthly tab */}
                   <div
-                    onClick={() => setActiveTab("monthly")}
+                    onClick={() => setActiveTab("userAnalytics")}
                     style={{
                       display: "flex",
                       flexDirection: "column",
@@ -290,7 +290,7 @@ const Profile = () => {
                       <BarsOutlined style={{ fontSize: "16px" }} />
                       <span>USER ANALYTICS</span>
                     </div>
-                    {activeTab === "monthly" && (
+                    {activeTab === "userAnalytics" && (
                       <div
                         style={{
                           width: "100%",
@@ -304,87 +304,173 @@ const Profile = () => {
                 </div>
 
                 {/* You can add the content below here based on activeTab */}
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      paddingTop: "12px",
-                      color: "white",
-                      maxWidth: "320px",
-                    }}
-                  >
-                    <CalendarOutlined  style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                {activeTab === "internship" && (
+                  <>
                     <div>
-                      <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
-                        JOINING DATE
-                      </Text>
-                      <br />
-                      <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                        {dayjs(user?.internsDetails?.joiningDate).format("DD MMM YYYY")}
-                      </Text>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          paddingTop: "12px",
+                          color: "white",
+                          maxWidth: "320px",
+                        }}
+                      >
+                        <CalendarOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
+                            JOINING DATE
+                          </Text>
+                          <br />
+                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                            {dayjs(user?.internsDetails?.joiningDate).format("DD MMM YYYY")}
+                          </Text>
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          paddingTop: "12px",
+                          color: "white",
+                          maxWidth: "320px",
+                        }}
+                      >
+                        <FieldTimeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
+                            DURATION
+                          </Text>
+                          <br />
+                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                            {user?.internsDetails?.duration} MONTHS
+                          </Text>
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          paddingTop: "12px",
+                          color: "white",
+                          maxWidth: "320px",
+                        }}
+                      >
+                        <CodeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }} >
+                            STREAM
+                          </Text>
+                          <br />
+                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                            {(user?.internsDetails?.stream ?? "").toUpperCase()}
+                          </Text>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      paddingTop: "12px",
-                      color: "white",
-                      maxWidth: "320px",
-                    }}
-                  >
-                    <FieldTimeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
-                    <div>
-                      <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
-                        DURATION
-                      </Text>
-                      <br />
-                      <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                        {user?.internsDetails?.duration} MONTHS
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      paddingTop: "12px",
-                      color: "white",
-                      maxWidth: "320px",
-                    }}
-                  >
-                    <CodeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
-                    <div>
-                      <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }} >
-                        STREAM
-                      </Text>
-                      <br />
-                      <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                        {(user?.internsDetails?.stream ?? "").toUpperCase()}
-                      </Text>
-                    </div>
-                  </div>
-                </div>
-                <div style={{ marginTop: "2rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-                    <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
-                    <div>
-                      <Text type="secondary" style={{ fontSize: "12px", color: "#bbb" }}>HR</Text><br />
-                      <Text strong style={{ color: "white" }}>RIDDHI JARIWALA</Text><br />
-                      <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
-                    </div>
-                  </div>
+                    <div style={{ marginTop: "2rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
+                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#bbb" }}>HR</Text><br />
+                          <Text strong style={{ color: "white" }}>RIDDHI JARIWALA</Text><br />
+                          <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
+                        </div>
+                      </div>
 
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
-                    <div>
-                      <Text type="secondary" style={{ fontSize: "12px", color: "#bbb" }}>MENTOR</Text><br />
-                      <Text strong style={{ color: "white" }}>HARSH PATEL</Text><br />
-                      <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#bbb" }}>MENTOR</Text><br />
+                          <Text strong style={{ color: "white" }}>HARSH PATEL</Text><br />
+                          <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
+                        </div>
+                      </div>
                     </div>
+                  </>
+                )}
+
+                {activeTab === "userAnalytics" && (
+                  <div style={{}}>
+                    <Row gutter={[16, 16]} style={{ marginTop: "1rem" }}>
+                      <Col span={12}>
+                        <Card
+                          className="custom-card-img1"
+                          style={{
+                            height: "100px",
+                            position: "relative",
+                            borderRadius: "12px",
+                            borderColor: "transparent",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", }}>
+                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
+                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}>HALF DAY <span style={{ fontSize: "25px", marginLeft: "10px", }}><AccountBookOutlined /></span></Text>
+                          </div>
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card
+                          className="custom-card-img2"
+                          style={{
+                            height: "100px",
+                            position: "relative",
+                            borderRadius: "12px",
+                            borderColor: "transparent"
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", }}>
+                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
+                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}>LEAVE <span style={{ fontSize: "25px", marginLeft: "10px" }}><AccountBookOutlined /></span></Text>
+                          </div>
+                        </Card>
+                      </Col>
+                    </Row>
+                    <Row gutter={[16, 16]} style={{ marginTop: "1rem" }}>
+                      <Col span={12}>
+                        <Card
+                          className="custom-card-img3"
+                          style={{
+                            height: "100px",
+                            position: "relative",
+                            borderRadius: "12px",
+                            borderColor: "transparent"
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", }}>
+                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
+                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "20px" }}>TASK COMPLETION</Text>
+                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "2px" }}>RATE</Text>
+                              <span style={{ position: "absolute", right: "7px", bottom: "7px", marginLeft: "10px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span>
+                            </div>
+                          </div>
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card
+                          className="custom-card-img4"
+                          style={{
+                            height: "100px",
+                            position: "relative",
+                            borderRadius: "12px",
+                            borderColor: "transparent"
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", }}>
+                            <Text strong style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
+                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "20px" }}>ATTENDANCE</Text>
+                              <Text style={{ color: "#fff", position: "absolute", right: "47px", bottom: "2px" }}>RATE</Text>
+                              <span style={{ position: "absolute", right: "7px", bottom: "7px", marginLeft: "10px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span>
+                            </div>
+                          </div>
+                        </Card>
+                      </Col>
+                    </Row>
                   </div>
-                </div>
+                )}
+
               </Card>
 
             </Col>
@@ -393,7 +479,7 @@ const Profile = () => {
 
 
       </div>
-        <div className="overlay"></div>
+      <div className="overlay"></div>
 
 
     </>
