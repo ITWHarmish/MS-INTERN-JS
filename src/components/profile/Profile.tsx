@@ -14,7 +14,7 @@ const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const { Text } = Typography;
-  const [activeTab, setActiveTab] = useState("userAnalytics");
+  const [activeTab, setActiveTab] = useState("internship");
   console.log("user:", user); // Log unused variable
 
   const fullName = user?.fullName;
