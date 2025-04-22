@@ -138,7 +138,7 @@ const Profile = () => {
               <div>
                 <Card
                   style={{
-                    height: "calc(100vh - 150px)",
+                    height: "calc(100vh - 135px)",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -175,9 +175,9 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <MailOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <MailOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
                             E-MAIL
                           </Text>
                           <br />
@@ -195,9 +195,9 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <PhoneOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <PhoneOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
                             PHONE NUMBER:
                           </Text>
                           <br />
@@ -215,9 +215,9 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <BankOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <BankOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }} >
+                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }} >
                             COLLEGGE NAME:
                           </Text>
                           <br />
@@ -234,20 +234,17 @@ const Profile = () => {
                     </div>
                   </div>
                 </Card>
-
-                {/* compo */}
               </div>
             </Col>
             <Col md={10}>
-              {/* coponent */}
               <Card
                 className="custom-card"
                 style={{
-                  height: "calc(100vh - 150px)",
+                  height: "calc(100vh - 135px)",
                   padding: "1rem",
                 }}
               >
-                <div style={{ display: "flex", gap: "2rem", marginBottom: "1rem" }}>
+                <div style={{ display: "flex", gap: "2rem", paddingBottom: "4px" }}>
                   {/* Internship tab */}
                   <div
                     onClick={() => setActiveTab("internship")}
@@ -269,13 +266,12 @@ const Profile = () => {
                           width: "100%",
                           height: "2px",
                           backgroundColor: "white",
-                          marginTop: "6px", // this adds the space between text and border
+                          marginTop: "6px",
                         }}
                       />
                     )}
                   </div>
 
-                  {/* Monthly tab */}
                   <div
                     onClick={() => setActiveTab("userAnalytics")}
                     style={{
@@ -303,7 +299,6 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {/* You can add the content below here based on activeTab */}
                 {activeTab === "internship" && (
                   <>
                     <div>
@@ -316,9 +311,9 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <CalendarOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <CalendarOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
                             JOINING DATE
                           </Text>
                           <br />
@@ -336,9 +331,9 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <FieldTimeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <FieldTimeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }}>
+                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
                             DURATION
                           </Text>
                           <br />
@@ -356,9 +351,9 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <CodeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <CodeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#ddd" }} >
+                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }} >
                             STREAM
                           </Text>
                           <br />
@@ -370,18 +365,18 @@ const Profile = () => {
                     </div>
                     <div style={{ marginTop: "2rem" }}>
                       <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#bbb" }}>HR</Text><br />
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#fff" }}>HR</Text><br />
                           <Text strong style={{ color: "white" }}>RIDDHI JARIWALA</Text><br />
                           <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
                         </div>
                       </div>
 
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid #ddd", paddingRight: "10px" }} />
+                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#bbb" }}>MENTOR</Text><br />
+                          <Text type="secondary" style={{ fontSize: "12px", color: "#fff" }}>MENTOR</Text><br />
                           <Text strong style={{ color: "white" }}>HARSH PATEL</Text><br />
                           <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
                         </div>

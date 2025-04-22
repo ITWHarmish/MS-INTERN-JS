@@ -192,12 +192,12 @@ input:-webkit-autofill:active {
 }
 
 .containerCalendar {
-  display: flex;
   position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0px;
-  height: 300px;
+  /* margin-top: 30px; */
+  /* height: 300px;  */
 }
 
 .spinner {
@@ -212,12 +212,12 @@ input:-webkit-autofill:active {
 .rbc-day-slot .rbc-background-event {
   background-color: transparent !important;
 }
-
+/* 
 .Monthcalendar {
   .rbc-off-range-bg {
-    background-color: #474646;
+    background-color: #3c3c3c46 !important;
   }
-}
+} */
 
 .rbc-row-segment {
   height: 0px !important;
@@ -858,3 +858,10 @@ th.ant-table-cell:not(:last-child)::after {
   border-top-right-radius: 12px !important;
 
 }
+/* 
+@font-face {
+  font-family: 'Neue Machina';
+  src: url('/fonts/NeueMachina-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+} */
