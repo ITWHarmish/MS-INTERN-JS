@@ -32,6 +32,8 @@ const MonthlySummary = () => {
         start: dayjs().startOf("month"),
         end: dayjs().endOf("month")
     });
+    const [calendarLabel, setCalendarLabel] = useState("");
+
 
     const handleNavigate = useCallback(async (date) => {
         try {
@@ -40,6 +42,7 @@ const MonthlySummary = () => {
 
             const selectedMonth = dayjs(date).month() + 1;
             const selectedYear = dayjs(date).year();
+            setCalendarLabel(dayjs(date).format("YYYY"));
 
             const payload = { year: selectedYear, month: selectedMonth };
             setVisibleMonthRange({
@@ -129,6 +132,7 @@ const MonthlySummary = () => {
             return {
                 style: {
                     backgroundColor: "#3c3c3c46",
+                    margin: "4px 4px 0px 0px",
                 },
             };
         }
@@ -168,17 +172,7 @@ const MonthlySummary = () => {
         return {};
 
     }
-
-    const CalendarToolbar = ({ label, onNavigate }) => (
-        < div >
-            <div className="calendar-toolbar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: "18px", }}>
-                <span onClick={() => onNavigate('PREV')} style={{ marginRight: "7px", cursor: "pointer" }}> <LeftOutlined /> </span>
-                {label}
-                <span onClick={() => onNavigate('NEXT')} style={{ marginLeft: "7px", cursor: "pointer" }}> <RightOutlined /> </span>
-            </div>
-        </div >
-    );
-
+    
     const CustomEvent = ({ event }) => {
 
         const holiday = officeHoliday?.find(holiday =>
@@ -208,7 +202,6 @@ const MonthlySummary = () => {
                     fontSize: "30px",
                     color: token.colorBgLayout === "White" ? "black" : "white",
                     height: (holiday || isHiddenEvent) ? 50 : "auto",
-                    marginLeft: "10px",
                 }}>
                     {(event.title === "undefined" || event.title === "0") ? "" : event.title}
                 </span>
@@ -222,13 +215,13 @@ const MonthlySummary = () => {
             <div
                 className='ScrollInProgress'
                 style={{ height: "calc(100vh - 100px)", overflowY: "auto", overflowX: "hidden" }}>
-                <Row gutter={16} style={{ padding: '', }}>
+                <Row gutter={16}>
                     <Col md={20}>
                         <div
 
                             style={{ display: "flex", alignItems: "center", padding: "10px 0px 0px 70px" }}>
 
-                            <div style={{}}>
+                            <div>
                                 <div className='containerCalendar'>
                                     {calendarLoading && (
                                         <div className='spinner'>
@@ -242,11 +235,15 @@ const MonthlySummary = () => {
                                         endAccessor="end"
                                         date={currentDate}
                                         onNavigate={handleNavigate}
-                                        style={{ height: 500, width: 800, position: "relative", zIndex: "0" }}
+                                        style={{
+                                            height: "calc(100vh - 197px)",
+                                            width: "calc(100vw - 490px)",
+                                            position: "relative",
+                                            zIndex: "0",
+                                        }}
                                         components={{
                                             event: CustomEvent,
-                                            toolbar: CalendarToolbar,
-                                            header: (props) => <div className={token.colorBgLayout === "White" ? "" : "BgCard"}>{props.label}</div>,
+                                            header: (props) => <div style={{ color: "#49494B" }} >{(props.label ? props.label : "").toUpperCase()}</div>,
                                             // month: {
                                             //     dateHeader: (props) => <div className={token.colorBgLayout === "White" ? "" : "dateColorWhite"}>{props.label}</div>
                                             // },
@@ -257,7 +254,10 @@ const MonthlySummary = () => {
                                                     const isWhite = isWeekend || isHoliday;
 
                                                     return (
-                                                        <div style={{ color: isWhite ? 'white' : "" }}>
+                                                        <div style={{
+                                                            color: isWhite ? 'white' : "",
+                                                            margin: "5px 5px 0px 0px",
+                                                        }}>
                                                             {label}
                                                         </div>
                                                     );
@@ -271,7 +271,7 @@ const MonthlySummary = () => {
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "8px", marginBottom: "8px" }}>
                                     <div style={{
-                                        width: '800px',
+                                        width: 'calc(100vw - 490px)',
                                         color: "white",
                                         padding: '10px',
                                         display: 'flex',
@@ -281,13 +281,20 @@ const MonthlySummary = () => {
                                         height: "40px",
                                         borderRadius: "12px",
                                     }}>
-                                        <span style={{ marginRight: '15px', color: "black" }}>Total Working Days: <b>{monthlySummary?.totalWorkingDays || 0}</b></span>
-                                        <span style={{ marginRight: '15px', color: "black" }}>Total Hours: <b>{monthlySummary?.totalWorkingHours || 0}</b></span>
+                                        <span style={{ marginRight: '15px', color: "black" }}>TOTAL WORKING DAYS: {monthlySummary?.totalWorkingDays || 0}</span>
+                                        <span style={{ marginRight: '15px', color: "black" }}>TOTAL HOURS: {monthlySummary?.totalWorkingHours || 0}</span>
                                         <span>
                                             {monthlySummary?.shortage < 0 ? (
-                                                <><span style={{ color: "black" }}>Extra Hours:</span> <b style={{ color: '#50C150' }}>{Math.abs(monthlySummary.shortage)}</b></>
+                                                <>
+                                                    <span style={{ color: "black" }}>EXTRA HOURS:
+                                                        {Math.abs(monthlySummary.shortage)}
+                                                    </span>
+                                                </>
                                             ) : (
-                                                <><span style={{ color: "black" }}>Shortage Hours:</span> <b style={{ color: '#E65A5A' }}>{monthlySummary?.shortage || 0}</b></>
+                                                <>
+                                                    <span style={{ color: "black" }}>SHORTAGE HOURS:  {monthlySummary?.shortage || 0}
+                                                    </span>
+                                                </>
                                             )}
                                         </span>
                                     </div>
@@ -297,22 +304,43 @@ const MonthlySummary = () => {
                     </Col>
                     <Col md={4}>
                         <div style={{
-                            display: 'flex', justifyContent: 'end', padding: '10px',
+                            display: 'flex', justifyContent: 'end', padding: '10px', marginRight:"8px"
                         }}>
                             <Button onClick={showModal} type="primary">
-                                Apply Leave
+                                APPLY LEAVE
                             </Button>
                             <Leaves visible={isModalOpen} onClose={handleCancel} />
                         </div>
                     </Col>
                 </Row>
             </div>
+            <span className='iconcheck' onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'month').toDate())}>
+                <LeftOutlined />
+            </span>
+            <span className='iconcheck1' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'month').toDate())}>
+                <RightOutlined />
+            </span>
+
+            <div className='iconcheck3'>
+                <span onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'year').toDate())}>
+                    <LeftOutlined />
+                </span>
+                {calendarLabel}
+                <span style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'year').toDate())}>
+                    <RightOutlined />
+                </span>
+            </div>
+
             <div
+                className="Monthly-Summary-overlay"
                 style={{
+                    position: "absolute",
                     WebkitMaskImage: `url('/${monthImage}.png')`,
                     maskImage: `url('/${monthImage}.png')`,
                 }}
-                className="Monthly-Summary-overlay"></div>
+            >
+            </div>
+
 
 
         </>

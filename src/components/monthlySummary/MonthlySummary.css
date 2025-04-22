@@ -19,6 +19,10 @@
 
 .rbc-off-range {
     color: #ffffff !important;
+    /* margin: 4px 4px 0px 0px; */
+}
+.rbc-header + .rbc-header{
+    border-left: 1px solid #49494B !important;
 }
 
 .rbc-day-bg{
@@ -42,12 +46,49 @@
     justify-content: center !important;
     align-items: center !important;
     border-right: #ffffff !important;
+    font-weight: normal;
 }  
 
 .rbc-row-content{
-    margin-right: 10px !important;
+    /* margin-right: 10px !important; */
 }
 
+.iconcheck {
+    position: absolute;
+    cursor: pointer;
+    font-size: 30px;
+    bottom: 190px;
+    right: 85px;
+    top: 68%;
+    /* t7ansform: scale(0.9); */
+    /* margin-top: 90px; */
+    margin-right: 20.5vw;
+}
+
+.iconcheck1 {
+    position: absolute;
+    cursor: pointer;
+    font-size: 30px;
+    bottom: 190px;
+    right: 45px;
+    top: 68%;
+    /* t7ansform: scale(0.9); */
+    /* margin-top: 90px; */
+    /* margin-right: 20.5vw; */
+}
+
+.iconcheck3 {
+    position: absolute;
+    cursor: pointer;
+    font-size: 40px;
+    bottom: 190px;
+    right: 110px;
+    top: 78%;
+    color: white;
+    /* t7ansform: scale(0.9); */
+    /* margin-top: 90px; */
+    /* margin-right: 20.5vw; */
+}
 
 
 .Monthly-Summary-overlay {
@@ -59,7 +100,7 @@
     top: 120px;
     /* transform: scale(0.9); */
     /* margin-top: 90px; */
-    margin-right: 70px;
+    margin-right: 90px;
     background: #49494B; /* your overlay color */
     mix-blend-mode: overlay;
     z-index: 10;
@@ -78,3 +119,6 @@
     /* mask-position: calc(100% - 20px) center; */
 }
 
+.rbc-toolbar{
+    display: none !important;
+}

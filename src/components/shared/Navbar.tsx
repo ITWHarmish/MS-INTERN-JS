@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, GoogleOutlined, LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -83,14 +83,14 @@ const Navbar = () => {
             <Space direction="vertical">
                 {
                     !user?.admin && <a style={{ color: "white" }} onClick={() => onMenuClick({ key: "profile" })} type="text">
-                        <span style={{ display: "flex", alignItems: "center", gap: "7px", borderBottom: "1px solid white", paddingBottom: "10px", marginBottom:"3px" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "7px", borderBottom: "1px solid white", paddingBottom: "10px", marginBottom: "3px" }}>
                             <ProfileOutlined style={{ fontSize: "16px" }} />
                             PROFILE
                         </span>
                     </a>
                 }
                 <a style={{ color: "white" }} onClick={handleLogout} type="text">
-                    <span style={{ display: "flex", alignItems: "center", gap: "7px", marginTop:"0px" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "7px", marginTop: "0px" }}>
                         <LogoutOutlined style={{ fontSize: "16px" }} />
                         LOGOUT
                     </span>
@@ -174,21 +174,21 @@ const Navbar = () => {
                     {
                         user && !user?.admin && (
                             telegramUser?.google?.tokens?.access_token ?
-                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent" }} className="btn" disabled type="default"><span style={{ color: "grey" }}>GOOGLE CONNECTED</span></Button>
+                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent", display: "none" }} className="btn" disabled type="default"><span style={{ color: "grey" }}></span></Button>
                                 :
-                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">CONNECT GOOGLE</Button>
+                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default"><GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }}/></Button>
                         )
                     }
                     {telegramUser?.telegram?.session_id ? (
-                        <Button style={{ fontFamily: "Rubik" }} disabled>
+                        <Button style={{ fontFamily: "Rubik", display:"none" }} disabled>
                             <span style={{ color: "grey" }}>TELEGRAM CONNECTED</span>
                         </Button>
                     ) : (
                         <>
                             {
                                 user && !user?.admin &&
-                                <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
-                                    CONNECT TELEGRAM
+                                <Button style={{ fontFamily: "Rubik", color: "#49494B", marginRight:"12px" }} onClick={showModal} type="default">
+                                    <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }} />
                                 </Button>
                             }
                             <Modal
