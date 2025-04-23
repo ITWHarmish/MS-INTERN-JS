@@ -34,6 +34,28 @@ const MonthlySummary = () => {
     });
     const [calendarLabel, setCalendarLabel] = useState("");
 
+    const [calendarDimensions, setCalendarDimensions] = useState({
+        height: document.documentElement.clientHeight - 197,
+        width: document.documentElement.clientWidth - 600,
+    });
+
+    // Handle window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setCalendarDimensions({
+                height: document.documentElement.clientHeight - 197,
+                width: document.documentElement.clientWidth - 600,
+            });
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Clean up on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
 
     const handleNavigate = useCallback(async (date) => {
         try {
@@ -148,7 +170,7 @@ const MonthlySummary = () => {
         else if (!isHalfLeave && isCurrentDay) {
             return {
                 style: {
-                    backgroundColor: "transparent",
+                    backgroundColor: "#ffffff80",
                 },
             };
         }
@@ -172,7 +194,7 @@ const MonthlySummary = () => {
         return {};
 
     }
-    
+
     const CustomEvent = ({ event }) => {
 
         const holiday = officeHoliday?.find(holiday =>
@@ -213,14 +235,11 @@ const MonthlySummary = () => {
     return (
         <>
             <div
-                className='ScrollInProgress'
-                style={{ height: "calc(100vh - 100px)", overflowY: "auto", overflowX: "hidden" }}>
+                style={{ height: "calc(100vh - 100px)"}}>
                 <Row gutter={16}>
                     <Col md={20}>
                         <div
-
                             style={{ display: "flex", alignItems: "center", padding: "10px 0px 0px 70px" }}>
-
                             <div>
                                 <div className='containerCalendar'>
                                     {calendarLoading && (
@@ -236,14 +255,16 @@ const MonthlySummary = () => {
                                         date={currentDate}
                                         onNavigate={handleNavigate}
                                         style={{
-                                            height: "calc(100vh - 197px)",
-                                            width: "calc(100vw - 490px)",
+                                            height: `${calendarDimensions.height}px`,
+                                            width: `${calendarDimensions.width}px`,
                                             position: "relative",
                                             zIndex: "0",
                                         }}
                                         components={{
                                             event: CustomEvent,
-                                            header: (props) => <div style={{ color: "#49494B" }} >{(props.label ? props.label : "").toUpperCase()}</div>,
+                                            header: ({ date }) => <div style={{ color: "#49494B" }} >
+                                                {dayjs(date).format('dddd').toUpperCase()}
+                                            </div>,
                                             // month: {
                                             //     dateHeader: (props) => <div className={token.colorBgLayout === "White" ? "" : "dateColorWhite"}>{props.label}</div>
                                             // },
@@ -271,7 +292,8 @@ const MonthlySummary = () => {
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "8px", marginBottom: "8px" }}>
                                     <div style={{
-                                        width: 'calc(100vw - 490px)',
+                                        // width: 'calc(100vw - 490px)',
+                                        width: `${calendarDimensions.width}px`,
                                         color: "white",
                                         padding: '10px',
                                         display: 'flex',
@@ -304,9 +326,9 @@ const MonthlySummary = () => {
                     </Col>
                     <Col md={4}>
                         <div style={{
-                            display: 'flex', justifyContent: 'end', padding: '10px', marginRight:"8px"
+                            display: 'flex', justifyContent: 'end', padding: '10px', marginRight: "8px",
                         }}>
-                            <Button onClick={showModal} type="primary">
+                            <Button onClick={showModal} type="primary" style={{backgroundColor:"#323791"}}>
                                 APPLY LEAVE
                             </Button>
                             <Leaves visible={isModalOpen} onClose={handleCancel} />
@@ -314,14 +336,14 @@ const MonthlySummary = () => {
                     </Col>
                 </Row>
             </div>
-            <span className='iconcheck' onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'month').toDate())}>
+            <span className='month-left-nav' onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'month').toDate())}>
                 <LeftOutlined />
             </span>
-            <span className='iconcheck1' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'month').toDate())}>
+            <span className='month-right-nav' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'month').toDate())}>
                 <RightOutlined />
             </span>
 
-            <div className='iconcheck3'>
+            <div className='year-nav'>
                 <span onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'year').toDate())}>
                     <LeftOutlined />
                 </span>

@@ -23,6 +23,7 @@
 }
 .rbc-header + .rbc-header{
     border-left: 1px solid #49494B !important;
+    margin: 8px 0px;
 }
 
 .rbc-day-bg{
@@ -51,33 +52,29 @@
 
 .rbc-row-content{
     /* margin-right: 10px !important; */
+    /* height: 100px; */
 }
 
-.iconcheck {
+.month-left-nav {
     position: absolute;
     cursor: pointer;
     font-size: 30px;
     bottom: 190px;
     right: 85px;
     top: 68%;
-    /* t7ansform: scale(0.9); */
-    /* margin-top: 90px; */
     margin-right: 20.5vw;
 }
 
-.iconcheck1 {
+.month-right-nav {
     position: absolute;
     cursor: pointer;
     font-size: 30px;
     bottom: 190px;
     right: 45px;
     top: 68%;
-    /* t7ansform: scale(0.9); */
-    /* margin-top: 90px; */
-    /* margin-right: 20.5vw; */
 }
 
-.iconcheck3 {
+.year-nav {
     position: absolute;
     cursor: pointer;
     font-size: 40px;
@@ -85,18 +82,18 @@
     right: 110px;
     top: 78%;
     color: white;
-    /* t7ansform: scale(0.9); */
-    /* margin-top: 90px; */
-    /* margin-right: 20.5vw; */
 }
 
+.rbc-today {
+    border: 1px solid black !important;
+}
 
 .Monthly-Summary-overlay {
     position: absolute;
     bottom: 190px;
     right: 0;
     width: 50.5vw;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 200px);
     top: 120px;
     /* transform: scale(0.9); */
     /* margin-top: 90px; */
