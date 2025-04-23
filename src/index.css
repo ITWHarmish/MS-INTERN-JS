@@ -892,3 +892,15 @@ th.ant-table-cell:not(:last-child)::after {
   background: #49494B !important;
   color: #fff !important;
 }
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range:not(.ant-picker-cell-disabled):before {
+  background: #49494B !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+  background: #49494B !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+  background: #49494B !important;
+}

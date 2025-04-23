@@ -46,7 +46,7 @@ const ProgressReports = () => {
 
     const columns: TableProps<IColumnsReports>['columns'] = [
         {
-            title: 'Sr. No.',
+            title: 'SR. NO.',
             dataIndex: 'srNo',
             key: 'srNo',
             align: 'center',
@@ -54,7 +54,7 @@ const ProgressReports = () => {
             width: "80px"
         },
         {
-            title: 'File Name',
+            title: 'FILE NAME',
             dataIndex: 'duration',
             key: 'duration',
             render: (duration: { from: string; to: string }, record: { _id: string }) => (
@@ -67,7 +67,7 @@ const ProgressReports = () => {
             )
         },
         {
-            title: 'Status',
+            title: 'STATUS',
             dataIndex: 'status',
             key: 'status',
             render: (_, record) => (
@@ -216,11 +216,11 @@ const ProgressReports = () => {
 
     return (
         <>
-            <div style={{ padding: "20px", height: "88vh" }}>
+            <div style={{ padding: "10px 20px 0px 20px", height: "calc(100vh - 130px)" }}>
 
                 <Card style={{ position: "relative", height: "calc(100vh - 150px)" }}
                     title={
-                        "Progress Report"
+                        "PROGRESS REPORT"
                     }
                     extra={
                         <>
@@ -250,7 +250,7 @@ const ProgressReports = () => {
                                 </>
                                 :
                                 <Button onClick={() => { navigate("/reportuser") }} type="primary">
-                                    Add New Report
+                                    ADD NEW REPORT
                                 </Button>
                             }
                         </>
