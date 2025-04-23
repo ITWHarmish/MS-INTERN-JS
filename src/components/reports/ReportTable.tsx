@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Card, DatePicker, Input, Table, Form, message, Steps } from "antd";
+import { Button, Card, DatePicker, Input, Table, Form, message, Steps, Row, Col } from "antd";
 import dayjs from "dayjs";
 import type { TableProps } from 'antd';
 import { IColumnsReports, IProgressReport } from "../../types/IReport";
@@ -66,7 +66,7 @@ const ReportTable = () => {
 
     const columns: TableProps<IColumnsReports>['columns'] = [
         {
-            title: 'Date Assigned',
+            title: 'DATE ASSIGNED',
             dataIndex: 'assignedDate',
             width: 130,
             key: 'assignedDate',
@@ -74,7 +74,7 @@ const ReportTable = () => {
                 dayjs(assignedDate).format('YYYY-MM-DD'),
         },
         {
-            title: 'Expected Date Of Completion',
+            title: 'EXPECTED DATE OF COMPLETION',
             dataIndex: 'expectedCompletionDate',
             width: 230,
             key: 'expectedCompletionDate',
@@ -82,7 +82,7 @@ const ReportTable = () => {
                 dayjs(expectedCompletionDate).format('YYYY-MM-DD'),
         },
         {
-            title: 'Actual Date Of Completion',
+            title: 'ACTUAL DATE OF COMPLETION',
             dataIndex: 'actualCompletionDate',
             key: 'actualCompletionDate',
             width: 230,
@@ -90,12 +90,12 @@ const ReportTable = () => {
                 dayjs(actualCompletionDate).format('YYYY-MM-DD'),
         },
         {
-            title: 'Description',
+            title: 'DESCRIPTION',
             dataIndex: 'taskDescription',
             key: 'taskDescription',
         },
         {
-            title: 'Actions',
+            title: 'ACTIONS',
             dataIndex: 'actions',
             key: 'actions',
             width: 100,
@@ -201,85 +201,68 @@ const ReportTable = () => {
 
     return (
         <>
-            <div style={{ marginBottom: "50px", height: "82vh" }}>
-                <div style={{ padding: "20px", height: "80vh", marginBottom: "50px" }}>
-                    <Steps current={1} style={{ width: "99%", maxWidth: "1300px", marginBottom: "20px" }}>
-                        <Step title="Fill Details" />
-                        <Step title="Add Tasks" />
-                        {user?.admin &&
-                            <Step title="Intern Evaluation" />
-                        }
-                        <Step title="Review & Submit" />
-                    </Steps>
-                    <Card style={{ position: "relative", height: "90%" }}
-                        title={
-                            "Progress Report"
-                        }
-                        extra={
-                            user?.admin ?
-                                <Button onClick={() => navigate(`/reportevaluation/${reportId}`)} type="primary">
-                                    Next
-                                </Button>
-                                :
-                                <Button onClick={() => navigate(`/report/submit`)} type="primary">
-                                    Next
-                                </Button>
-                        }
-                    >
-                        <Form
-                            form={form}
-                            onFinish={handleSubmit}
-                            layout="vertical"
+            <div style={{ height: "calc(100vh - 130px)", padding: "20px" }}>
+                <Row gutter={6} style={{ height: "calc(100vh - 130px)" }}>
+                    <Col>
+                        <Steps
+                            direction="vertical"
+                            current={1}
+                            style={{ height: "calc(100vh - 160px)", background: "rgba(255, 255, 255, 0.5)", borderRadius: "30px" }}
                         >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    flexWrap: "wrap",
-                                }}
-                            >
-                                <Form.Item
-                                    name="dateRange"
-                                    rules={[{ required: true, message: "Please select assigned and expected completion dates!" }]}
-                                    style={{ flex: 1, minWidth: "280px" }}
-                                >
-                                    <RangePicker
-                                        placeholder={['Date Assigned', 'Expected Date']}
-                                        style={{ width: "100%" }}
-                                        required
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    name="actualCompletionDate"
-                                    rules={[{ required: true, message: "Please select actual completion dates!" }]}
-                                    style={{ flex: 1, minWidth: "250px" }}
-                                >
-                                    <DatePicker
-                                        placeholder="Actual Completion Date"
-                                        style={{ width: "100%" }}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    name="taskDescription"
-                                    rules={[{ required: true, message: "Please write the Description!" }]}
-                                    style={{ flex: 2, minWidth: "300px" }}
-                                >
-                                    <Input
-                                        placeholder="Task Description"
-                                        style={{ width: "100%" }}
-                                        maxLength={115}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                >
-                                    <Button htmlType="submit" type="primary">
-                                        {editingTask ? "Update Task" : "Add Task"}
-                                    </Button>
-                                </Form.Item>
-                            </div>
-                            <div
-                            >
+                            <Step />
+                            <Step />
+                            {user?.admin && <Step />}
+                            <Step />
+                        </Steps>
+                    </Col>
+                    <Col>
+                        <Card
+                            title="PROGRESS REPORT"
+                            extra={
+                                <Button onClick={() => navigate(user?.admin ? `/reportevaluation/${reportId}` : `/report/submit`)} type="primary">
+                                    NEXT
+                                </Button>
+                            }
+                            style={{ width: "calc(100vw - 400px)", height: "calc(100vh - 160px)", padding: "" }}
+                        >
+                            <Form form={form} onFinish={handleSubmit} layout="vertical">
+                                <Row gutter={[16, 16]} align="bottom">
+                                    <Col span={6}>
+                                        <Form.Item
+                                            name="dateRange"
+                                            rules={[{ required: true, message: "Please select assigned and expected completion dates!" }]}
+                                            style={{paddingLeft:"14px"}}
+                                        >
+                                            <RangePicker placeholder={["DATE ASSIGNED", "EXPECTED DATE"]} style={{ width: "100%", }} />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={6}>
+                                        <Form.Item
+                                            name="actualCompletionDate"
+                                            rules={[{ required: true, message: "Please select actual completion date!" }]}
+                                        >
+                                            <DatePicker placeholder="ACTUAL COMPLETION DATE" style={{ width: "100%" }} />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.Item
+                                            name="taskDescription"
+                                            rules={[{ required: true, message: "Please write the Description!" }]}
+                                        >
+                                            <Input placeholder="TASK DESCRIPTION" maxLength={115} />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={4}>
+                                        <Form.Item
+                                        style={{marginLeft:"6px"}}
+                                        >
+                                            <Button htmlType="submit" type="primary" >
+                                                {editingTask ? "UPDATE TASK" : "ADD TASK"}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+
                                 <Table<IColumnsReports>
                                     columns={columns}
                                     dataSource={tasks}
@@ -287,26 +270,19 @@ const ReportTable = () => {
                                     bordered
                                     size="small"
                                     loading={loading}
-                                    sticky={true}
+                                    sticky
                                     locale={{ emptyText: <></> }}
                                     className="ScrollInProgress"
-                                    style={{
-                                        height: "calc(65vh - 135px)",
-                                        position: "absolute",
-                                        overflowY: "auto",
-                                        overflowX: "hidden",
-                                        left: "10px",
-                                        right: "0",
-                                        paddingRight: "10px",
-                                    }}
+                                    style={{ height: "calc(65vh - 135px)", overflowY: "auto", position: "absolute", right: "0", paddingRight: "4px", paddingLeft: "4px", top:"103px" }}
                                 />
-                            </div>
-                        </Form>
-                    </Card >
-                </div>
+                            </Form>
+                        </Card>
+                    </Col>
+                </Row>
             </div>
+            <div className="report-overlay"></div>
         </>
-    )
+    );
 }
 
 export default ReportTable

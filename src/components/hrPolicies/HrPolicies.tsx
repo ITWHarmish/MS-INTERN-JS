@@ -126,9 +126,9 @@ const HrPolicies = () => {
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
         </div >
       }
-      <div className="ScrollInProgress" style={{ height: "calc(100vh - 50px)", overflowY: "auto"}}>
-        <div style={{ padding: "16px" }}>
-          <Card style={{ marginBottom: "50px", padding: "20px" }}>
+      <div className="ScrollInProgress" style={{ height:"calc(100vh - 130px)" }}>
+        <div style={{ padding: "16px", }}>
+          <Card style={{ marginBottom: "20px", padding: "20px",  position:"relative", height:"calc(100vh - 155px)"}}>
             {loading ? (
               <Spinner />
             ) : (
@@ -170,9 +170,9 @@ const HrPolicies = () => {
                   </Droppable>
                 </DragDropContext>
               ) : (
-                <div>
+                <div className="ScrollInProgress" style={{height: "calc(100vh - 205px)", overflowY: "auto", position:"absolute", right:"0", width:"100%", padding:"0px 20px"}}>
                   {orderedPolicies.map((policy) => (
-                    <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px", background:"#3c3c3c46", backdropFilter: "blur(12px)" }}>
+                    <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px", background: "#3c3c3c46", backdropFilter: "blur(12px)" }}>
                       <div style={{ marginLeft: "15px" }} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
                     </Card>
                   ))}

@@ -212,6 +212,7 @@ input:-webkit-autofill:active {
 .rbc-day-slot .rbc-background-event {
   background-color: transparent !important;
 }
+
 /* 
 .Monthcalendar {
   .rbc-off-range-bg {
@@ -858,10 +859,36 @@ th.ant-table-cell:not(:last-child)::after {
   border-top-right-radius: 12px !important;
 
 }
-/* 
-@font-face {
-  font-family: 'Neue Machina';
-  src: url('/fonts/NeueMachina-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-} */
+
+.ant-switch.ant-switch-checked {
+  background: #fff !important;
+}
+
+.ant-switch .ant-switch-handle::before {
+  background-color: black !important;
+}
+
+.ant-switch:not(.ant-switch-checked) .ant-switch-handle::before {
+  background-color: white !important;
+}
+
+.ant-steps-item-container>.ant-steps-item-tail {
+  margin-left: 16px !important;
+}
+
+.ant-steps .ant-steps-item-container {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  margin-top: 20px !important;
+}
+
+.ant-steps.ant-steps-vertical>.ant-steps-item {}
+
+.ant-steps-item .ant-steps-item-process .ant-steps-item-active {
+  margin: 50px 50px !important;
+}
+
+.ant-message .ant-message-notice-wrapper .ant-message-notice-content {
+  background: #49494B !important;
+  color: #fff !important;
+}

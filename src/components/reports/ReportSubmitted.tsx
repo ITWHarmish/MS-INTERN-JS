@@ -1,4 +1,4 @@
-import { Button, Card, Steps } from "antd"
+import { Button, Card, Col, Row, Steps } from "antd"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
@@ -17,33 +17,55 @@ const ReportSubmitted = () => {
 
     return (
         <>
-            <div style={{ marginBottom: "50px", height: "82vh" }}>
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
-                    <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
-                        <Step title="Fill Details" />
-                        <Step title="Add Tasks" />
-                        {user?.admin &&
-                            <Step title="Intern Evaluation" />
-                        }
-                        <Step title="Review & Submit" />
-                    </Steps>
-                    <Card
-                        title="Interns Evaluation"
-                        extra={
-                            <Button onClick={() => handleNext()} type="primary" htmlType="submit">
-                                Next
-                            </Button>
-                        }
-                        style={{ width: "80%", maxWidth: "900px", padding: "24px", marginBottom: "40px" }}
-                    >
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <p style={{ fontSize: "30px" }}>Report has been submitted successfully. 🎉</p>
-                        </div>
-                    </Card>
-                </div>
+            <div style={{ height: "calc(100vh - 130px)", padding: "20px" }}>
+                <Row gutter={6} style={{ height: "calc(100vh - 130px)" }}>
+                    <Col>
+                        <Steps
+                            direction="vertical"
+                            current={currentStep}
+                            style={{
+                                height: "calc(100vh - 160px)",
+                                background: "rgba(255, 255, 255, 0.5)",
+                                borderRadius: "30px",
+                            }}
+                        >
+                            <Step />
+                            <Step />
+                            {user?.admin && <Step />}
+                            <Step />
+                        </Steps>
+                    </Col>
+                    <Col>
+                        <Card
+                            title="REPORT SUBMIT"
+                            style={{ width: "calc(100vw - 400px)", height: "calc(100vh - 160px)",}}
+                            extra={
+                                <Button onClick={() => handleNext()} type="primary">
+                                    NEXT
+                                </Button>
+                            }
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    height:"50vh"
+                                }}
+                            >
+                                <p style={{ fontSize: "30px", margin: 0 }}>
+                                    REPORT HAS BEEN SUBMITTED SUCCESSFULLY.
+                                </p>
+
+                            </div>
+                        </Card>
+                    </Col>
+                </Row>
             </div>
+            <div className="report-overlay"></div>
         </>
-    )
+    );
+
 }
 
 export default ReportSubmitted

@@ -2,7 +2,7 @@ import { Button, Col, Row, theme, Tooltip } from 'antd';
 import Leaves from './Leaves';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { DownOutlined, UpOutlined } from '@ant-design/icons'
 import "../../index.css"
 import { useCallback, useEffect, useState } from 'react'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -50,7 +50,6 @@ const MonthlySummary = () => {
 
         window.addEventListener('resize', handleResize);
 
-        // Clean up on component unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
@@ -162,7 +161,7 @@ const MonthlySummary = () => {
         if (isHalfLeave) {
             return {
                 style: {
-                    backgroundColor: "#FFD9004C",
+                    backgroundColor: "#515151",
                 },
             };
         }
@@ -178,7 +177,7 @@ const MonthlySummary = () => {
         if (isEventDay) {
             return {
                 style: {
-                    backgroundColor: '#6c6ccda8',
+                    backgroundColor: 'black',
                 },
             };
         }
@@ -215,7 +214,7 @@ const MonthlySummary = () => {
             <Tooltip
                 title={tooltipText || ``}
                 placement="top"
-                overlayInnerStyle={{ backgroundColor: "#474787" }}
+                overlayInnerStyle={{ backgroundColor: "#fff", color: "black" }}
             >
                 <span style={{
                     display: "flex",
@@ -235,7 +234,7 @@ const MonthlySummary = () => {
     return (
         <>
             <div
-                style={{ height: "calc(100vh - 100px)"}}>
+                style={{ height: "calc(100vh - 130px)" }}>
                 <Row gutter={16}>
                     <Col md={20}>
                         <div
@@ -272,7 +271,15 @@ const MonthlySummary = () => {
                                                 dateHeader: ({ date, label }) => {
                                                     const isWeekend = dayjs(date).day() === 0 || dayjs(date).day() === 6;
                                                     const isHoliday = officeHoliday?.some(holiday => dayjs(holiday.date).isSame(date, 'day'));
-                                                    const isWhite = isWeekend || isHoliday;
+                                                    const isEventDay = eventList?.some(event =>
+                                                        (event.type === 'casual leave' || event.type === 'sick leave') &&
+                                                        dayjs(date).isBetween(event.start, event.end, 'day', '[]')
+                                                    );
+                                                    const isHalfLeave = eventList?.some(event => (event.type === 'half leave') &&
+                                                        dayjs(date).isBetween(event.start, event.end, 'day', '[]')
+                                                    );
+
+                                                    const isWhite = isWeekend || isHoliday || isEventDay || isHalfLeave;
 
                                                     return (
                                                         <div style={{
@@ -303,18 +310,30 @@ const MonthlySummary = () => {
                                         height: "40px",
                                         borderRadius: "12px",
                                     }}>
-                                        <span style={{ marginRight: '15px', color: "black" }}>TOTAL WORKING DAYS: {monthlySummary?.totalWorkingDays || 0}</span>
-                                        <span style={{ marginRight: '15px', color: "black" }}>TOTAL HOURS: {monthlySummary?.totalWorkingHours || 0}</span>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                            <span style={{ color: "#49494B" }}>TOTAL WORKING DAYS: </span>
+                                            <span style={{ color: "black", marginRight: '15px' }}>
+                                                {monthlySummary?.totalWorkingDays || 0}
+                                            </span>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                            <span style={{ color: "#49494B" }}>TOTAL HOURS:</span>
+                                            <span style={{ color: "black", marginRight: '15px' }}>
+                                                {monthlySummary?.totalWorkingHours || 0}
+                                            </span>
+                                        </div>
                                         <span>
                                             {monthlySummary?.shortage < 0 ? (
                                                 <>
-                                                    <span style={{ color: "black" }}>EXTRA HOURS:
+                                                    <span style={{ color: "#49494B" }}>EXTRA HOURS:</span>
+                                                    <span style={{ color: "black" }}>
                                                         {Math.abs(monthlySummary.shortage)}
                                                     </span>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <span style={{ color: "black" }}>SHORTAGE HOURS:  {monthlySummary?.shortage || 0}
+                                                    <span style={{ color: "#49494B" }}>SHORTAGE HOURS:</span>  <span style={{ color: "black" }}>
+                                                        {monthlySummary?.shortage || 0}
                                                     </span>
                                                 </>
                                             )}
@@ -328,7 +347,7 @@ const MonthlySummary = () => {
                         <div style={{
                             display: 'flex', justifyContent: 'end', padding: '10px', marginRight: "8px",
                         }}>
-                            <Button onClick={showModal} type="primary" style={{backgroundColor:"#323791"}}>
+                            <Button onClick={showModal} type="primary" style={{ backgroundColor: "#323791" }}>
                                 APPLY LEAVE
                             </Button>
                             <Leaves visible={isModalOpen} onClose={handleCancel} />
@@ -336,22 +355,24 @@ const MonthlySummary = () => {
                     </Col>
                 </Row>
             </div>
-            <span className='month-left-nav' onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'month').toDate())}>
-                <LeftOutlined />
+            <span className='month-up-nav' onClick={() => handleNavigate(dayjs(currentDate).add(1, 'month').toDate())}>
+                <UpOutlined className="custom-up-icon" />
             </span>
-            <span className='month-right-nav' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'month').toDate())}>
-                <RightOutlined />
+            <span className='month-down-nav' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'month').toDate())}>
+                <DownOutlined className="custom-up-icon" />
             </span>
 
             <div className='year-nav'>
-                <span onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'year').toDate())}>
-                    <LeftOutlined />
-                </span>
                 {calendarLabel}
-                <span style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'year').toDate())}>
-                    <RightOutlined />
-                </span>
             </div>
+            <span className='year-down-nav' onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'year').toDate())}>
+                <DownOutlined />
+            </span>
+
+            <span className='year-up-nav' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'year').toDate())}>
+                <UpOutlined />
+            </span>
+
 
             <div
                 className="Monthly-Summary-overlay"
