@@ -1,4 +1,4 @@
-import { Button, Col, Row, theme, Tooltip } from 'antd';
+import { Button, Col, Row, theme, Tooltip, message, Select } from 'antd';
 import Leaves from './Leaves';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
@@ -14,12 +14,15 @@ import { fetchLeaves } from '../../redux/actions/leaveActions';
 import isBetween from 'dayjs/plugin/isBetween';
 import { GetMonthlySummary } from '../../services/monthlySummaryAPI';
 import "./MonthlySummary.css"
+import { GetInternsByMentorId } from '../../services/adminAPI';
+import { GetLeaveRequests } from '../../services/leaveAPI';
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
     const localizer = dayjsLocalizer(dayjs)
     const dispatch = useDispatch<AppDispatch>();
     const { leaves } = useSelector((state: RootState) => state.leave)
+    const { user } = useSelector((state: RootState) => state.auth)
     const { token } = theme.useToken();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -54,7 +57,29 @@ const MonthlySummary = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+    const [internId, setInternId] = useState("");
+    const [students, setStudents] = useState<{ _id: string; fullName: string }[]>([]);
+    const [customLeaves, setCustomLeaves] = useState([]);
 
+    const fetchInterns = async () => {
+        if (!user || !user._id) {
+            console.warn("User or Mentor ID is missing, skipping API call");
+            return;
+        }
+        try {
+            if (user.admin) {
+                const res = await GetInternsByMentorId(user._id);
+                setStudents(res.data || []);
+            }
+        } catch (error) {
+            console.error("Error Intern List:", error);
+            message.error("Failed to fetch Intern List.");
+        }
+    };
+
+    useEffect(() => {
+        fetchInterns();
+    }, [user]);
 
     const handleNavigate = useCallback(async (date) => {
         try {
@@ -65,7 +90,12 @@ const MonthlySummary = () => {
             const selectedYear = dayjs(date).year();
             setCalendarLabel(dayjs(date).format("YYYY"));
 
-            const payload = { year: selectedYear, month: selectedMonth };
+            const userId = user?.admin ? internId : user?._id;
+            const payload = { year: selectedYear, month: selectedMonth, userId: userId };
+
+            const response = await GetLeaveRequests(payload);
+            setCustomLeaves(response);
+
             setVisibleMonthRange({
                 start: dayjs(date).startOf("month"),
                 end: dayjs(date).endOf("month"),
@@ -85,36 +115,47 @@ const MonthlySummary = () => {
             setTimeout(() => setCalendarLoading(false), 500);
         }
 
-    }, []);
+    }, [internId, user?._id, user?.admin]);
+
+
 
     useEffect(() => {
         dispatch(fetchLeaves());
     }, [dispatch])
+
+
+    useEffect(() => {
+        if (!user?.admin && leaves) {
+            setCustomLeaves(leaves);
+        }
+    }, [leaves, user]);
 
     useEffect(() => {
         handleNavigate(currentDate);
     }, [handleNavigate, currentDate]);
 
     useEffect(() => {
-        if (leaves && leaves.length > 0 || (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)) {
-            const dynamicLeaves = leaves.map((leave) => ({
+        if (customLeaves && customLeaves.length > 0 || (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)) {
+            const dynamicLeaves = customLeaves.map((leave) => ({
                 start: new Date(leave.from),
                 end: new Date(leave.to),
                 title: "",
                 type: leave.leaveType,
             })) || [];
 
-            const dynamicWorkHours = monthlySummary?.daysArray?.map((day) => ({
-                start: new Date(day.date),
-                end: new Date(day.date),
-                title: `${day.totalHours}`,
-            })) || [];
+            const dynamicWorkHours = (monthlySummary?.daysArray || [])
+                .filter(day => Number(day.totalHours) > 0)
+                .map(day => ({
+                    start: new Date(day.date),
+                    end: new Date(day.date),
+                    title: `${Number(day.totalHours).toFixed(2)}`,
+                }));
 
             const allEvents = [...dynamicLeaves, ...dynamicWorkHours];
 
             setEventList(allEvents);
         }
-    }, [leaves, monthlySummary]);
+    }, [customLeaves, monthlySummary]);
 
     useEffect(() => {
         const holiday = monthlySummary?.daysArray?.filter(day => day.holiday)
@@ -166,7 +207,7 @@ const MonthlySummary = () => {
             };
         }
 
-        else if (!isHalfLeave && isCurrentDay) {
+        else if (!isHalfLeave && !isEventDay && isCurrentDay) {
             return {
                 style: {
                     backgroundColor: "#ffffff80",
@@ -230,6 +271,10 @@ const MonthlySummary = () => {
         );
 
     };
+
+    const handleStudentChange = (value) => {
+        setInternId(value);
+    }
 
     return (
         <>
@@ -344,14 +389,30 @@ const MonthlySummary = () => {
                         </div>
                     </Col>
                     <Col md={4}>
-                        <div style={{
-                            display: 'flex', justifyContent: 'end', padding: '10px', marginRight: "8px",
-                        }}>
-                            <Button onClick={showModal} type="primary" style={{ backgroundColor: "#323791" }}>
-                                APPLY LEAVE
-                            </Button>
-                            <Leaves visible={isModalOpen} onClose={handleCancel} />
-                        </div>
+                        {user && !user.admin &&
+                            <div style={{
+                                display: 'flex', justifyContent: 'end', padding: '10px', marginRight: "8px",
+                            }}>
+                                <Button onClick={showModal} type="primary" style={{ backgroundColor: "#323791" }}>
+                                    APPLY LEAVE
+                                </Button>
+                                <Leaves visible={isModalOpen} onClose={handleCancel} />
+                            </div>
+                        }
+                        {user && user.admin &&
+                            < div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
+                                <Select
+                                    showSearch
+                                    style={{ marginLeft: "15px" }}
+                                    placeholder="Select Student"
+                                    options={students.map((student) => ({
+                                        value: student._id,
+                                        label: student.fullName,
+                                    }))}
+                                    onChange={handleStudentChange}
+                                />
+                            </div>
+                        }
                     </Col>
                 </Row>
             </div>

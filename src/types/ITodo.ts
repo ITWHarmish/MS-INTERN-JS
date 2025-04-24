@@ -9,5 +9,6 @@ export interface Todo {
 export interface TodoCardProps {
     setLoading: (loading: boolean) => void;
     selectedDate: dayjs.Dayjs;
+    internId: string;
 }
 

@@ -18,7 +18,7 @@ const ProgressReports = () => {
     const [loading, setLoading] = useState(false);
     const { progressReport } = useSelector((state: RootState) => state.report)
     const { user } = useSelector((state: RootState) => state.auth)
-    const [mentorListName, setMentorListName] = useState<{ mentorId: string; mentorFullName: string }[]>([]);
+    const [mentorListName, setMentorListName] = useState<{ _id: string; fullName: string }[]>([]);
     const [selectedMentor, setSelectedMentor] = useState<string | null>(null);
     const [students, setStudents] = useState<{ _id: string; fullName: string }[]>([]);
     const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
@@ -231,8 +231,8 @@ const ProgressReports = () => {
                                         placeholder="Select Mentor"
                                         onChange={handleMentorChange}
                                         options={mentorListName?.map((mentor) => ({
-                                            value: mentor.mentorId,
-                                            label: mentor.mentorFullName,
+                                            value: mentor._id,
+                                            label: mentor.fullName,
                                         }))}
                                     />
 

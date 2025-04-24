@@ -6,8 +6,8 @@ import Cookies from "js-cookie";
 const getAuthHeaders = () => {
   const token = Cookies.get('ms_intern_jwt');
   return {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
   };
 };
 
@@ -18,19 +18,20 @@ export const AddTodo = async (todo: Todo) => {
     })
     return res.data
   } catch (error) {
-    console.error('Error while Adding time log:', error);
+    console.error('Error while Adding Todos :', error);
     throw error;
   }
 }
 
-export const GetTodo = async () => {
+export const GetTodo = async (userId: string) => {
   try {
     const res = await axios.get(`${API_END_POINT}/todo/getTodo`, {
+      params: { userId },
       headers: getAuthHeaders(),
     });
     return res.data;
   } catch (error) {
-    console.error('Error while fetching time logs:', error);
+    console.error('Error while fetching Todos:', error);
     throw error;
   }
 }
@@ -57,6 +58,20 @@ export const DeleteTodo = async (id: string) => {
     return res.data;
   } catch (error) {
     console.error('Error while Deleting Todo:', error);
+    throw error;
+  }
+}
+
+
+export const CalculateCompletionRate = async (userId: string) => {
+  try {
+    const res = await axios.get(`${API_END_POINT}/todo/completionRate`, {
+      params: { userId },
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Error while fetching completion Rate:', error);
     throw error;
   }
 }

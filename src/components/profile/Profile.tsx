@@ -1,23 +1,27 @@
-import { Avatar, Card, Col, message, Row, theme, Typography } from "antd";
+import { Avatar, Card, Col, Row, Typography } from "antd";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { UpdateUserDetails } from "../../services/authAPI";
-import { setUser } from "../../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { GetCurrentUser } from "../../services/authAPI";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Profile.css";
 import { AccountBookOutlined, BankOutlined, BarsOutlined, CalendarOutlined, CheckSquareOutlined, CodeOutlined, FieldTimeOutlined, FileTextOutlined, GithubOutlined, LinkedinOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import { GetFullAttendanceSummary } from "../../services/monthlySummaryAPI";
+import { CalculateCompletionRate } from "../../services/todoAPI";
 
 const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const { Text } = Typography;
   const [activeTab, setActiveTab] = useState("internship");
-  console.log("user:", user); // Log unused variable
-
-  const fullName = user?.fullName;
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  console.log("loading:", loading); // Log unused variable
+  const [selectedUser, setSelectedUser] = useState(user);
+  const [attendanceSummary, setAttendanceSummary] = useState<{ totalLeaves?: number; halfLeaves?: number; attendanceRate?: number } | null>(null)
+  const [completionRate, setCompletionRate] = useState<{ completionRate: number } | null>(null)
+  const { id } = useParams();
 
   const getInitials = (name?: string) => {
     if (!name) return "";
@@ -29,101 +33,58 @@ const Profile = () => {
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
   };
 
+  const fullName = selectedUser?.fullName;
   const initials = getInitials(fullName);
 
+  const fetchAttedanceSummary = async () => {
+    const res = await GetFullAttendanceSummary({ userId: id });
+    setAttendanceSummary(res);
+  }
 
-  const navigate = useNavigate();
-  console.log("navigate:", navigate); // Log unused variable
-
-  const dispatch = useDispatch();
-  console.log("dispatch:", dispatch); // Log unused variable
-
-  const [loading, setLoading] = useState(true);
-  console.log("loading:", loading); // Log unused variable
-
-  const [editMode, setEditMode] = useState(false);
-  console.log("editMode:", editMode); // Log unused variable
-  const { token } = theme.useToken();
-  console.log("token:", token); // Log unused variable
-
-  const [editedData, setEditedData] = useState({
-    fullName: user?.fullName || "",
-    duration: user?.internsDetails?.duration || "",
-    stream: user?.internsDetails?.stream || "",
-    phoneNumber: user?.internsDetails?.phoneNumber || "",
-    address: user?.internsDetails?.address || "",
-    githubURL: user?.internsDetails?.githubURL || "",
-    linkedinURL: user?.internsDetails?.linkedinURL || "",
-    hrEmail: user?.hrEmail || "",
-    hrFullName: user?.hrFullName || "",
-    mentorEmail: user?.internshipDetails?.mentorEmail || "",
-    mentorFullName: user?.internshipDetails?.mentorFullName || "",
-    collegeName: user?.internsDetails?.collegeName || "",
-    dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
-    joiningDate: user?.internshipDetails?.joiningDate ? dayjs(user?.internshipDetails?.joiningDate).format("YYYY-MM-DD") : "",
-  });
+  const fetchCompletionRate = async () => {
+    const res = await CalculateCompletionRate(id);
+    setCompletionRate(res);
+  }
 
   useEffect(() => {
-    if (user) {
-      setEditedData({
-        fullName: user?.fullName || "",
-        duration: user?.internsDetails?.duration || "",
-        stream: user?.internsDetails?.stream || "",
-        phoneNumber: user?.internsDetails?.phoneNumber || "",
-        address: user?.internsDetails?.address || "",
-        githubURL: user?.internsDetails?.githubURL || "",
-        linkedinURL: user?.internsDetails?.linkedinURL || "",
-        hrEmail: user?.hrEmail || "",
-        hrFullName: user?.hrFullName || "",
-        mentorEmail: user?.internshipDetails?.mentorEmail || "",
-        mentorFullName: user?.internshipDetails?.mentorFullName || "",
-        collegeName: user?.internsDetails?.collegeName || "",
-        dob: user?.dob ? dayjs(user?.dob).format("YYYY-MM-DD") : "",
-        joiningDate: user?.internshipDetails?.joiningDate ? dayjs(user?.internshipDetails?.joiningDate).format("YYYY-MM-DD") : "",
-      })
-    }
+    fetchAttedanceSummary();
+    fetchCompletionRate();
+  }, [id])
+
+
+  useEffect(() => {
+    setSelectedUser(user)
   }, [user])
 
-  const handleSave = async () => {
-    try {
-      const response = await UpdateUserDetails(editedData);
-      dispatch(setUser(response.user))
-      message.success('Updated successful!');
-      setEditMode(false);
-    } catch (error) {
-      message.error('Updation failed! Please try again.');
-      console.error('API Error:', error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      const fetchUser = async () => {
+        if (user) {
+          if (user.admin) {
+            try {
+              const res = await GetCurrentUser(id);
+              setSelectedUser(res.user);
+            } catch (error) {
+              console.error("Error fetching user:", error);
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      }
+      fetchUser();
     }
-  };
-  console.log("handleSave:", handleSave); // Log unused variable
-
-  const handleChange = (e, field: string) => {
-    setEditedData({
-      ...editedData,
-      [field]: e.target.value,
-    });
-  };
-
-  console.log("handleChange", handleChange)
-
-  const handleDateChange = (date: dayjs.Dayjs | null, field: string) => {
-    setEditedData({
-      ...editedData,
-      [field]: date ? date.toISOString() : null,
-    });
-  };
-
-  console.log("handleChange", handleDateChange)
-
+  }, [user, id])
 
   useEffect(() => {
     if (user) {
-      if (user.internsDetails === undefined || user.internsDetails === "") {
-        navigate("/fillUpForm");
-      } else {
-        navigate("/profile");
+      if (!user.admin) {
+        if (user.internsDetails === undefined || user.internsDetails === "") {
+          navigate("/fillUpForm");
+        } else {
+          navigate("/profile");
+        }
       }
     }
     setLoading(false);
@@ -161,7 +122,7 @@ const Profile = () => {
                       }}
                     />
                     <h3 style={{ fontWeight: "bold", marginBottom: "1rem" }}>
-                      {(user?.fullName ?? "").toUpperCase()}
+                      {(selectedUser?.fullName ?? "").toUpperCase()}
                     </h3>
                     <hr style={{ borderColor: "rgba(255,255,255,0.3)" }} />
 
@@ -182,7 +143,7 @@ const Profile = () => {
                           </Text>
                           <br />
                           <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {user?.email}
+                            {selectedUser?.email}
                           </Text>
                         </div>
                       </div>
@@ -202,7 +163,7 @@ const Profile = () => {
                           </Text>
                           <br />
                           <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {user?.internsDetails?.phoneNumber}
+                            {selectedUser?.internsDetails?.phoneNumber}
                           </Text>
                         </div>
                       </div>
@@ -222,15 +183,15 @@ const Profile = () => {
                           </Text>
                           <br />
                           <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {user?.internsDetails?.collegeName}
+                            {selectedUser?.internsDetails?.collegeName}
                           </Text>
                         </div>
                       </div>
                     </div>
 
                     <div style={{ marginTop: "1.5rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
-                      <a href={user?.internsDetails?.linkedinURL} target="_blank"><LinkedinOutlined style={{ fontSize: "30px" }} /></a>
-                      <a href={user?.internsDetails?.githubURL} target="_blank"><GithubOutlined style={{ fontSize: "30px" }} /></a>
+                      <a href={selectedUser?.internsDetails?.linkedinURL} target="_blank"><LinkedinOutlined style={{ fontSize: "30px" }} /></a>
+                      <a href={selectedUser?.internsDetails?.githubURL} target="_blank"><GithubOutlined style={{ fontSize: "30px" }} /></a>
                     </div>
                   </div>
                 </Card>
@@ -318,7 +279,7 @@ const Profile = () => {
                           </Text>
                           <br />
                           <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {dayjs(user?.internsDetails?.joiningDate).format("DD MMM YYYY")}
+                            {dayjs(selectedUser?.internsDetails?.joiningDate).format("DD MMM YYYY")}
                           </Text>
                         </div>
                       </div>
@@ -338,7 +299,7 @@ const Profile = () => {
                           </Text>
                           <br />
                           <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {user?.internsDetails?.duration} MONTHS
+                            {selectedUser?.internsDetails?.duration} MONTHS
                           </Text>
                         </div>
                       </div>
@@ -358,7 +319,7 @@ const Profile = () => {
                           </Text>
                           <br />
                           <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {(user?.internsDetails?.stream ?? "").toUpperCase()}
+                            {(selectedUser?.internsDetails?.stream ?? "").toUpperCase()}
                           </Text>
                         </div>
                       </div>
@@ -377,8 +338,8 @@ const Profile = () => {
                         <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
                         <div>
                           <Text type="secondary" style={{ fontSize: "12px", color: "#fff" }}>MENTOR</Text><br />
-                          <Text strong style={{ color: "white" }}>HARSH PATEL</Text><br />
-                          <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
+                          <Text strong style={{ color: "white" }}>{selectedUser?.internshipDetails?.mentor?.fullName}</Text><br />
+                          <Text style={{ color: "white" }}>{selectedUser?.internshipDetails?.mentor?.email}</Text>
                         </div>
                       </div>
                     </div>
@@ -399,7 +360,7 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{attendanceSummary?.halfLeaves}</Text>
                             <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0" }}><span style={{ fontWeight: "100px", fontSize: "12px" }}>HALF DAY</span> <span style={{ fontSize: "25px", marginLeft: "7px", }}><AccountBookOutlined /></span></Text>
                           </div>
                         </Card>
@@ -415,7 +376,7 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>10</Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{attendanceSummary ? attendanceSummary.totalLeaves : "N/A"}</Text>
                             <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}> <span style={{ fontWeight: "100px", fontSize: "12px" }}>LEAVE</span> <span style={{ fontSize: "25px", marginLeft: "7px" }}><AccountBookOutlined /></span></Text>
                           </div>
                         </Card>
@@ -433,7 +394,8 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{completionRate ? `${Math.round(completionRate.completionRate)}%` : "N/A"}
+                            </Text>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
                               <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontSize: "12px" }}> <span style={{ fontWeight: "100px" }}>TASK COMPLETION</span>
                                 <span style={{}}><CheckSquareOutlined style={{ fontSize: "25px", marginLeft: "7px" }} /></span>
@@ -453,7 +415,7 @@ const Profile = () => {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>100%</Text>
+                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{attendanceSummary && `${Math.round(attendanceSummary?.attendanceRate)}%`}</Text>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
                               <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontWeight: "100px", fontSize: "12px" }}>ATTENDANCE <span style={{ marginLeft: "7px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span></Text>
                             </div>

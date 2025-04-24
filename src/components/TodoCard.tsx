@@ -1,12 +1,14 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+
 import { Button, Card, Input, message, Modal, Select, theme } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
 import { useDispatch } from "react-redux";
@@ -23,7 +25,7 @@ import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
 import ModalCard from "../utils/ModalCard";
 
-const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
+const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector(
@@ -44,10 +46,6 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const [isDayEndModalOpen, setIsDayEndModalOpen] = useState(false);
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(fetchTodos());
-  }, [dispatch]);
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -79,9 +77,15 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
       })
     );
 
+    const userId = user?.admin ? internId : user?._id;
+    if (!userId) {
+      message.error("User ID is missing.");
+      return;
+    }
+
     try {
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
-      dispatch(fetchTodos());
+      dispatch(fetchTodos({ userId }));
       message.success("Updated tasks successfully");
     } catch (error) {
       dispatch(
@@ -98,8 +102,14 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   const handleAddTodo = async () => {
     if (!newTask.trim()) return;
 
+    const userId = user?.admin ? internId : user?._id;
+    if (!userId) {
+      message.error("User ID is missing.");
+      return;
+    }
+
     const todo = {
-      userId: user?._id,
+      userId: userId,
       description: newTask,
       date: currentDate,
     };
@@ -109,7 +119,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
     try {
       setLoading(true);
       await AddTodo(todo);
-      dispatch(fetchTodos());
+      dispatch(fetchTodos({ userId }));
       message.success("Task added successfully!");
     } catch (error) {
       console.error("Error adding todo:", error);
@@ -120,10 +130,15 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate }) => {
   };
 
   const handleDelete = async (id: string) => {
+    const userId = user?.admin ? internId : user?._id;
+    if (!userId) {
+      message.error("User ID is missing.");
+      return;
+    }
     setLoading(true);
     try {
       await DeleteTodo(id);
-      dispatch(fetchTodos());
+      dispatch(fetchTodos({ userId }));
       message.success("Task deleted successfully!");
     } catch (error) {
       console.error("Error deleting task:", error);
@@ -357,9 +372,14 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   }}
                   disabled={
                     !(
-                      telegramUser?.telegram?.session_id ||
-                      telegramUser?.google?.tokens?.access_token
-                    ) || currentDate !== formattedDate
+                      (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token)
+                      && !user?.admin
+                      && currentDate === formattedDate
+                    )
+                    // !(
+                    //   telegramUser?.telegram?.session_id ||
+                    //   telegramUser?.google?.tokens?.access_token
+                    // ) || currentDate !== formattedDate
                   }
                 >
                   <Select.Option value="start">DAY START</Select.Option>
@@ -445,7 +465,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     marginBottom: "10px",
                   }}
                 >
-                  <span style={{ fontSize: "16px", fontWeight: "600",marginLeft:"12px" }}>
+                  <span style={{ fontSize: "16px", fontWeight: "600", marginLeft: "12px" }}>
                     IN PROGRESS
                   </span>
 
@@ -575,7 +595,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 }}
               >
                 <div style={{ marginBottom: "10px" }}>
-                  <span style={{ fontSize: "16px", fontWeight: "600",marginLeft:"12px" }}>
+                  <span style={{ fontSize: "16px", fontWeight: "600", marginLeft: "12px" }}>
                     DONE
                   </span>
                 </div>
@@ -607,7 +627,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                             >
                               {(provided) => (
                                 <div
-                                className="todo-card"
+                                  className="todo-card"
                                   style={{
                                     marginBottom: "10px",
                                     marginRight: "10px",

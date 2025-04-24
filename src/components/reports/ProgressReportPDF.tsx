@@ -18,9 +18,7 @@ const ProgressReportPDF = () => {
 
     const getRegularityLabel = (percentage) => {
         if (!percentage) return "";
-
         const numericValue = parseFloat(percentage);
-
         if (numericValue == 100) return `${percentage}% (Excellent)`;
         if (numericValue >= 70) return `${percentage}% (Good)`;
         if (numericValue >= 50) return `${percentage}% (Average)`;
@@ -40,7 +38,6 @@ const ProgressReportPDF = () => {
         }
         fetchData();
     }, [reportId])
-
 
     const externalGuideRemarks = Array.from({ length: 4 }, (_, index) => data?.externalGuideRemarks[index] || "");
     const internalGuideRemarks = Array.from({ length: 4 }, () => "");
@@ -69,6 +66,7 @@ const ProgressReportPDF = () => {
             );
         }
     }
+
     const strikeThroughOptions = (selected) => {
         const options = ["good", "average", "poor"];
         return options.map((option, index) => (
@@ -81,6 +79,7 @@ const ProgressReportPDF = () => {
             </span>
         ));
     };
+
     return (
         loading ? <Spinner /> :
             <div className="ScrollInProgress" style={{ height: "100vh", overflow: "auto" }}>
@@ -107,10 +106,10 @@ const ProgressReportPDF = () => {
                         <div className="section">
                             <div className="company">
                                 <span>Enrollment No.:</span> {data?.enrollmentNo}
-                                <span style={{ marginLeft: "70px" }}>Project Title:</span> {data?.projectTitle}
                                 <span style={{ marginLeft: "40px" }}>Class:</span> {data?.course}
                                 <span style={{ marginLeft: "40px" }}>Div:</span> {data?.division}
                             </div>
+                            <span style={{ marginBottom: "14px" }}>Project Title:</span> {data?.projectTitle}
                         </div>
                         <div className="section">
                             <span>Duration:</span> <span>From:</span> {formatDate(data?.duration?.from)}
@@ -132,8 +131,9 @@ const ProgressReportPDF = () => {
                         </table>
 
                         <div className="section single-line">
-                            <div style={{ display: "flex", justifyContent: "center", alignItems: "", gap: "3px" }} className="regular">
-                                <span>Regularity:</span> <span style={{ width: "max-content" }} className="blank-remarks">{getRegularityLabel(data?.selfEvaluation?.regularity)}</span>
+                            <div style={{ display: "flex", justifyContent: "center", gap: "3px" }} className="regular">
+                                <span>Regularity:</span>
+                                <span style={{ width: "max-content" }} className="blank-remarks">{getRegularityLabel(data?.selfEvaluation?.regularity)}</span>
                             </div>
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "18px" }} className="regular">
                                 <span style={{ marginRight: "3px" }}>Punctuality:</span> {strikeThroughOptions(data?.selfEvaluation?.punctuality)}
@@ -142,6 +142,7 @@ const ProgressReportPDF = () => {
                                 <span style={{ marginRight: "3px" }}>Discipline:</span> {strikeThroughOptions(data?.selfEvaluation?.discipline)}
                             </div>
                         </div>
+
                         <div className="section">
                             <span>Learning Ability:</span> {strikeThroughOptions(data?.selfEvaluation?.learningAbility)}
                             <span style={{ marginLeft: "118px" }}>Implementation Ability:</span> {strikeThroughOptions(data?.selfEvaluation?.implementationAbility)}
@@ -186,7 +187,7 @@ const ProgressReportPDF = () => {
                     </div>
                 </div>
             </div>
-    )
-}
+    );
+};
 
-export default ProgressReportPDF
+export default ProgressReportPDF;

@@ -6,11 +6,13 @@ import { Avatar, Card, Flex, Space, theme } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-const OtherLinks = () => {
+const OtherLinks = ({ userDetails }) => {
   const { user } = useSelector((state: RootState) => state.auth)
   const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
   const { token } = theme.useToken();
-  const fullName = user?.fullName;
+
+  const selectedUser = userDetails || user;
+  const fullName = selectedUser?.fullName;
 
   const getInitials = (name?: string) => {
     if (!name) return "";
@@ -34,7 +36,7 @@ const OtherLinks = () => {
         style={{ border: "2px solid #474787" }}
       />
       <Space style={{ width: "100%" }} direction="vertical" size={15}>
-        {user?.internsDetails?.linkedinURL && user?.internsDetails?.githubURL &&
+        {selectedUser?.internsDetails?.linkedinURL && selectedUser?.internsDetails?.githubURL &&
           <Card className="cardWidth custom-card">
             <Card.Meta
               avatar={
@@ -49,10 +51,10 @@ const OtherLinks = () => {
                 >
                   <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "26px" }}>
                     {
-                      user?.internsDetails?.githubURL && <a href={user?.internsDetails?.githubURL} target="_blanck"><GithubOutlined style={{ color: token.colorPrimary }} /></a>
+                      selectedUser?.internsDetails?.githubURL && <a href={selectedUser?.internsDetails?.githubURL} target="_blanck"><GithubOutlined style={{ color: token.colorPrimary }} /></a>
                     }
                     {
-                      user?.internsDetails?.linkedinURL && <a href={user?.internsDetails?.linkedinURL} target="_blanck"><LinkedinOutlined style={{ color: token.colorPrimary }} /></a>
+                      selectedUser?.internsDetails?.linkedinURL && <a href={selectedUser?.internsDetails?.linkedinURL} target="_blanck"><LinkedinOutlined style={{ color: token.colorPrimary }} /></a>
                     }
                   </div>
                 </Flex>

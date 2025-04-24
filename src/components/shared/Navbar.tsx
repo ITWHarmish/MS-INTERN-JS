@@ -1,4 +1,4 @@
-import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, GoogleOutlined, LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, ProfileOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -140,11 +140,17 @@ const Navbar = () => {
         else if (location.pathname === "/hrPolicy") {
             setCurrent("hr policy");
         }
+        else if (location.pathname === "/intern/list") {
+            setCurrent("intern list");
+        }
+        else if (location.pathname === "/developing/team") {
+            setCurrent("about us");
+        }
         else if (!user?.admin) {
             setCurrent("timelog");
         }
         else {
-            setCurrent("hr policy");
+            setCurrent("progress report");
         }
     }, [dispatch, user?.admin]);
 
@@ -158,14 +164,15 @@ const Navbar = () => {
                         className="check"
                         style={{
                             gap: "1px",
-                            // lineHeight: "60px",
                         }}
                         mode="horizontal"
                         items={[
-                            !user?.admin && { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>TIMELOG</Link> },
-                            !user?.admin && { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>MONTHLY SUMMARY</Link> },
+                            { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>TIMELOG</Link> },
+                            { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>MONTHLY SUMMARY</Link> },
                             { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>WORK POLICIES</Link> },
                             { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>PROGRESS REPORT</Link> },
+                            user?.admin && { key: "intern list", icon: <UserOutlined />, label: <Link to={"/intern/list"}>INTERN LIST</Link> },
+                            { key: "about us", icon: <TeamOutlined />, label: <Link to={"/developing/team"}>ABOUT US</Link> },
                         ]}
                     ></Menu>
                 )}
@@ -176,19 +183,24 @@ const Navbar = () => {
                             telegramUser?.google?.tokens?.access_token ?
                                 <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent", display: "none" }} className="btn" disabled type="default"><span style={{ color: "grey" }}></span></Button>
                                 :
-                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default"><GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }}/></Button>
+                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">
+                                    {/* <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: 
+                                    "#49494B" }}/> */}
+                                    <img src="/svg/flat-color-icons_google.svg" alt="" />
+                                </Button>
                         )
                     }
                     {telegramUser?.telegram?.session_id ? (
-                        <Button style={{ fontFamily: "Rubik", display:"none" }} disabled>
+                        <Button style={{ fontFamily: "Rubik", display: "none" }} disabled>
                             <span style={{ color: "grey" }}>TELEGRAM CONNECTED</span>
                         </Button>
                     ) : (
                         <>
                             {
                                 user && !user?.admin &&
-                                <Button style={{ fontFamily: "Rubik", color: "#49494B", marginRight:"12px" }} onClick={showModal} type="default">
-                                    <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }} />
+                                <Button style={{ fontFamily: "Rubik", color: "#49494B", marginRight: "12px" }} onClick={showModal} type="default">
+                                    {/* <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }} /> */}
+                                    <img src="/svg/telegram.png" alt="" />
                                 </Button>
                             }
                             <Modal

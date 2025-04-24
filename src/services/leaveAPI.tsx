@@ -51,10 +51,17 @@ export const ApplyLeave = async (payload: ILeave) => {
     }
 }
 
-export const GetLeaveRequests = async () => {
+interface LeaveRequestParams {
+    userId?: string;
+    month?: number;
+    year?: number;
+  }
+
+export const GetLeaveRequests = async (params?: LeaveRequestParams) => {
     try {
         const response = await axios.get(`${API_END_POINT}/getLeave`, {
             headers: getAuthHeaders(),
+            params: params,
         }
         );
         return response.data;

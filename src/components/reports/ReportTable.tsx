@@ -103,6 +103,7 @@ const ReportTable = () => {
             render: (_, record) => (
                 <div style={{ display: 'flex', justifyContent: "center", gap: '20px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
+                        className="check2"
                         shape="circle"
                         icon={<EditOutlined className="check" />}
                         size="small"
@@ -219,9 +220,21 @@ const ReportTable = () => {
                         <Card
                             title="PROGRESS REPORT"
                             extra={
-                                <Button onClick={() => navigate(user?.admin ? `/reportevaluation/${reportId}` : `/report/submit`)} type="primary">
-                                    NEXT
-                                </Button>
+                                user?.admin ?
+                                    <Button onClick={() => navigate(`/reportevaluation/${reportId}`)} type="primary">
+                                        Next
+                                    </Button>
+                                    :
+                                    <Button onClick={() => {
+                                        if (!tasks.length) {
+                                            message.warning("Please add at least one task before proceeding.");
+                                            return;
+                                        }
+                                        navigate(`/report/submit`)
+                                    }
+                                    } type="primary">
+                                        Next
+                                    </Button>
                             }
                             style={{ width: "calc(100vw - 400px)", height: "calc(100vh - 160px)", padding: "" }}
                         >
@@ -231,7 +244,7 @@ const ReportTable = () => {
                                         <Form.Item
                                             name="dateRange"
                                             rules={[{ required: true, message: "Please select assigned and expected completion dates!" }]}
-                                            style={{paddingLeft:"14px"}}
+                                            style={{ paddingLeft: "14px" }}
                                         >
                                             <RangePicker placeholder={["DATE ASSIGNED", "EXPECTED DATE"]} style={{ width: "100%", }} />
                                         </Form.Item>
@@ -254,7 +267,7 @@ const ReportTable = () => {
                                     </Col>
                                     <Col span={4}>
                                         <Form.Item
-                                        style={{marginLeft:"6px"}}
+                                            style={{ marginLeft: "6px" }}
                                         >
                                             <Button htmlType="submit" type="primary" >
                                                 {editingTask ? "UPDATE TASK" : "ADD TASK"}
@@ -273,7 +286,7 @@ const ReportTable = () => {
                                     sticky
                                     locale={{ emptyText: <></> }}
                                     className="ScrollInProgress"
-                                    style={{ height: "calc(65vh - 135px)", overflowY: "auto", position: "absolute", right: "0", paddingRight: "4px", paddingLeft: "4px", top:"103px" }}
+                                    style={{ height: "calc(65vh - 135px)", overflowY: "auto", position: "absolute", right: "0", paddingRight: "4px", paddingLeft: "4px", top: "103px" }}
                                 />
                             </Form>
                         </Card>

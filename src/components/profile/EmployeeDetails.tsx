@@ -8,9 +8,11 @@ import { Card, Flex, Input, Space, theme, Typography } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
+const EmployeeDetails = ({ editMode, editedData, handleChange, userDetails }) => {
   const { user } = useSelector((state: RootState) => state.auth)
   const { token } = theme.useToken();
+  const selectedUser = userDetails || user;
+
   return (
     <>
       <Space direction="vertical" size={15} style={{ width: "100%" }}>
@@ -50,7 +52,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                         placeholder='Enter Full Name'
                         onChange={(e) => handleChange(e, "fullName")}
                       />
-                      : user?.fullName
+                      : selectedUser?.fullName
                   }
                 </Typography.Text>
               }
@@ -79,7 +81,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
               }
               description={
                 <Typography.Text strong style={{ fontSize: "16px" }}>
-                  {user?.email}
+                  {selectedUser?.email}
                 </Typography.Text>
               }
             />
@@ -115,7 +117,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                         placeholder='Enter phoneNumber'
                         onChange={(e) => handleChange(e, "phoneNumber")}
                       />
-                      : user?.internsDetails?.phoneNumber
+                      : selectedUser?.internsDetails?.phoneNumber
                   }
                 </Typography.Text>
               }
@@ -152,7 +154,7 @@ const EmployeeDetails = ({ editMode, editedData, handleChange }) => {
                         placeholder='Enter address'
                         onChange={(e) => handleChange(e, "address")}
                       />
-                      : user?.internsDetails?.collegeName
+                      : selectedUser?.internsDetails?.collegeName
                   }
                 </Typography.Text>
               }
