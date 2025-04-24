@@ -4,7 +4,6 @@ const Footer = () => {
     return (
         <div id="footer"
             style={{
-                // margin:"0px 20px",
                 borderTop: "1px solid #ffffffa1",
                 width: "-webkit-fill-available",
                 height: "65px",
@@ -26,7 +25,6 @@ const Footer = () => {
                     alignItems: "center",
                     fontSize: "15px",
                     color: "#49494B",
-                    letterSpacing: "2px",
                 }}
             >
                 Toshal Management System ©{new Date().getFullYear()} Created By Toshal Infotech

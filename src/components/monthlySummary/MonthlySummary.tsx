@@ -372,13 +372,13 @@ const MonthlySummary = () => {
                                                 <>
                                                     <span style={{ color: "#49494B" }}>EXTRA HOURS:</span>
                                                     <span style={{ color: "black" }}>
-                                                        {Math.abs(monthlySummary.shortage)}
+                                                        {(Math.abs(monthlySummary.shortage)).toFixed(2)}
                                                     </span>
                                                 </>
                                             ) : (
                                                 <>
                                                     <span style={{ color: "#49494B" }}>SHORTAGE HOURS:</span>  <span style={{ color: "black" }}>
-                                                        {monthlySummary?.shortage || 0}
+                                                        {(monthlySummary?.shortage || 0).toFixed(2)}
                                                     </span>
                                                 </>
                                             )}

@@ -202,7 +202,7 @@ const Leaves = ({ visible, onClose }) => {
                                             <Input disabled type="text" style={{
                                                 marginRight: "7px"
                                             }}
-                                                value={user?.internshipDetails?.mentor?.mentorEmail}
+                                                value={user?.internshipDetails?.mentor?.email}
                                             />
                                         </div>
                                         <div>
