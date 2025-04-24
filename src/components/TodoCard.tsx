@@ -319,7 +319,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               borderTopLeftRadius: "0",
               borderTopRightRadius: "30px !important",
               borderBottomLeftRadius: "30px",
-              minHeight: "calc(100vh - 143.5px)",
+              minHeight: "calc(100vh - 148.5px)",
             }}
             title="TO DO"
             extra={
