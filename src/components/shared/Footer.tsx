@@ -4,7 +4,6 @@ const Footer = () => {
     return (
         <div id="footer"
             style={{
-                // margin:"0px 20px",
                 borderTop: "1px solid #ffffffa1",
                 width: "-webkit-fill-available",
                 height: "65px",
