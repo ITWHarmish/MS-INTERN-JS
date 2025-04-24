@@ -38,7 +38,7 @@ const MonthlySummary = () => {
     const [calendarLabel, setCalendarLabel] = useState("");
 
     const [calendarDimensions, setCalendarDimensions] = useState({
-        height: document.documentElement.clientHeight - 197,
+        height: document.documentElement.clientHeight - 247,
         width: document.documentElement.clientWidth - 600,
     });
 
@@ -46,7 +46,7 @@ const MonthlySummary = () => {
     useEffect(() => {
         const handleResize = () => {
             setCalendarDimensions({
-                height: document.documentElement.clientHeight - 197,
+                height: document.documentElement.clientHeight - 247,
                 width: document.documentElement.clientWidth - 600,
             });
         };
@@ -283,7 +283,7 @@ const MonthlySummary = () => {
                 <Row gutter={16}>
                     <Col md={20}>
                         <div
-                            style={{ display: "flex", alignItems: "center", padding: "10px 0px 0px 70px" }}>
+                            style={{ display: "flex", alignItems: "center", padding: "60px 0px 0px 70px" }}>
                             <div>
                                 <div className='containerCalendar'>
                                     {calendarLoading && (
