@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, WechatWorkOutlined, } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, } from '@ant-design/icons';
 import { Button, Input, message, Select, Table, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
@@ -16,7 +16,7 @@ dayjs.extend(localizedFormat);
 const Tasktable = ({ selectedDate, internId }) => {
 
     const formattedDate = selectedDate.format("YYYY-MM-DD");
-    const [showCard, setShowCard] = useState(false);
+    // const [showCard, setShowCard] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         startTime: '',
@@ -296,7 +296,7 @@ const Tasktable = ({ selectedDate, internId }) => {
                 />
             </div>
             <div>
-                <div
+                {/* <div
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
                         }`}
                 >
@@ -314,7 +314,7 @@ const Tasktable = ({ selectedDate, internId }) => {
                         style={{ minHeight: "450px" }}
                         frameBorder="0"
                     ></iframe>
-                </div>
+                </div> */}
             </div>
         </div>
     );
