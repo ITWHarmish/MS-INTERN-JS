@@ -5,6 +5,45 @@ body {
   padding: 0px;
 }
 
+.video-layout {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.bg-video {
+  position: fixed;
+  /* important for full background */
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.content-over-video {
+  position: relative;
+  z-index: 1;
+}
+
+
+.layout {
+  overflow: hidden;
+  /* height: calc(100vh - 42px); */
+  height: 100vh;
+  width: 100%;
+  background: url('/BURN1.png') no-repeat top center/cover;
+  background-attachment: fixed;
+}
+
+.container-img {
+  background: url('/BURN1.png') no-repeat top center/cover;
+  background-attachment: fixed;
+
+}
+
 .calculate-hours-card {
   position: fixed;
   max-width: 300px;
@@ -43,6 +82,20 @@ body {
   backdrop-filter: blur(7px);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: white !important;
+  /* Keep text color */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  /* Transparent background */
+  background-color: transparent !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  /* Delay default autofill styles */
+}
+
+
 :where(.css-dev-only-do-not-override-82w5ug).ant-btn-sm.ant-btn-icon-only {
   width: 30px;
 }
@@ -61,12 +114,12 @@ body {
 }
 
 .ScrollInProgress::-webkit-scrollbar-thumb {
-  background: #474787;
+  background-color: rgba(255, 255, 255, 0.406);
   border-radius: 10px;
 }
 
 .ScrollInProgress::-webkit-scrollbar-thumb:hover {
-  background: #43437f;
+  background: #ffffffb4;
 }
 
 .icons {
@@ -105,14 +158,14 @@ body {
   justify-content: center;
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 50px;
 }
 
 .ant-menu-light.ant-menu-horizontal>.ant-menu-item {
   justify-content: center;
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 50px;
 }
 
 .BgCard {
@@ -139,12 +192,12 @@ body {
 }
 
 .containerCalendar {
-  display: flex;
   position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0px;
-  height: 300px;
+  /* margin-top: 30px; */
+  /* height: 300px;  */
 }
 
 .spinner {
@@ -160,13 +213,694 @@ body {
   background-color: transparent !important;
 }
 
+/* 
 .Monthcalendar {
   .rbc-off-range-bg {
-    background-color: #474646;
+    background-color: #3c3c3c46 !important;
   }
-}
+} */
 
 .rbc-row-segment {
   height: 0px !important;
 }
 
+/* Navbar CSS */
+
+.Done-card {
+  border: none !important;
+  /* background: transparent !important; */
+
+}
+
+/* Remove default blue background */
+.ant-select-item-option-active:hover {
+  background-color: #111731 !important;
+  color: white !important;
+}
+
+/* Remove default selected color too */
+.ant-select-item-option-selected {
+  background-color: #111731 !important;
+  color: white !important;
+  border-top: 0.5px solid #ffffff !important;
+  border-bottom: 0.5px solid #ffffff !important;
+}
+
+.ant-select-dropdown .ant-select-item {
+  border-radius: 0px !important;
+}
+
+/* Hover background */
+/* .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: black !important;
+  color: white !important;
+} */
+
+/* Selected background */
+/* .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: black !important;
+  color: white !important;
+} */
+
+.ant-popover-inner {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  padding: 13px 20px !important;
+  margin-right: 20px !important;
+  border-top-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.ant-popover .ant-popover-arrow:after {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.ant-popover-arrow {
+  position: absolute !important;
+  left: 85px !important;
+}
+
+
+.nav {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 18px;
+  margin-left: 18px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  /* padding: 0px 20px; */
+  /* box-shadow: "0 2px 4px rgba(0, 0, 0, 0.2)"; */
+}
+
+.btn {
+  color: white;
+  background: transparent;
+}
+
+.check.ant-menu {
+  /* background-color: rgba(0, 0, 0, 0.406); */
+  /* backdrop-filter: blur(10px); */
+  border: none !important;
+  padding: 0px 0px 3px 20px !important;
+  /* padding: 10px 20px; */
+  margin-top: 13px;
+}
+
+.ant-menu .ant-menu-item a::before {
+  color: #fff;
+}
+
+/* navbar menu changes */
+
+.check .ant-menu-item {
+  color: #49494B !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.ant-menu-item-icon svg {
+  color: #49494B !important;
+  /* color: #204984 !important; */
+  fill: #49494B !important;
+}
+
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
+  border-bottom-color: #49494B !important;
+}
+
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+  border-bottom-color: #49494B !important;
+}
+
+/* modal Changes */
+.ant-modal-mask {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.ant-modal .ant-modal-content {
+  background-color: rgb(0 0 0 / 40%) !important;
+}
+
+.ant-modal .ant-modal-header {
+  background-color: transparent !important;
+  /* background-color: rgb(0 0 0 / 40%) !important; */
+}
+
+.ant-picker-dropdown .ant-picker-panel-container {
+  overflow: hidden;
+  vertical-align: top;
+  background: #3c3c3c46 !important;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  transition: margin 0.3s;
+  display: inline-block;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+}
+
+/* 
+.ant-modal .ant-modal-title  {
+  background-color: rgb(0 0 0 / 40%) !important;
+  color: white !important;
+} */
+/* 
+.ant-modal-header {
+  background-color: rgb(0 0 0 / 40%) !important;
+} */
+
+.ant-modal-title {
+  color: white !important;
+}
+
+:where(.ant-modal) .ant-modal-header {
+  background-color: rgb(0 0 0 / 40%) !important;
+}
+
+
+
+/* login Chnages */
+
+/* Change background color for Ant Design solid button on active state */
+.ant-btn.ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
+  background-color: #fff !important;
+  color: black !important;
+}
+
+
+.container {
+  min-height: 100vh;
+  width: 100%;
+  background: url('/BURN1.png') no-repeat top center/cover;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-section {
+  width: 40%;
+}
+
+.left-section img {
+  max-width: 350px;
+}
+
+.right-section {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ant-form-item-label label {
+  color: white !important;
+}
+
+/* Outer Wrapper which contains both icon and input */
+.ant-input-affix-wrapper {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.386) !important;
+  border-bottom-right-radius: 12px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Input, Icon & Placeholder */
+.ant-input-affix-wrapper .anticon {
+  color: white !important;
+}
+
+.wrapper .ant-input,
+.ant-input-outlined {
+  /* border: none !important; */
+  background: transparent !important;
+  /* outline: none !important; */
+  color: white !important;
+  margin-left: 5px !important;
+  border-bottom-right-radius: 12px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.683) !important;
+}
+
+
+/* Button */
+.ant-btn,
+.ant-btn.ant-btn-primary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.386);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.ant-btn-variant-outlined:disabled {
+  background: transparent !important;
+
+}
+
+.picker-timelog {
+  background: transparent !important;
+  border-bottom-right-radius: 12px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+}
+
+/* FillUpform CSS */
+.wrapper {
+  width: 70%;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.406);
+  backdrop-filter: blur(10px);
+  padding: 20px 40px;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border: 1px solid #ffffffa1;
+}
+
+.wrapper img {
+  display: block;
+  margin: 0 auto 20px;
+  width: 170px;
+}
+
+h2 {
+  font-size: 22px;
+  color: white;
+  margin-bottom: 30px;
+  font-family: "Rubik";
+}
+
+.ant-select-selector {
+  background-color: #f5f5f5 !important;
+  /* Change to your desired color */
+}
+
+.ant-select-selection-item {
+  /* Change label background */
+  color: white !important;
+  /* Change text color */
+  border-radius: 5px;
+  /* Optional: Add rounded corners */
+  padding: 5px 10px;
+  /* Adjust padding */
+}
+
+
+.ant-select-selector,
+.ant-picker-outlined {
+  background: transparent !important;
+  /* Remove background */
+  border-bottom-right-radius: 12px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.ant-picker .ant-picker-input>input {
+  color: white !important;
+}
+
+.ant-select-dropdown {
+  border: 1px solid #ffffffa1;
+  /* Keep border */
+  border-bottom-right-radius: 12px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  background: rgba(40, 40, 40, 0.37);
+  backdrop-filter: blur(10px);
+}
+
+.ant-select-item {
+  color: #ffffffb1 !important;
+}
+
+.ant-select-item-option:hover {
+  /* background-color:  !important; */
+  border-radius: none !important;
+}
+
+.ant-select-selection-placeholder,
+.ant-picker-input input::placeholder {
+  color: rgba(255, 255, 255, 0.683) !important;
+}
+
+.anticon svg {
+  color: #fff;
+}
+
+.ant-input {
+  margin-right: 2px;
+}
+
+
+
+/* Navbar CSS */
+.check.ant-menu {
+  background: transparent;
+}
+
+/* Time Log CSS */
+
+.ant-btn-color-dangerous.ant-btn-variant-outlined {
+  /* background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.386) !important;
+  color: white !important; */
+  border: none !important;
+  background: transparent !important;
+}
+
+.check2 {
+  background: transparent !important;
+  border: none !important;
+}
+
+.ant-btn-color-dangerous.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {}
+
+.ant-card {
+  background: rgba(60, 60, 60, 0.274);
+  border: 1px solid #ffffffa1;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.custom-card {
+  border-top-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.ant-card .ant-card-head-title {
+  color: White;
+}
+
+.ant-card-body {
+  color: white;
+}
+
+
+
+/* .ant-table-thead > tr > th {
+  background: transparent !important;
+  border-bottom: 1px solid #050505 !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: left;
+  padding: 12px;
+} */
+
+/* Remove the bottom border from the table header row */
+/* .ant-table-thead > tr > th {
+  border: none !important;
+  box-shadow: none !important;
+} */
+
+
+.ant-table {
+  background: transparent !important;
+}
+
+.ant-table-container {
+  background: transparent !important;
+  padding: 20px;
+  border: none !important;
+}
+
+.ant-table-wrapper .ant-table-thead>tr>th {
+  background: transparent !important;
+  /* background: rgba(255, 255, 255, 0) !important; */
+  color: white !important;
+  font-weight: 400;
+  text-align: left;
+  padding: 12px;
+}
+
+/* .ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder {
+  background: transparent !important;
+  cursor: default !important;
+} */
+
+/* Override Ant Design hover effect on the placeholder row */
+/* .ant-table-wrapper .ant-table-tbody > tr.ant-table-placeholder:hover {
+  background: transparent !important;
+  cursor: default;
+} */
+
+
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover {
+  background: transparent !important;
+  cursor: default;
+}
+
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover td {
+  background: transparent !important;
+}
+
+/* Hides the empty placeholder row completely */
+/* .ant-table-placeholder {
+  display: none !important;
+} */
+/* Remove only the border (white line) */
+.ant-table-placeholder>td {
+  border: none !important;
+}
+
+
+
+.ant-table-wrapper .ant-table-tbody>tr>td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.406);
+  color: #fff;
+  border-right: 0 !important;
+}
+
+.ant-table-cell td {
+  border-bottom: 0 !important;
+}
+
+/* .ant-table-placeholder:hover {
+  background: transparent !important;
+  cursor: default !important;
+} */
+
+/* .ant-table-wrapper 
+.ant-table-tbody > tr.ant-table-placeholder:hover {
+    background-color: inherit !important;
+    pointer-events: none;
+} */
+
+.ant-empty-description {
+  color: #fff !important;
+  border-bottom: 0 !important;
+}
+
+.ant-empty-normal {
+  border-bottom: 0 !important;
+}
+
+.ant-table-header {
+  background: rgba(60, 60, 60, 0.274) !important;
+  border: 1px solid #ffffffa1 !important;
+  border-top-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  margin-bottom: 15px;
+}
+
+/* Remove top-right corner from the last column header */
+.ant-table thead>tr>th:last-child {
+  border-top-right-radius: 0 !important;
+}
+
+/* Remove visible table header borders */
+/* th.ant-table-cell {
+  border: none !important;
+} */
+th.ant-table-cell {
+  border: none !important;
+  position: relative;
+}
+
+th.ant-table-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background-color: #fff;
+  /* background-color: rgba(255, 255, 255, 0.3);  */
+}
+
+
+
+.ant-table-placeholder {
+  background-color: transparent !important;
+}
+
+.ant-table-placeholder {
+  border-bottom: 0 !important;
+}
+
+.ant-table-cell-row-hover {
+  background: transparent !important;
+}
+
+/* hr policy modal */
+
+/* Override Quill toolbar button color */
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item,
+.ql-toolbar .ql-formats button {
+  color: white !important;
+}
+
+/* Set the background color of the toolbar to black */
+.ql-toolbar {
+  /* background-color: black !important; */
+  background-color: rgb(0 0 0 / 40%) !important;
+  color: white !important;
+}
+
+/* Change the button color on hover to white */
+.ql-toolbar .ql-picker-item:hover,
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar .ql-formats button:hover {
+  color: white !important;
+}
+
+.ql-picker-label,
+.ql-toolbar .ql-picker-item,
+.ql-toolbar .ql-formats button {
+  color: black !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell {
+  color: #ffffffb3 !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view {
+  color: white !important;
+}
+
+.ant-picker-dropdown .ant-picker-content th {
+  color: white !important;
+}
+
+.ant-picker-dropdown .ant-picker-header button {
+  color: #ffffffff !important;
+}
+
+.ant-picker-now-btn {
+  color: #ffffffff !important;
+}
+
+.ant-btn-color-default {
+  color: white !important;
+}
+
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
+  color: black !important;
+  border: none !important;
+}
+
+.ant-card .ant-card-head {
+  font-weight: normal !important;
+}
+
+.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+  color: white !important;
+}
+
+.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+  background: #111731 !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+  background: #111731 !important;
+}
+
+.ant-picker-dropdown .ant-picker-range-arrow::before {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.ant-table-thead {
+  backdrop-filter: blur(10px);
+}
+
+.nested-card .ant-picker-outlined {
+  border-top-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
+.todo-card .ant-card {
+  border-top-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-bottom-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+
+}
+
+.ant-switch.ant-switch-checked {
+  background: #fff !important;
+}
+
+.ant-switch .ant-switch-handle::before {
+  background-color: black !important;
+}
+
+.ant-switch:not(.ant-switch-checked) .ant-switch-handle::before {
+  background-color: white !important;
+}
+
+.ant-steps-item-container>.ant-steps-item-tail {
+  margin-left: 16px !important;
+}
+
+.ant-steps .ant-steps-item-container {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  margin-top: 20px !important;
+}
+
+.ant-steps.ant-steps-vertical>.ant-steps-item {}
+
+.ant-steps-item .ant-steps-item-process .ant-steps-item-active {
+  margin: 50px 50px !important;
+}
+
+.ant-message .ant-message-notice-wrapper .ant-message-notice-content {
+  background: #49494B !important;
+  color: #fff !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range:not(.ant-picker-cell-disabled):before {
+  background: #49494B !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+  background: #49494B !important;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+  background: #49494B !important;
+}

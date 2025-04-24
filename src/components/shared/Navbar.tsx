@@ -1,5 +1,5 @@
-import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space, theme } from "antd";
+import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, ProfileOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
@@ -13,11 +13,10 @@ import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
 
-const Navbar = ({ onToggleTheme, currentTheme }) => {
+const Navbar = () => {
 
     const { user } = useSelector((state: RootState) => state.auth)
     const { telegramUser } = useSelector((state: RootState) => state.telegramAuth)
-    const { token } = theme.useToken();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -58,7 +57,6 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
 
 
     const onMenuClick = (e) => {
-        if (e.key === "logo") return;
         setCurrent(e.key);
 
         if (e.key === "profile") {
@@ -84,13 +82,19 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         <div>
             <Space direction="vertical">
                 {
-                    !user?.admin && <Button onClick={() => onMenuClick({ key: "profile" })} type="text" icon={<UserOutlined />}>
-                        Profile
-                    </Button>
+                    !user?.admin && <a style={{ color: "white" }} onClick={() => onMenuClick({ key: "profile" })} type="text">
+                        <span style={{ display: "flex", alignItems: "center", gap: "7px", borderBottom: "1px solid white", paddingBottom: "10px", marginBottom: "3px" }}>
+                            <ProfileOutlined style={{ fontSize: "16px" }} />
+                            PROFILE
+                        </span>
+                    </a>
                 }
-                <Button onClick={handleLogout} type="text" icon={<LogoutOutlined />}>
-                    Logout
-                </Button>
+                <a style={{ color: "white" }} onClick={handleLogout} type="text">
+                    <span style={{ display: "flex", alignItems: "center", gap: "7px", marginTop: "0px" }}>
+                        <LogoutOutlined style={{ fontSize: "16px" }} />
+                        LOGOUT
+                    </span>
+                </a>
             </Space>
         </div>
     );
@@ -139,6 +143,9 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
         else if (location.pathname === "/intern/list") {
             setCurrent("intern list");
         }
+        else if (location.pathname === "/developing/team") {
+            setCurrent("about us");
+        }
         else if (!user?.admin) {
             setCurrent("timelog");
         }
@@ -149,130 +156,123 @@ const Navbar = ({ onToggleTheme, currentTheme }) => {
 
     return (
         <>
-            <div id="navbar"
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderBottom: "1px solid #e0e0e0",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                    padding: "0px 20px",
-                }}
-            >
+            <div id="navbar" className="nav">
                 {user && (
-                    <>
-                        <Menu
-                            onClick={onMenuClick}
-                            selectedKeys={[current]}
-                            className="check"
-                            style={{
-                                gap: "1px",
-                            }}
-                            mode="horizontal"
-                            items={[
-                                {
-                                    key: "logo",
-                                    label: <img style={{ height: "30px", width: "auto", verticalAlign: "middle", cursor: "pointer", pointerEvents: "none", }} src="/toshalLogo.png" alt="Logo" />,
-                                },
-                                { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>Timelog</Link> },
-                                { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>Monthly Summary</Link> },
-                                { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>Work Policies</Link> },
-                                { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>Progress Report</Link> },
-                                user?.admin && { key: "intern list", icon: <UserOutlined />, label: <Link to={"/intern/list"}>Intern List</Link> },
-                            ]}
-                        ></Menu>
-
-                        <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-
-                            {
-                                telegramUser?.google?.tokens?.access_token ?
-                                    <Button style={{ fontFamily: "Rubik" }} disabled type="default">Google Connected</Button>
-                                    :
-                                    <Button style={{ fontFamily: "Rubik" }} onClick={googleLogin} type="default">Connect Google</Button>
-                            }
-                            {telegramUser?.telegram?.session_id ? (
-                                <Button style={{ fontFamily: "Rubik" }} type="default" disabled>
-                                    Telegram Connected
-                                </Button>
-                            ) : (
-                                <>
-                                    {
-                                        user && !user?.admin &&
-                                        <Button style={{ fontFamily: "Rubik" }} onClick={showModal} type="default">
-                                            Connect Telegram
-                                        </Button>
-                                    }
-                                    <Modal
-                                        title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
-                                        open={isModalOpen}
-                                        footer={null}
-                                        onCancel={handleCancel}
-                                    >
-                                        <Form
-                                            onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
-                                            layout="vertical"
-                                        >
-                                            {!isOtpStep && (
-                                                <Form.Item
-                                                    label="Phone Number"
-                                                    name="phone"
-                                                    rules={[
-                                                        { required: true, message: "Please enter your phone number!" },
-                                                        {
-                                                            pattern: /^[0-9]{10}$/,
-                                                            message: "Phone number must be 10 digits.",
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input placeholder="Enter your phone number" />
-                                                </Form.Item>
-                                            )}
-                                            {isOtpStep && (
-                                                <Form.Item
-                                                    label="Code (For OTP See the Telegram Chat) "
-                                                    name="code"
-                                                    rules={[
-                                                        { required: true, message: "Please enter the code!" },
-                                                        {
-                                                            pattern: /^[0-9]{5}$/,
-                                                            message: "Code must be 5 digits.",
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input placeholder="Enter the code" />
-                                                </Form.Item>
-                                            )}
-                                            <Form.Item style={{ marginBottom: "10px" }}>
-                                                <Button type="primary" htmlType="submit" >
-                                                    {isOtpStep ? "Submit OTP" : "Send Code"}
-                                                </Button>
-                                            </Form.Item>
-                                        </Form>
-                                    </Modal>
-                                </>
-                            )}
-                            {user &&
-                                <div>
-                                    <Button onClick={onToggleTheme} style={{ border: "none" }}>
-                                        {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
-                                    </Button>
-                                </div>
-                            }
-                            {user &&
-                                <Popover content={popoverContent} trigger="click">
-                                    <span>
-                                        <span style={{
-                                            marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"
-                                        }}
-                                            className={token.colorBgLayout === "White" ? "" : "navbarSpanDark"}
-                                        >{user.fullName}</span>
-                                        <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "7px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
-                                    </span>
-                                </Popover>
-                            }
-                        </div>
-                    </>
+                    <Menu
+                        onClick={onMenuClick}
+                        selectedKeys={[current]}
+                        className="check"
+                        style={{
+                            gap: "1px",
+                        }}
+                        mode="horizontal"
+                        items={[
+                            { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>TIMELOG</Link> },
+                            { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>MONTHLY SUMMARY</Link> },
+                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>WORK POLICIES</Link> },
+                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>PROGRESS REPORT</Link> },
+                            user?.admin && { key: "intern list", icon: <UserOutlined />, label: <Link to={"/intern/list"}>INTERN LIST</Link> },
+                            { key: "about us", icon: <TeamOutlined />, label: <Link to={"/developing/team"}>ABOUT US</Link> },
+                        ]}
+                    ></Menu>
                 )}
+                <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+
+                    {
+                        user && !user?.admin && (
+                            telegramUser?.google?.tokens?.access_token ?
+                                <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent", display: "none" }} className="btn" disabled type="default"><span style={{ color: "grey" }}></span></Button>
+                                :
+                                <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">
+                                    {/* <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: 
+                                    "#49494B" }}/> */}
+                                    <img src="/svg/flat-color-icons_google.svg" alt="" />
+                                </Button>
+                        )
+                    }
+                    {telegramUser?.telegram?.session_id ? (
+                        <Button style={{ fontFamily: "Rubik", display: "none" }} disabled>
+                            <span style={{ color: "grey" }}>TELEGRAM CONNECTED</span>
+                        </Button>
+                    ) : (
+                        <>
+                            {
+                                user && !user?.admin &&
+                                <Button style={{ fontFamily: "Rubik", color: "#49494B", marginRight: "12px" }} onClick={showModal} type="default">
+                                    {/* <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }} /> */}
+                                    <img src="/svg/telegram.png" alt="" />
+                                </Button>
+                            }
+                            <Modal
+                                title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
+                                open={isModalOpen}
+                                footer={null}
+                                onCancel={handleCancel}
+                                width={450}
+                            >
+                                <Form
+                                    onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
+                                    layout="vertical"
+                                >
+                                    {!isOtpStep && (
+                                        <Form.Item
+                                            label="Phone Number"
+                                            name="phone"
+                                            rules={[
+                                                { required: true, message: "Please enter your phone number!" },
+                                                {
+                                                    pattern: /^[0-9]{10}$/,
+                                                    message: "Phone number must be 10 digits.",
+                                                },
+                                            ]}
+                                        >
+                                            <Input placeholder="Enter your phone number" />
+                                        </Form.Item>
+                                    )}
+                                    {isOtpStep && (
+                                        <Form.Item
+                                            label="Code (For OTP See the Telegram Chat) "
+                                            name="code"
+                                            rules={[
+                                                { required: true, message: "Please enter the code!" },
+                                                {
+                                                    pattern: /^[0-9]{5}$/,
+                                                    message: "Code must be 5 digits.",
+                                                },
+                                            ]}
+                                        >
+                                            <Input placeholder="Enter the code" />
+                                        </Form.Item>
+                                    )}
+                                    <Form.Item style={{ marginBottom: "10px", textAlign: "right" }}>
+                                        <Button type="primary" htmlType="submit" >
+                                            {isOtpStep ? "Submit OTP" : "Send Code"}
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+                            </Modal>
+                        </>
+                    )}
+                    {/* {user &&
+                        <div>
+                            <Button onClick={onToggleTheme} style={{ border: "none" }}>
+                                {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
+                            </Button>
+                        </div>
+                    } */}
+                    {user &&
+                        <Popover style={{ marginLeft: "20px" }} content={popoverContent} trigger="click">
+                            <span>
+                                {/* <span style={{
+                                    marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"
+                                }}
+                                    className={token.colorBgLayout === "White" ? "" : "navbarSpanDark"}
+                                >{user.fullName}</span> */}
+                                <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "20px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
+                            </span>
+                        </Popover>
+                    }
+                </div>
             </div >
         </>
     );

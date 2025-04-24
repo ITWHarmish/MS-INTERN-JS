@@ -105,11 +105,11 @@ const MainPage = () => {
     <>
       {loading ?
         <Spinner /> :
-        <Row className="Check" style={{ height: "calc(100vh - 100px )" }}>
-          <Col md={15}>
+        <Row className="Check" style={{ height: "calc(100vh - 130px )", padding:"10px 18px 10px 18px", }}>
+          <Col md={18}>
             <div
               style={{
-                padding: "10px",
+                marginRight: "4px",
                 position: "relative",
                 zIndex: "3",
               }}
@@ -117,7 +117,7 @@ const MainPage = () => {
               <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate} setInternId={setInternId} internId={internId} />
             </div>
           </Col>
-          <Col md={9}>
+          <Col md={6}>
             <TodoCard selectedDate={selectedDate} setLoading={setLoading} internId={internId} />
           </Col>
         </Row>

@@ -38,23 +38,23 @@ const ProgressReports = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
     }, [dispatch]);
-    
+
 
 
     const columns: TableProps<IColumnsReports>['columns'] = [
         {
-            title: 'Sr. No.',
+            title: 'SR. NO.',
             dataIndex: 'srNo',
             key: 'srNo',
             align: 'center',
             render: (_, __, index) => index + 1,
-            width:"80px"
+            width: "80px"
         },
         {
-            title: 'File Name',
+            title: 'FILE NAME',
             dataIndex: 'duration',
             key: 'duration',
             render: (duration: { from: string; to: string }, record: { _id: string }) => (
@@ -67,11 +67,9 @@ const ProgressReports = () => {
             )
         },
         {
-            title: 'Status',
+            title: 'STATUS',
             dataIndex: 'status',
             key: 'status',
-
-            align: 'center',
             render: (_, record) => (
                 <div>
                     {
@@ -101,7 +99,7 @@ const ProgressReports = () => {
             render: (_, record) => (
                 <div style={{ display: 'flex', justifyContent: "center", gap: '10px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
-                        shape="circle"
+                        className="check2"
                         icon={<EditOutlined className="check" />}
                         size="small"
                         onClick={() => {
@@ -110,7 +108,6 @@ const ProgressReports = () => {
                         disabled={user?.admin ? false : record?.status === "approved"}
                     />
                     <Button
-                        shape="circle"
                         danger
                         icon={<DeleteOutlined className="check" />}
                         size="small"
@@ -183,7 +180,7 @@ const ProgressReports = () => {
     };
 
     useEffect(() => {
-        if(!user?.admin) return;
+        if (!user?.admin) return;
         const fetchMentorList = async () => {
             const res = await GetMentorList();
             setMentorListName(res.data);
@@ -219,11 +216,11 @@ const ProgressReports = () => {
 
     return (
         <>
-            <div style={{ padding: "20px", height: "88vh" }}>
+            <div style={{ padding: "10px 20px 0px 20px", height: "calc(100vh - 130px)" }}>
 
-                <Card style={{ position: "relative", height: "65vh" }}
+                <Card style={{ position: "relative", height: "calc(100vh - 150px)" }}
                     title={
-                        "Progress Report"
+                        "PROGRESS REPORT"
                     }
                     extra={
                         <>
@@ -253,7 +250,7 @@ const ProgressReports = () => {
                                 </>
                                 :
                                 <Button onClick={() => { navigate("/reportuser") }} type="primary">
-                                    Add New Report
+                                    ADD NEW REPORT
                                 </Button>
                             }
                         </>
@@ -270,6 +267,7 @@ const ProgressReports = () => {
                             size="small"
                             loading={loading}
                             sticky={true}
+                            locale={{ emptyText: <></> }}
                             className="ScrollInProgress"
                             style={{
                                 height: "calc(65vh - 88px)",
