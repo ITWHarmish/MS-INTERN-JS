@@ -59,7 +59,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
     return (
         <>
-            <Card style={{ position: "relative", height: "100%" }}
+            <Card style={{ position: "relative", height: "calc(100vh - 148.5px)" }}
                 title={
                     <div>
                         <span style={{ marginLeft: "8px" }}>TIMELOG :</span>
