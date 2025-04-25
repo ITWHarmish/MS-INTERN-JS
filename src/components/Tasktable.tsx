@@ -223,7 +223,7 @@ const Tasktable = ({ selectedDate, internId }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "calc(100vh - 225px)", paddingTop:"10px"}}>
+        <div style={{ height: "calc(100vh - 225px)", paddingTop: "10px" }}>
             <div
                 style={{
                     display: 'flex',

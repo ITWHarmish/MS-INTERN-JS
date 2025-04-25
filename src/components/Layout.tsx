@@ -42,7 +42,7 @@ const Layout = () => {
         <Spinner />
       ) : (
         <Layouts className="layout">
-          <div style={{ minHeight: "100vh", display: "flex",  flexDirection: "column" }}>
+          <div style={{ minHeight: "100vh", display: "flex",  flexDirection: "column", justifyContent:"space-between" }}>
             <Navbar />
             <Outlet />
             <Footer />
