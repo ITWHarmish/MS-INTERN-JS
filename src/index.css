@@ -14,7 +14,6 @@ body {
 
 .bg-video {
   position: fixed;
-  /* important for full background */
   top: 0;
   left: 0;
   min-width: 100%;
@@ -31,7 +30,6 @@ body {
 
 .layout {
   overflow: hidden;
-  /* height: calc(100vh - 42px); */
   height: 100vh;
   width: 100%;
   background: url('/BURN1.png') no-repeat top center/cover;
@@ -196,8 +194,6 @@ input:-webkit-autofill:active {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-top: 30px; */
-  /* height: 300px;  */
 }
 
 .spinner {
@@ -228,7 +224,6 @@ input:-webkit-autofill:active {
 
 .Done-card {
   border: none !important;
-  /* background: transparent !important; */
 
 }
 
@@ -249,18 +244,6 @@ input:-webkit-autofill:active {
 .ant-select-dropdown .ant-select-item {
   border-radius: 0px !important;
 }
-
-/* Hover background */
-/* .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
-  background-color: black !important;
-  color: white !important;
-} */
-
-/* Selected background */
-/* .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: black !important;
-  color: white !important;
-} */
 
 .ant-popover-inner {
   background-color: rgba(0, 0, 0, 0.4) !important;
@@ -293,8 +276,6 @@ input:-webkit-autofill:active {
   background-color: rgba(255, 255, 255, 0.5);
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  /* padding: 0px 20px; */
-  /* box-shadow: "0 2px 4px rgba(0, 0, 0, 0.2)"; */
 }
 
 .btn {
@@ -303,11 +284,8 @@ input:-webkit-autofill:active {
 }
 
 .check.ant-menu {
-  /* background-color: rgba(0, 0, 0, 0.406); */
-  /* backdrop-filter: blur(10px); */
   border: none !important;
   padding: 0px 0px 3px 20px !important;
-  /* padding: 10px 20px; */
   margin-top: 13px;
 }
 
@@ -324,7 +302,6 @@ input:-webkit-autofill:active {
 
 .ant-menu-item-icon svg {
   color: #49494B !important;
-  /* color: #204984 !important; */
   fill: #49494B !important;
 }
 
@@ -348,7 +325,6 @@ input:-webkit-autofill:active {
 
 .ant-modal .ant-modal-header {
   background-color: transparent !important;
-  /* background-color: rgb(0 0 0 / 40%) !important; */
 }
 
 .ant-picker-dropdown .ant-picker-panel-container {
@@ -362,16 +338,6 @@ input:-webkit-autofill:active {
   pointer-events: auto;
   backdrop-filter: blur(12px);
 }
-
-/* 
-.ant-modal .ant-modal-title  {
-  background-color: rgb(0 0 0 / 40%) !important;
-  color: white !important;
-} */
-/* 
-.ant-modal-header {
-  background-color: rgb(0 0 0 / 40%) !important;
-} */
 
 .ant-modal-title {
   color: white !important;
@@ -438,9 +404,7 @@ input:-webkit-autofill:active {
 
 .wrapper .ant-input,
 .ant-input-outlined {
-  /* border: none !important; */
   background: transparent !important;
-  /* outline: none !important; */
   color: white !important;
   margin-left: 5px !important;
   border-bottom-right-radius: 12px !important;
@@ -506,17 +470,12 @@ h2 {
 
 .ant-select-selector {
   background-color: #f5f5f5 !important;
-  /* Change to your desired color */
 }
 
 .ant-select-selection-item {
-  /* Change label background */
   color: white !important;
-  /* Change text color */
   border-radius: 5px;
-  /* Optional: Add rounded corners */
   padding: 5px 10px;
-  /* Adjust padding */
 }
 
 
@@ -550,7 +509,6 @@ h2 {
 }
 
 .ant-select-item-option:hover {
-  /* background-color:  !important; */
   border-radius: none !important;
 }
 
@@ -577,9 +535,6 @@ h2 {
 /* Time Log CSS */
 
 .ant-btn-color-dangerous.ant-btn-variant-outlined {
-  /* background: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.386) !important;
-  color: white !important; */
   border: none !important;
   background: transparent !important;
 }
@@ -588,8 +543,6 @@ h2 {
   background: transparent !important;
   border: none !important;
 }
-
-.ant-btn-color-dangerous.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {}
 
 .ant-card {
   background: rgba(60, 60, 60, 0.274);
@@ -615,24 +568,6 @@ h2 {
   color: white;
 }
 
-
-
-/* .ant-table-thead > tr > th {
-  background: transparent !important;
-  border-bottom: 1px solid #050505 !important;
-  color: white !important;
-  font-weight: bold;
-  text-align: left;
-  padding: 12px;
-} */
-
-/* Remove the bottom border from the table header row */
-/* .ant-table-thead > tr > th {
-  border: none !important;
-  box-shadow: none !important;
-} */
-
-
 .ant-table {
   background: transparent !important;
 }
@@ -645,23 +580,11 @@ h2 {
 
 .ant-table-wrapper .ant-table-thead>tr>th {
   background: transparent !important;
-  /* background: rgba(255, 255, 255, 0) !important; */
   color: white !important;
   font-weight: 400;
   text-align: left;
   padding: 12px;
 }
-
-/* .ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder {
-  background: transparent !important;
-  cursor: default !important;
-} */
-
-/* Override Ant Design hover effect on the placeholder row */
-/* .ant-table-wrapper .ant-table-tbody > tr.ant-table-placeholder:hover {
-  background: transparent !important;
-  cursor: default;
-} */
 
 
 .ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover {
@@ -673,16 +596,10 @@ h2 {
   background: transparent !important;
 }
 
-/* Hides the empty placeholder row completely */
-/* .ant-table-placeholder {
-  display: none !important;
-} */
 /* Remove only the border (white line) */
 .ant-table-placeholder>td {
   border: none !important;
 }
-
-
 
 .ant-table-wrapper .ant-table-tbody>tr>td {
   border-bottom: 1px solid rgba(255, 255, 255, 0.406);
@@ -693,17 +610,6 @@ h2 {
 .ant-table-cell td {
   border-bottom: 0 !important;
 }
-
-/* .ant-table-placeholder:hover {
-  background: transparent !important;
-  cursor: default !important;
-} */
-
-/* .ant-table-wrapper 
-.ant-table-tbody > tr.ant-table-placeholder:hover {
-    background-color: inherit !important;
-    pointer-events: none;
-} */
 
 .ant-empty-description {
   color: #fff !important;
@@ -729,10 +635,6 @@ h2 {
   border-top-right-radius: 0 !important;
 }
 
-/* Remove visible table header borders */
-/* th.ant-table-cell {
-  border: none !important;
-} */
 th.ant-table-cell {
   border: none !important;
   position: relative;
@@ -746,7 +648,6 @@ th.ant-table-cell:not(:last-child)::after {
   height: 50%;
   width: 1px;
   background-color: #fff;
-  /* background-color: rgba(255, 255, 255, 0.3);  */
 }
 
 
@@ -774,7 +675,6 @@ th.ant-table-cell:not(:last-child)::after {
 
 /* Set the background color of the toolbar to black */
 .ql-toolbar {
-  /* background-color: black !important; */
   background-color: rgb(0 0 0 / 40%) !important;
   color: white !important;
 }
@@ -881,8 +781,6 @@ th.ant-table-cell:not(:last-child)::after {
   flex-direction: row-reverse !important;
   margin-top: 20px !important;
 }
-
-.ant-steps.ant-steps-vertical>.ant-steps-item {}
 
 .ant-steps-item .ant-steps-item-process .ant-steps-item-active {
   margin: 50px 50px !important;

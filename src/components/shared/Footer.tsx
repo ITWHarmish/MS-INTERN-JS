@@ -1,8 +1,36 @@
 import { Typography } from "antd"
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 const Footer = () => {
+    const footerRef = useRef(null);
+
+    useEffect(() => {
+        const animateNavbar = () => {
+            const menuItems = document.querySelectorAll('#footer');
+
+            if (menuItems.length > 0 && footerRef.current) {
+
+                gsap.fromTo(
+                    footerRef.current,
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: "power2.out",
+                    }
+                );
+            } else {
+                requestAnimationFrame(animateNavbar);
+            }
+        };
+
+        requestAnimationFrame(animateNavbar);
+    }, []);
+
     return (
-        <div id="footer"
+        <div id="footer" ref={footerRef}
             style={{
                 borderTop: "1px solid #ffffffa1",
                 width: "-webkit-fill-available",

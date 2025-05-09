@@ -1,4 +1,3 @@
-// TermsAndConditions.jsx
 import styles from './TermsAndConditions.module.css';
 
 const TermsAndConditions = () => {

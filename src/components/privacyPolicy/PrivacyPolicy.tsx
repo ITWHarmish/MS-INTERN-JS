@@ -1,4 +1,3 @@
-// PrivacyPolicy.tsx
 import styles from './PrivacyPolicy.module.css';
 
 const PrivacyPolicy = () => {
@@ -6,11 +5,6 @@ const PrivacyPolicy = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <h1 className={styles.title}>MS-Intern Privacy Policy</h1>
-        
-        {/* <div className={styles.dates}>
-          <p><strong>Effective Date:</strong> April 29, 2025</p>
-          <p><strong>Last Updated:</strong> April 29, 2025</p>
-        </div> */}
 
         <section className={styles.section}>
           <h2>Introduction</h2>
@@ -201,15 +195,6 @@ const PrivacyPolicy = () => {
             becoming effective. We encourage you to periodically review this page for the latest information on our privacy practices.
           </p>
         </section>
-
-        {/* <section className={styles.section}>
-          <h2>Contact Information</h2>
-          <p>If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:</p>
-          <ul className={styles.contactInfo}>
-            <li>Email: your.support@example.com</li>
-            <li>Address: [Insert Your Address]</li>
-          </ul>
-        </section> */}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import "../index.css";
 import Timelog from "./Timelog";
 import TodoCard from "./TodoCard";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { fetchTodos } from "../redux/actions/todosAction";
 import Spinner from "../utils/Spinner";
+import { gsap } from "gsap";
 
 const token = Cookies.get('ms_intern_jwt')
 
@@ -26,6 +27,23 @@ const MainPage = () => {
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth)
+  const timelogRef = useRef(null);
+  const todoRef = useRef(null);
+
+  useEffect(() => {
+    if (!loading) {
+      gsap.fromTo(
+        timelogRef.current,
+        { x: -100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out",delay: 0.4 }
+      );
+      gsap.fromTo(
+        todoRef.current,
+        { x: 100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.8 }
+      );
+    }
+  }, [loading]);
 
   useEffect(() => {
     const telegramSessionCheck = async () => {
@@ -69,7 +87,7 @@ const MainPage = () => {
 
   useEffect(() => {
     if (user) {
-      if(user.admin) return;
+      if (user.admin) return;
       if (user.internsDetails === undefined || user.internsDetails === "") {
         navigate("/fillUpForm");
       } else {
@@ -105,9 +123,10 @@ const MainPage = () => {
     <>
       {loading ?
         <Spinner /> :
-        <Row className="Check" style={{ height: "calc(100vh - 130px )", padding:"10px 18px 10px 18px", }}>
+        <Row className="Check" style={{ height: "calc(100vh - 130px )", padding: "10px 18px 10px 18px", }}>
           <Col md={18}>
             <div
+              ref={timelogRef}
               style={{
                 marginRight: "4px",
                 position: "relative",
@@ -118,9 +137,11 @@ const MainPage = () => {
             </div>
           </Col>
           <Col md={6}>
-            <TodoCard selectedDate={selectedDate} setLoading={setLoading} internId={internId} />
+            <div ref={todoRef}>
+              <TodoCard selectedDate={selectedDate} setLoading={setLoading} internId={internId} />
+            </div>
           </Col>
-        </Row>
+        </Row >
       }
     </>
   );

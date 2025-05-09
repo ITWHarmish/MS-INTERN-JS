@@ -24,11 +24,8 @@
     right: 0;
     width: 31.5vw;
     height: calc(100vh - 0px);
-    /* transform: scale(0.9); */
-    /* margin-top: 20px; */
     margin-right: 20px;
     background: #49494B;
-    /* your overlay color */
     mix-blend-mode: overlay;
     z-index: 2;
     pointer-events: none;

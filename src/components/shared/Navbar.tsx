@@ -1,6 +1,6 @@
 import { FieldTimeOutlined, FilePptOutlined, FileTextOutlined, LogoutOutlined, ProfileOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Menu, Modal, Popover, Form, message, Space } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginApiTelegram, SubmitApiTelegram } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,7 @@ import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
-
+import gsap from "gsap";
 const Navbar = () => {
 
     const { user } = useSelector((state: RootState) => state.auth)
@@ -21,6 +21,36 @@ const Navbar = () => {
     const [isOtpStep, setIsOtpStep] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
     const [current, setCurrent] = useState(user?.admin ? "hr policy" : "timelog");
+    const navbarRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const animateNavbar = () => {
+            const menuItems = document.querySelectorAll('.nav-menu-item');
+
+            if (menuItems.length > 0 && navbarRef.current) {
+
+                gsap.fromTo(navbarRef.current, { y: -100, opacity: 0 }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.7,
+                    ease: 'power2.out',
+                });
+
+                gsap.fromTo(menuItems, { y: -30, opacity: 0 }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.7,
+                    stagger: 0.2,
+                    ease: 'power2.out',
+                });
+            } else {
+                requestAnimationFrame(animateNavbar);
+            }
+        };
+
+        requestAnimationFrame(animateNavbar);
+    }, []);
+
 
     useEffect(() => {
         const checkGoogleToken = async () => {
@@ -78,6 +108,15 @@ const Navbar = () => {
         message.success("Logged out successfully!");
     }
 
+    const menuItems = [
+        { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to="/">TIMELOG</Link> },
+        { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to="/monthlySummary">MONTHLY SUMMARY</Link> },
+        { key: "hr policy", icon: <FileTextOutlined />, label: <Link to="/hrPolicy">WORK POLICIES</Link> },
+        { key: "progress report", icon: <FilePptOutlined />, label: <Link to="/report">PROGRESS REPORT</Link> },
+        ...(user?.admin ? [{ key: "intern list", icon: <UserOutlined />, label: <Link to="/intern/list">INTERN LIST</Link> }] : []),
+        { key: "about us", icon: <TeamOutlined />, label: <Link to="/developing/team">ABOUT US</Link> },
+    ];
+
     const popoverContent = (
         <div>
             <Space direction="vertical">
@@ -125,38 +164,24 @@ const Navbar = () => {
         window.location.href = `${API_END_POINT}/G_login`
     };
 
-
     useEffect(() => {
-        dispatch(fetchTelegram());
-        if (location.pathname === "/profile") {
-            setCurrent("profile");
-        }
-        else if (location.pathname === "/monthlySummary") {
-            setCurrent("monthly summary");
-        }
-        else if (location.pathname === "/report") {
-            setCurrent("progress report");
-        }
-        else if (location.pathname === "/hrPolicy") {
-            setCurrent("hr policy");
-        }
-        else if (location.pathname === "/intern/list") {
-            setCurrent("intern list");
-        }
-        else if (location.pathname === "/developing/team") {
-            setCurrent("about us");
-        }
-        else if (!user?.admin) {
-            setCurrent("timelog");
-        }
-        else {
-            setCurrent("progress report");
-        }
-    }, [dispatch, user?.admin]);
+        const pathToKey = {
+            "/profile": "profile",
+            "/monthlySummary": "monthly summary",
+            "/report": "progress report",
+            "/hrPolicy": "hr policy",
+            "/intern/list": "intern list",
+            "/developing/team": "about us",
+            "/": "timelog",
+        };
+        const currentPath = location.pathname;
+        setCurrent(pathToKey[currentPath] || (user?.admin ? "progress report" : "timelog"));
+    }, [user?.admin]);
+
 
     return (
         <>
-            <div id="navbar" className="nav">
+            <div id="navbar" className="nav" ref={navbarRef}>
                 {user && (
                     <Menu
                         onClick={onMenuClick}
@@ -166,15 +191,13 @@ const Navbar = () => {
                             gap: "1px",
                         }}
                         mode="horizontal"
-                        items={[
-                            { key: "timelog", icon: <FieldTimeOutlined />, label: <Link to={"/"}>TIMELOG</Link> },
-                            { key: "monthly summary", icon: <FieldTimeOutlined />, label: <Link to={"/monthlySummary"}>MONTHLY SUMMARY</Link> },
-                            { key: "hr policy", icon: <FileTextOutlined />, label: <Link to={"/hrPolicy"}>WORK POLICIES</Link> },
-                            { key: "progress report", icon: <FilePptOutlined />, label: <Link to={"/report"}>PROGRESS REPORT</Link> },
-                            user?.admin && { key: "intern list", icon: <UserOutlined />, label: <Link to={"/intern/list"}>INTERN LIST</Link> },
-                            { key: "about us", icon: <TeamOutlined />, label: <Link to={"/developing/team"}>ABOUT US</Link> },
-                        ]}
-                    ></Menu>
+                    >
+                        {menuItems.map((item) => (
+                            <Menu.Item key={item.key} icon={item.icon} className="nav-menu-item">
+                                {item.label}
+                            </Menu.Item>
+                        ))}
+                    </Menu>
                 )}
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
 
@@ -184,8 +207,6 @@ const Navbar = () => {
                                 <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent", display: "none" }} className="btn" disabled type="default"><span style={{ color: "grey" }}></span></Button>
                                 :
                                 <Button style={{ fontFamily: "Rubik" }} className="btn" onClick={googleLogin} type="default">
-                                    {/* <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: 
-                                    "#49494B" }}/> */}
                                     <img src="/svg/flat-color-icons_google.svg" alt="" />
                                 </Button>
                         )
@@ -199,8 +220,7 @@ const Navbar = () => {
                             {
                                 user && !user?.admin &&
                                 <Button style={{ fontFamily: "Rubik", color: "#49494B", marginRight: "12px" }} onClick={showModal} type="default">
-                                    {/* <GoogleOutlined style={{ fontSize: "20px", color: "#49494B", fill: "#49494B" }} /> */}
-                                    <img src="/svg/telegram.png" alt="" />
+                                    <img src="/svg/telegram.png" alt="telegram" />
                                 </Button>
                             }
                             <Modal
@@ -253,21 +273,9 @@ const Navbar = () => {
                             </Modal>
                         </>
                     )}
-                    {/* {user &&
-                        <div>
-                            <Button onClick={onToggleTheme} style={{ border: "none" }}>
-                                {currentTheme === "light" ? <MoonOutlined style={{ fontSize: "22px" }} /> : <SunOutlined style={{ fontSize: "22px" }} />}
-                            </Button>
-                        </div>
-                    } */}
                     {user &&
                         <Popover style={{ marginLeft: "20px" }} content={popoverContent} trigger="click">
                             <span>
-                                {/* <span style={{
-                                    marginRight: "7px", cursor: "pointer", fontFamily: "Rubik"
-                                }}
-                                    className={token.colorBgLayout === "White" ? "" : "navbarSpanDark"}
-                                >{user.fullName}</span> */}
                                 <Avatar src={telegramUser?.google?.profile?.picture || undefined} style={{ marginRight: "20px", cursor: "pointer" }} icon={!telegramUser?.google?.profile?.picture ? initials : undefined} />
                             </span>
                         </Popover>

@@ -309,9 +309,6 @@ const MonthlySummary = () => {
                                             header: ({ date }) => <div style={{ color: "#49494B" }} >
                                                 {dayjs(date).format('dddd').toUpperCase()}
                                             </div>,
-                                            // month: {
-                                            //     dateHeader: (props) => <div className={token.colorBgLayout === "White" ? "" : "dateColorWhite"}>{props.label}</div>
-                                            // },
                                             month: {
                                                 dateHeader: ({ date, label }) => {
                                                     const isWeekend = dayjs(date).day() === 0 || dayjs(date).day() === 6;
@@ -344,7 +341,6 @@ const MonthlySummary = () => {
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "8px", marginBottom: "8px" }}>
                                     <div style={{
-                                        // width: 'calc(100vw - 490px)',
                                         width: `${calendarDimensions.width}px`,
                                         color: "white",
                                         padding: '10px',

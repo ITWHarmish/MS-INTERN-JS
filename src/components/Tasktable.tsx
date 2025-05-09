@@ -16,7 +16,6 @@ dayjs.extend(localizedFormat);
 const Tasktable = ({ selectedDate, internId }) => {
 
     const formattedDate = selectedDate.format("YYYY-MM-DD");
-    // const [showCard, setShowCard] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         startTime: '',
@@ -249,7 +248,6 @@ const Tasktable = ({ selectedDate, internId }) => {
 
                 <Select
                     style={{ width: '180px' }}
-                    // style={{ flex: 1, minWidth: '200px' }}
                     placeholder="Select Category"
                     optionFilterProp="label"
                     options={[

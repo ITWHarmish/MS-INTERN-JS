@@ -42,11 +42,8 @@
     right: 0;
     width: 51.5vw;
     height: calc(100vh - 200px);
-    /* transform: scale(0.9); */
-    /* margin-top: 20px; */
     margin-right: 20px;
     background: #49494B;
-    /* your overlay color */
     mix-blend-mode: overlay;
     z-index: 2;
     pointer-events: none;
@@ -54,12 +51,10 @@
     -webkit-mask-image: url('/avatar/TEAM.png');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
-    /* -webkit-mask-position: calc(100% - 20px) 50px; */
     -webkit-mask-position-x: right;
     -webkit-mask-position-y: bottom;
 
     mask-image: url('/avatar/TEAM.png');
     mask-repeat: no-repeat;
     mask-size: contain;
-    /* mask-position: calc(100% - 20px) center; */
 }

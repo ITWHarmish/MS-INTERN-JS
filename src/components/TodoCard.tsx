@@ -376,10 +376,6 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                       && !user?.admin
                       && currentDate === formattedDate
                     )
-                    // !(
-                    //   telegramUser?.telegram?.session_id ||
-                    //   telegramUser?.google?.tokens?.access_token
-                    // ) || currentDate !== formattedDate
                   }
                 >
                   <Select.Option value="start">DAY START</Select.Option>
@@ -400,42 +396,6 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   onOk={handleSendDayEndTodo}
                 />
               </>
-              // <>
-              //   <Select
-              //     style={{ width: 200 }}
-              //     placeholder="Day Status"
-              //     onChange={(value) => {
-              //       if (value === "start") {
-              //         setIsDayStartModalOpen(true);
-              //       } else if (value === "end") {
-              //         setIsDayEndModalOpen(true);
-              //       }
-              //     }}
-              //     disabled={
-              //       !(
-              //         telegramUser?.telegram?.session_id ||
-              //         telegramUser?.google?.tokens?.access_token
-              //       ) || currentDate !== formattedDate
-              //     }
-              //   >
-              //     <Select.Option value="start">Day Start</Select.Option>
-              //     <Select.Option value="end">Day End</Select.Option>
-              //   </Select>
-
-              //   <ModalCard
-              //     title="Are you sure, Do you want to send the day start status?"
-              //     ModalOpen={isDayStartModalOpen}
-              //     setModalOpen={setIsDayStartModalOpen}
-              //     onOk={handleSendTodo}
-              //   />
-
-              //   <ModalCard
-              //     title="Are you sure, Do you want to send the day end status?"
-              //     ModalOpen={isDayEndModalOpen}
-              //     setModalOpen={setIsDayEndModalOpen}
-              //     onOk={handleSendDayEndTodo}
-              //   />
-              // </>
             }
           >
             <div

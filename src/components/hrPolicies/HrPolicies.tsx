@@ -23,8 +23,6 @@ const getItemStyle = (draggableStyle) => ({
   marginBottom: "24px",
   background: "#3c3c3c46",
   backdropFilter: "blur(12px)",
-  // background: "white",
-  // padding: "20px",
   ...draggableStyle
 });
 
