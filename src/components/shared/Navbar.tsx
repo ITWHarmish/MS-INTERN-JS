@@ -179,7 +179,7 @@ const Navbar = () => {
                 <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
 
                     {
-                        user && !user?.admin && (
+                        user && (
                             telegramUser?.google?.tokens?.access_token ?
                                 <Button style={{ fontFamily: "Rubik", color: "white", background: "transparent", display: "none" }} className="btn" disabled type="default"><span style={{ color: "grey" }}></span></Button>
                                 :
