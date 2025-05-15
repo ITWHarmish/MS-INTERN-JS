@@ -18,9 +18,7 @@ const ProgressReportPDF = () => {
 
     const getRegularityLabel = (percentage) => {
         if (!percentage) return "";
-
         const numericValue = parseFloat(percentage);
-
         if (numericValue == 100) return `${percentage}% (Excellent)`;
         if (numericValue >= 70) return `${percentage}% (Good)`;
         if (numericValue >= 50) return `${percentage}% (Average)`;
@@ -40,7 +38,6 @@ const ProgressReportPDF = () => {
         }
         fetchData();
     }, [reportId])
-
 
     const externalGuideRemarks = Array.from({ length: 4 }, (_, index) => data?.externalGuideRemarks[index] || "");
     const internalGuideRemarks = Array.from({ length: 4 }, () => "");
@@ -69,6 +66,7 @@ const ProgressReportPDF = () => {
             );
         }
     }
+
     const strikeThroughOptions = (selected) => {
         const options = ["good", "average", "poor"];
         return options.map((option, index) => (
@@ -81,110 +79,115 @@ const ProgressReportPDF = () => {
             </span>
         ));
     };
+
     return (
         loading ? <Spinner /> :
-            <div style={{ marginBottom: "25px" }} className="report">
-                <Button
-                    id="pdf-button"
-                    type="primary"
-                    onClick={() => window.print()}
-                    style={{
-                        position: "absolute",
-                        right: "15px",
-                        top: "15px",
-                    }}
-                >
-                    Download PDF
-                </Button>
-                <div style={{ width: "43rem" }}>
-                    <div className="section name">
-                        <div className="name"><span>Student Name:</span> {data?.studentName}</div>
-                    </div>
-                    <div className="section">
-                        <div className="company"><span>Company Name:</span> Toshal Infotech</div>
-                    </div>
-                    <div className="section">
-                        <div className="company">
-                            <span>Enrollment No.:</span> {data?.enrollmentNo}
-                            <span style={{ marginLeft: "40px" }}>Class:</span> {data?.course}
-                            <span style={{ marginLeft: "40px" }}>Div:</span> {data?.division}
+            <div className="ScrollInProgress" style={{ height: "100vh", overflow: "auto" }}>
+                <div style={{ marginBottom: "25px", padding: "120px" }} className="report">
+                    <Button
+                        id="pdf-button"
+                        type="primary"
+                        onClick={() => window.print()}
+                        style={{
+                            position: "absolute",
+                            right: "15px",
+                            top: "15px",
+                        }}
+                    >
+                        Download PDF
+                    </Button>
+                    <div style={{ width: "43rem" }}>
+                        <div className="section name">
+                            <div className="name"><span>Student Name:</span> {data?.studentName}</div>
                         </div>
+                        <div className="section">
+                            <div className="company"><span>Company Name:</span> Toshal Infotech</div>
+                        </div>
+                        <div className="section">
+                            <div className="company">
+                                <span>Enrollment No.:</span> {data?.enrollmentNo}
+                                <span style={{ marginLeft: "40px" }}>Class:</span> {data?.course}
+                                <span style={{ marginLeft: "40px" }}>Div:</span> {data?.division}
+                            </div>
                             <span style={{ marginBottom: "14px" }}>Project Title:</span> {data?.projectTitle}
-                    </div>
-                    <div className="section">
-                        <span>Duration:</span> <span>From:</span> {formatDate(data?.duration?.from)}
-                        <span style={{ marginLeft: "150px" }}>To:</span> {formatDate(data?.duration?.to)}
-                    </div>
-
-                    <table className="table">
-                        <thead className="table-thead">
-                            <tr>
-                                <th>Task Assigned</th>
-                                <th>Date Assigned</th>
-                                <th>Expected date of completion</th>
-                                <th>Actual date of completion</th>
-                            </tr>
-                        </thead>
-                        <tbody className="table-tbody">
-                            {tasksHtml}
-                        </tbody>
-                    </table>
-
-                    <div className="section single-line">
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "", gap: "3px" }} className="regular">
-                            <span>Regularity:</span> <span style={{ width: "max-content" }} className="blank-remarks">{getRegularityLabel(data?.selfEvaluation?.regularity)}</span>
                         </div>
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "18px" }} className="regular">
-                            <span style={{ marginRight: "3px" }}>Punctuality:</span> {strikeThroughOptions(data?.selfEvaluation?.punctuality)}
+                        <div className="section">
+                            <span>Duration:</span> <span>From:</span> {formatDate(data?.duration?.from)}
+                            <span style={{ marginLeft: "150px" }}>To:</span> {formatDate(data?.duration?.to)}
                         </div>
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "20px" }} className="regular">
-                            <span style={{ marginRight: "3px" }}>Discipline:</span> {strikeThroughOptions(data?.selfEvaluation?.discipline)}
-                        </div>
-                    </div>
-                    <div className="section">
-                        <span>Learning Ability:</span> {strikeThroughOptions(data?.selfEvaluation?.learningAbility)}
-                        <span style={{ marginLeft: "118px" }}>Implementation Ability:</span> {strikeThroughOptions(data?.selfEvaluation?.implementationAbility)}
-                    </div>
 
-                    <div>
-                        <div className="remark">Remark by External Guide:</div>
-                        {externalGuideRemarks.map((text, index) => (
-                            <div key={index} className="line">
-                                {index + 1}.
-                                <div className="blank-remarks">{text}</div>
+                        <table className="table">
+                            <thead className="table-thead">
+                                <tr>
+                                    <th>Task Assigned</th>
+                                    <th>Date Assigned</th>
+                                    <th>Expected date of completion</th>
+                                    <th>Actual date of completion</th>
+                                </tr>
+                            </thead>
+                            <tbody className="table-tbody">
+                                {tasksHtml}
+                            </tbody>
+                        </table>
+
+                        <div className="section single-line">
+                            <div style={{ display: "flex", justifyContent: "center", gap: "3px" }} className="regular">
+                                <span>Regularity:</span>
+                                <span style={{ width: "max-content" }} className="blank-remarks">{getRegularityLabel(data?.selfEvaluation?.regularity)}</span>
                             </div>
-                        ))}
-                    </div>
-
-                    <div className="signatures">
-                        <div>Student Sign: _____________</div>
-                        <div>External Guide Sign: _____________</div>
-                        <div>Date: _____________</div>
-                    </div>
-
-                    <div>
-                        <div className="remark">Remark by Internal Guide:</div>
-                        {internalGuideRemarks.map((text, index) => (
-                            <div key={index} className="line">
-                                {index + 1}.
-                                <div className="blank-remarks">{text}</div>
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "18px" }} className="regular">
+                                <span style={{ marginRight: "3px" }}>Punctuality:</span> {strikeThroughOptions(data?.selfEvaluation?.punctuality)}
                             </div>
-                        ))}
-                    </div>
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0px", marginLeft: "20px" }} className="regular">
+                                <span style={{ marginRight: "3px" }}>Discipline:</span> {strikeThroughOptions(data?.selfEvaluation?.discipline)}
+                            </div>
+                        </div>
 
-                    <div className="signatures">
-                        <div>Student Sign: _____________</div>
-                        <div>Internal Guide Sign: _____________</div>
-                        <div>Date: _____________</div>
-                    </div>
+                        <div className="section">
+                            <span>Learning Ability:</span> {strikeThroughOptions(data?.selfEvaluation?.learningAbility)}
+                            <span style={{ marginLeft: "118px" }}>Implementation Ability:</span> {strikeThroughOptions(data?.selfEvaluation?.implementationAbility)}
+                        </div>
 
-                    <div className="hr-signature">
-                        <span className="hr">HR Executive</span>
-                        <span className="hr_name">Riddhi Jariwala</span>
+                        <div>
+                            <div className="remark">Remark by External Guide:</div>
+                            {externalGuideRemarks.map((text, index) => (
+                                <div key={index} className="line">
+                                    {index + 1}.
+                                    <div className="blank-remarks">{text}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="signatures">
+                            <div>Student Sign: _____________</div>
+                            <div>External Guide Sign: _____________</div>
+                            <div>Date: _____________</div>
+                        </div>
+
+                        <div>
+                            <div className="remark">Remark by Internal Guide:</div>
+                            {internalGuideRemarks.map((text, index) => (
+                                <div key={index} className="line">
+                                    {index + 1}.
+                                    <div className="blank-remarks">{text}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="signatures">
+                            <div>Student Sign: _____________</div>
+                            <div>Internal Guide Sign: _____________</div>
+                            <div>Date: _____________</div>
+                        </div>
+
+                        <div className="hr-signature">
+                            <span className="hr">HR Executive</span>
+                            <span className="hr_name">Riddhi Jariwala</span>
+                        </div>
                     </div>
                 </div>
             </div>
-    )
-}
+    );
+};
 
-export default ProgressReportPDF
+export default ProgressReportPDF;

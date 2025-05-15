@@ -17,6 +17,9 @@ import ProgressReportPDF from './components/reports/ProgressReportPDF.tsx'
 import ReportEvaluation from './components/reports/ReportEvaluation.tsx'
 import ReportSubmitted from './components/reports/ReportSubmitted.tsx'
 import InternList from './components/admin/InternList.tsx'
+import Team from './components/developingTeam/Team.tsx'
+import TermsAndConditions from './components/privacyPolicy/TermsAndConditions.tsx'
+import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy.tsx'
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -82,6 +85,10 @@ const router = createBrowserRouter([
         path: "/intern/list",
         element: <InternList />
       },
+      {
+        path: "/developing/team",
+        element: <Team />
+      },
 
     ]
   },
@@ -89,6 +96,16 @@ const router = createBrowserRouter([
     path: "/fillUpForm",
     element: <FillUpForm />
   },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />
+  },
+
+  {
+    path: "/terms-and-conditions",
+    element: <TermsAndConditions />
+  },
+
 
 ])
 

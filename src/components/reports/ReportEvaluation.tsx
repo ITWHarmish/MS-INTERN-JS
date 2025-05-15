@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, message, Row, Select, Steps, theme } from "antd"
+import { Button, Card, Col, Form, Input, message, Row, Select, Steps } from "antd"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,7 +9,6 @@ import Spinner from "../../utils/Spinner";
 
 const ReportEvaluation = () => {
     const { Step } = Steps;
-    const { token } = theme.useToken();
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [form] = Form.useForm();
@@ -123,148 +122,151 @@ const ReportEvaluation = () => {
         <>
             {loading ?
                 <Spinner /> :
-                <div style={{ marginBottom: "10px" }}>
-                    <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", height: "100%" }}>
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
-                            <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
-                                <Step title="Fill Details" />
-                                <Step title="Add Tasks" />
-                                <Step title="Intern Evaluation" />
-                                <Step title="Review & Submit" />
-                            </Steps>
-                            <Card
-                                title="Interns Evaluation"
-                                extra={
-                                    <Button onClick={() => form.submit()} loading={loading} type="primary" htmlType="submit">
-                                        Next
-                                    </Button>
-                                }
-                                style={{ width: "80%", maxWidth: "900px", padding: "24px", marginBottom: "40px" }}
-                            >
-                                <Form
-                                    form={form}
-                                    onFinish={handleSubmit}
-                                    layout="vertical"
+                <Row>
+                    <Col></Col>
+                    <div className="ScrollInProgress" style={{ marginBottom: "10px", overflowY: "auto" }}>
+                        <div style={{ height: "100%" }}>
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
+                                <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
+                                    <Step />
+                                    <Step />
+                                    <Step />
+                                    <Step />
+                                </Steps>
+                                <Card
+                                    title="INTERNS EVALUATION"
+                                    extra={
+                                        <Button onClick={() => form.submit()} loading={loading} type="primary" htmlType="submit">
+                                            NEXT
+                                        </Button>
+                                    }
+                                    style={{ width: "80%", maxWidth: "900px", padding: "24px", marginBottom: "40px" }}
                                 >
-                                    <Row gutter={24}>
-                                        <Col span={12}>
-                                            <Form.Item
-                                                label="Regularity"
-                                                name="regularity"
-                                                rules={[{ required: true, message: "Regularity is required!" }]}
-                                            >
-                                                <Input type="number" placeholder="100% " />
-                                            </Form.Item>
-
-                                            <Form.Item
-                                                label="Punctuality"
-                                                name="punctuality"
-                                                rules={
-                                                    [{ required: true, message: "Punctuality is required!" },
-                                                    ]}
-                                            >
-                                                <Select
-                                                    placeholder="Select Punctuality"
-                                                    options={[
-                                                        { value: 'good', label: 'Good' },
-                                                        { value: 'average', label: 'Average' },
-                                                        { value: 'poor', label: 'Poor' },
-                                                    ]}
-
-                                                />
-                                            </Form.Item>
-
-                                            <Form.Item
-                                                label="Implementation Ability"
-                                                name="implementationAbility"
-                                                rules={
-                                                    [{ required: true, message: "Implementation Ability is required!" },
-                                                    ]}
-                                            >
-                                                <Select
-                                                    placeholder="Select Implementation Ability"
-                                                    options={[
-                                                        { value: 'good', label: 'Good' },
-                                                        { value: 'average', label: 'Average' },
-                                                        { value: 'poor', label: 'Poor' },
-                                                    ]}
-                                                />
-                                            </Form.Item>
-
-
-                                        </Col>
-
-                                        <Col span={12}>
-
-
-                                            <Form.Item
-                                                label="Learning Ability"
-                                                name="learningAbility"
-                                                rules={
-                                                    [{ required: true, message: "Learning Ability is required!" },
-                                                    ]}
-                                            >
-                                                <Select
-                                                    placeholder="Select Learning Ability"
-                                                    options={[
-                                                        { value: 'good', label: 'Good' },
-                                                        { value: 'average', label: 'Average' },
-                                                        { value: 'poor', label: 'Poor' },
-                                                    ]}
-
-                                                />
-                                            </Form.Item>
-
-                                            <Form.Item
-                                                label="Discipline"
-                                                name="discipline"
-                                                rules={[
-                                                    { required: true, message: "Discipline is required!" },
-                                                ]}
-                                            >
-                                                <Select
-                                                    placeholder="Select Discipline"
-                                                    options={[
-                                                        { value: 'good', label: 'Good' },
-                                                        { value: 'average', label: 'Average' },
-                                                        { value: 'poor', label: 'Poor' },
-                                                    ]}
-                                                />
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                    <Form.Item
-                                        label={
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "800px" }}>
-                                                <span>Remark by External Guide</span>
-                                                <Button
-                                                    onClick={handleGenerateRemarks}
-                                                    loading={loading}
-                                                    style={{ borderRadius: "20px", marginLeft: "0px" }}
-                                                    size="small"
-                                                    type="primary"
-                                                >
-                                                    <span>Generate Remark with AI</span>
-                                                    <img
-                                                        style={{ height: "16px", filter: "brightness(0) invert(1)", marginLeft: "8px" }}
-                                                        src="/geminiIcon.svg"
-                                                        alt=""
-                                                    />
-                                                </Button>
-                                            </div>
-                                        }
+                                    <Form
+                                        form={form}
+                                        onFinish={handleSubmit}
+                                        layout="vertical"
                                     >
-                                        <Input name="remark1" value={remarks[0]} placeholder="1." style={{ height: "40px" }} onChange={(e) => updateRemark(0, e.target.value)} />
-                                        <Input name="remark2" value={remarks[1]} placeholder="2." style={{ marginTop: "8px", height: "40px" }} onChange={(e) => updateRemark(1, e.target.value)} />
-                                        <Input name="remark3" value={remarks[2]} placeholder="3." style={{ marginTop: "8px", height: "40px" }} onChange={(e) => updateRemark(2, e.target.value)} />
-                                        <Input name="remark4" value={remarks[3]} placeholder="4." style={{ marginTop: "8px", height: "40px" }} onChange={(e) => updateRemark(3, e.target.value)} />
-                                    </Form.Item>
+                                        <Row gutter={24}>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label="Regularity"
+                                                    name="regularity"
+                                                    rules={[{ required: true, message: "Regularity is required!" }]}
+                                                >
+                                                    <Input type="number" placeholder="100% " />
+                                                </Form.Item>
 
-                                </Form>
-                            </Card>
-                        </div>
-                    </div >
-                </div>
+                                                <Form.Item
+                                                    label="Punctuality"
+                                                    name="punctuality"
+                                                    rules={
+                                                        [{ required: true, message: "Punctuality is required!" },
+                                                        ]}
+                                                >
+                                                    <Select
+                                                        placeholder="Select Punctuality"
+                                                        options={[
+                                                            { value: 'good', label: 'Good' },
+                                                            { value: 'average', label: 'Average' },
+                                                            { value: 'poor', label: 'Poor' },
+                                                        ]}
+
+                                                    />
+                                                </Form.Item>
+
+                                                <Form.Item
+                                                    label="Implementation Ability"
+                                                    name="implementationAbility"
+                                                    rules={
+                                                        [{ required: true, message: "Implementation Ability is required!" },
+                                                        ]}
+                                                >
+                                                    <Select
+                                                        placeholder="Select Implementation Ability"
+                                                        options={[
+                                                            { value: 'good', label: 'Good' },
+                                                            { value: 'average', label: 'Average' },
+                                                            { value: 'poor', label: 'Poor' },
+                                                        ]}
+                                                    />
+                                                </Form.Item>
+
+
+                                            </Col>
+
+                                            <Col span={12}>
+
+
+                                                <Form.Item
+                                                    label="Learning Ability"
+                                                    name="learningAbility"
+                                                    rules={
+                                                        [{ required: true, message: "Learning Ability is required!" },
+                                                        ]}
+                                                >
+                                                    <Select
+                                                        placeholder="Select Learning Ability"
+                                                        options={[
+                                                            { value: 'good', label: 'Good' },
+                                                            { value: 'average', label: 'Average' },
+                                                            { value: 'poor', label: 'Poor' },
+                                                        ]}
+
+                                                    />
+                                                </Form.Item>
+
+                                                <Form.Item
+                                                    label="Discipline"
+                                                    name="discipline"
+                                                    rules={[
+                                                        { required: true, message: "Discipline is required!" },
+                                                    ]}
+                                                >
+                                                    <Select
+                                                        placeholder="Select Discipline"
+                                                        options={[
+                                                            { value: 'good', label: 'Good' },
+                                                            { value: 'average', label: 'Average' },
+                                                            { value: 'poor', label: 'Poor' },
+                                                        ]}
+                                                    />
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                        <Form.Item
+                                            label={
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "800px" }}>
+                                                    <span>Remark by External Guide</span>
+                                                    <Button
+                                                        onClick={handleGenerateRemarks}
+                                                        loading={loading}
+                                                        style={{ borderRadius: "20px", marginLeft: "0px" }}
+                                                        size="small"
+                                                        type="primary"
+                                                    >
+                                                        <span>Generate Remark with AI</span>
+                                                        <img
+                                                            style={{ height: "16px", filter: "brightness(0) invert(1)", marginLeft: "8px" }}
+                                                            src="/geminiIcon.svg"
+                                                            alt=""
+                                                        />
+                                                    </Button>
+                                                </div>
+                                            }
+                                        >
+                                            <Input name="remark1" value={remarks[0]} placeholder="1." style={{ height: "40px" }} onChange={(e) => updateRemark(0, e.target.value)} />
+                                            <Input name="remark2" value={remarks[1]} placeholder="2." style={{ marginTop: "8px", height: "40px" }} onChange={(e) => updateRemark(1, e.target.value)} />
+                                            <Input name="remark3" value={remarks[2]} placeholder="3." style={{ marginTop: "8px", height: "40px" }} onChange={(e) => updateRemark(2, e.target.value)} />
+                                            <Input name="remark4" value={remarks[3]} placeholder="4." style={{ marginTop: "8px", height: "40px" }} onChange={(e) => updateRemark(3, e.target.value)} />
+                                        </Form.Item>
+
+                                    </Form>
+                                </Card>
+                            </div>
+                        </div >
+                    </div>
+                </Row>
             }
         </>
     )

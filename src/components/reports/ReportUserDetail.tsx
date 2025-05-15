@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Steps, theme } from "antd"
+import { Button, Card, Col, DatePicker, Form, Input, message, Row, Steps } from "antd"
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import Spinner from "../../utils/Spinner";
+import "./ProgressReport.css"
 
 const ReportUserDetail = () => {
     const { RangePicker } = DatePicker;
@@ -20,7 +21,6 @@ const ReportUserDetail = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const { user } = useSelector((state: RootState) => state.auth)
     const { progressReport } = useSelector((state: RootState) => state.report)
-    const { token } = theme.useToken();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -126,89 +126,98 @@ const ReportUserDetail = () => {
         <>
             {
                 loading ? <Spinner /> :
-                    <div style={{ backgroundColor: token.colorBgLayout === "White" ? "#f0f2f5" : "#1a1c1f", marginBottom: "50px", overflow: "", height: "100vh" }}>
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", flexDirection: "column" }}>
-                            <Steps current={currentStep} style={{ width: "80%", maxWidth: "800px", marginBottom: "20px" }}>
-                                <Step title="Fill Details" />
-                                <Step title="Add Tasks" />
-                                {user?.admin &&
-                                    <Step title="Intern Evaluation" />
-                                }
-                                <Step title="Review & Submit" />
-                            </Steps>
-                            <Card
-                                title="Fill Up Your Details"
-                                extra={
-                                    <Button onClick={() => form.submit()} loading={loading} type="primary" htmlType="submit">
-                                        Next
-                                    </Button>
-                                }
-                                style={{ width: "80%", maxWidth: "900px", padding: "24px", marginBottom: "22px" }}
-                            >
-                                <Form
-                                    form={form}
-                                    onFinish={handleSubmit}
-                                    layout="vertical"
+                    <div style={{ height: "calc(100vh - 130px)", padding: "20px" }}>
+                        <Row gutter={6} style={{ height: "calc(100vh - 130px)" }}>
+                            <Col style={{}}>
+                                <div style={{}}>
+                                    <Steps
+                                        direction="vertical"
+                                        current={currentStep}
+                                        style={{ height: "calc(100vh - 160px)", background: "rgba(255, 255, 255, 0.5)", borderRadius: "30px" }}
+                                    >
+
+                                        <Step />
+                                        <Step />
+                                        {user?.admin &&
+                                            <Step />
+                                        }
+                                        <Step />
+                                    </Steps>
+                                </div>
+                            </Col>
+                            <Col >
+                                <Card
+                                    title="FILL UP YOUR DETAILS"
+                                    extra={
+                                        <Button onClick={() => form.submit()} loading={loading} type="primary" htmlType="submit">
+                                            NEXT
+                                        </Button>
+                                    }
+                                    style={{ width: "calc(100vw - 400px)", height: "calc(100vh - 160px)"}}
                                 >
-                                    <Row gutter={24}>
-                                        <Col span={12}>
-                                            <Form.Item
-                                                label="Student Name"
-                                                name="studentName"
-                                                rules={[{ required: true, message: "Name is required!" }]}
-                                            >
-                                                <Input placeholder="Enter Full Name " />
-                                            </Form.Item>
-                                            <Form.Item
-                                                label="Enrollment Number"
-                                                name="enrollmentNo"
-                                                rules={
-                                                    [{ required: true, message: "Enrollement Number is required!" },
-                                                    ]}
-                                            >
-                                                <Input placeholder="SR22BSIT000" />
-                                            </Form.Item>
-                                            <Form.Item
-                                                label="Class/Course"
-                                                name="course"
-                                                rules={[
-                                                    { required: true, message: "Please Enter your Course!" },
-                                                ]}
-                                            >
-                                                <Input placeholder="BSC IT" />
-                                            </Form.Item>
-                                        </Col>
+                                    <Form
+                                        form={form}
+                                        onFinish={handleSubmit}
+                                        layout="vertical"
+                                        style={{padding:"10px"}}
+                                    >
+                                        <Row gutter={24}>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label="STUDENT NAME"
+                                                    name="studentName"
+                                                    rules={[{ required: true, message: "Name is required!" }]}
+                                                >
+                                                    <Input placeholder="Enter Full Name " />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    label="ENROLLMENT NUMBER"
+                                                    name="enrollmentNo"
+                                                    rules={[{ required: true, message: "Enrollement Number is required!" }]}
+                                                >
+                                                    <Input placeholder="SR22BSIT000" />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    label="CLASS/COURSE"
+                                                    name="course"
+                                                    rules={[{ required: true, message: "Please Enter your Course!" }]}
+                                                >
+                                                    <Input placeholder="BSC IT" />
+                                                </Form.Item>
+                                            </Col>
 
-                                        <Col span={12}>
-
-                                            <Form.Item
-                                                label="Division"
-                                                name="division"
-                                            >
-                                                <Input placeholder="Enter your Division " />
-                                            </Form.Item>
-                                            <Form.Item
-                                                label="Project Title"
-                                                name="projectTitle"
-                                            >
-                                                <Input placeholder="Enter your Project Title " />
-                                            </Form.Item>
-                                            <Form.Item
-                                                label="Report Duration"
-                                                name="duration"
-                                                rules={[{ required: true, message: "Please Select your Report date!" }]}
-                                            >
-                                                <RangePicker placeholder={["From", "To"]} style={{ width: "100%" }} />
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </Form>
-                            </Card>
-                        </div>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label="DIVISION"
+                                                    name="division"
+                                                >
+                                                    <Input placeholder="Enter your Division " />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    label="PROJECT TITLE"
+                                                    name="projectTitle"
+                                                >
+                                                    <Input placeholder="Enter your Project Title " />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    label="REPORT DURATIION"
+                                                    name="duration"
+                                                    rules={[{ required: true, message: "Please Select your Report date!" }]}
+                                                >
+                                                    <RangePicker placeholder={["From", "To"]} style={{ width: "100%" }} />
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                </Card>
+                            </Col>
+                        </Row>
                     </div>
             }
+            <div className="report-overlay"></div>
         </>
-    )
+    );
+
 }
 
 export default ReportUserDetail

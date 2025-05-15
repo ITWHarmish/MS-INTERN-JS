@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, WechatWorkOutlined, } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, } from '@ant-design/icons';
 import { Button, Input, message, Select, Table, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AddTimelog, DeleteTimelog, UpdateTimelog } from '../services/timelogAPI';
@@ -16,7 +16,6 @@ dayjs.extend(localizedFormat);
 const Tasktable = ({ selectedDate, internId }) => {
 
     const formattedDate = selectedDate.format("YYYY-MM-DD");
-    const [showCard, setShowCard] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         startTime: '',
@@ -53,7 +52,7 @@ const Tasktable = ({ selectedDate, internId }) => {
 
     const columns: TableProps<IColumns>['columns'] = [
         {
-            title: 'Start Time',
+            title: 'START TIME',
             dataIndex: 'startTime',
             width: 100,
             key: 'startTime',
@@ -61,7 +60,7 @@ const Tasktable = ({ selectedDate, internId }) => {
                 dayjs(startTime).format('hh:mm A'),
         },
         {
-            title: 'End Time',
+            title: 'END TIME',
             dataIndex: 'endTime',
             width: 100,
             key: 'endTime',
@@ -69,24 +68,24 @@ const Tasktable = ({ selectedDate, internId }) => {
                 dayjs(endTime).format('hh:mm A'),
         },
         {
-            title: 'Hours',
+            title: 'HOURS',
             dataIndex: 'hours',
             key: 'hours',
             width: 70,
         },
         {
-            title: 'Category',
+            title: 'CATEGORY',
             dataIndex: 'category',
             key: 'category',
             width: 120,
         },
         {
-            title: 'Description',
+            title: 'DESCRIPTION',
             dataIndex: 'description',
             key: 'description',
         },
         {
-            title: 'Actions',
+            title: 'ACTIONS',
             dataIndex: 'actions',
             key: 'actions',
             width: 100,
@@ -94,6 +93,7 @@ const Tasktable = ({ selectedDate, internId }) => {
             render: (_, record) => (
                 <div style={{ display: 'flex', justifyContent: "center", gap: '20px', cursor: 'pointer', alignItems: "center" }}>
                     <Button
+                        className='check2'
                         shape="circle"
                         icon={<EditOutlined className="check" />}
                         size="small"
@@ -222,15 +222,19 @@ const Tasktable = ({ selectedDate, internId }) => {
     }, [formattedDate]);
 
     return (
-        <div style={{ minHeight: "65vh" }}>
+        <div style={{ height: "calc(100vh - 225px)", paddingTop: "10px" }}>
             <div
                 style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
+                    paddingLeft: "22px",
+                    paddingRight: "20px",
+                    width: "100%",
                 }}
             >
                 <RangePicker
+                    style={{ width: '240px' }}
                     format="HH:mm A"
                     minuteStep={15}
                     onChange={handleRangeChange}
@@ -244,26 +248,25 @@ const Tasktable = ({ selectedDate, internId }) => {
 
                 <Select
                     style={{ width: '180px' }}
-                    showSearch
                     placeholder="Select Category"
                     optionFilterProp="label"
                     options={[
-                        { value: 'learning', label: 'Learning' },
-                        { value: 'coding', label: 'Coding' },
-                        { value: 'management', label: 'Management' },
+                        { value: 'learning', label: 'LEARNING' },
+                        { value: 'coding', label: 'CODING' },
+                        { value: 'management', label: 'MANAGEMENT' },
                     ]}
                     onChange={handleChangeCategory}
                     value={formData.category || undefined}
                 />
                 <Input
                     placeholder="Description"
-                    style={{ width: '450px' }}
+                    style={{ flex: 1, minWidth: '450px' }}
                     value={formData.description}
                     onChange={handleChangeDescription}
                     required
                 />
                 <Button onClick={handleSubmit} type="primary">
-                    Submit
+                    SUBMIT
                 </Button>
             </div>
             <div style={{
@@ -277,9 +280,10 @@ const Tasktable = ({ selectedDate, internId }) => {
                     size="small"
                     loading={loading}
                     sticky={true}
+                    locale={{ emptyText: <></> }}
                     className="ScrollInProgress"
                     style={{
-                        height: "calc(65vh - 50px)",
+                        height: "calc(100vh - 280px)",
                         position: "absolute",
                         overflowY: "auto",
                         overflowX: "hidden",
@@ -290,7 +294,7 @@ const Tasktable = ({ selectedDate, internId }) => {
                 />
             </div>
             <div>
-                <div
+                {/* <div
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''
                         }`}
                 >
@@ -308,7 +312,7 @@ const Tasktable = ({ selectedDate, internId }) => {
                         style={{ minHeight: "450px" }}
                         frameBorder="0"
                     ></iframe>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -1,0 +1,50 @@
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.overlay {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 31.5vw;
+    height: calc(100vh - 0px);
+    margin-right: 20px;
+    background: #49494B; /* your overlay color */
+    mix-blend-mode: overlay;
+    z-index: 2;
+    pointer-events: none;
+  
+    -webkit-mask-image: url('/imageProfile1.png');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    /* -webkit-mask-position: calc(100% - 20px) 50px; */
+    -webkit-mask-position-x: right;
+    -webkit-mask-position-y: bottom;
+  
+    mask-image: url('/imageProfile1.png');
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    /* mask-position: calc(100% - 20px) center; */
+}
+
+
+
+.custom-card-img1 {
+    background: url('/card_4.png') no-repeat center center/cover;
+  }
+  
+  .custom-card-img2 {
+    background: url('/card_2.png') no-repeat center center/cover;
+  }
+  
+  .custom-card-img3 {
+    background: url('/card_1.png') no-repeat center center/cover;
+  }
+  
+  .custom-card-img4 {
+    background: url('/card_3.png') no-repeat center center/cover;
+  }

@@ -23,3 +23,18 @@ export const GetMonthlySummary = async (payload: IMonthlySummary) => {
         throw error;
     }
 }
+
+export const GetFullAttendanceSummary = async (payload) => {
+    const { userId } = payload;
+    try {
+        const response = await axios.get(`${API_END_POINT}/getFullAttendanceSummary`, {
+            params: userId ? { userId } : {},
+            headers: getAuthHeaders(),
+        }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error while applying Leave: ', error);
+        throw error;
+    }
+}

@@ -38,6 +38,8 @@ const QuillEditor = ({ onChange, content, toolbarOptions }) => {
             return delta;
         });
 
+        const editorElement = quillRef.current.root;
+        editorElement.style.color = 'white';
 
         return () => {
             quillRef.current.off('text-change', handleChange);

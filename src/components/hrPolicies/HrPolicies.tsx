@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, message, theme } from "antd";
+import { Button, Card, message } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { DeletePolicy, GetPolicies, UpdatePoliciesOrder } from "../../services/hrPolicyAPI";
@@ -21,6 +21,8 @@ const reorder = (list, startIndex, endIndex) => {
 
 const getItemStyle = (draggableStyle) => ({
   marginBottom: "24px",
+  background: "#3c3c3c46",
+  backdropFilter: "blur(12px)",
   ...draggableStyle
 });
 
@@ -35,7 +37,6 @@ const HrPolicies = () => {
   const [deletePolicyId, setDeletePolicyId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth)
-  const { token } = theme.useToken();
 
 
   const isAdmin = user?.admin;
@@ -115,24 +116,24 @@ const HrPolicies = () => {
 
   return (
     <>
-      {isAdmin &&
-        < div style={{ display: "flex", justifyContent: "flex-end", margin: "14px 20px" }}>
+      {isAdmin && (
+        <div style={{ display: "flex", justifyContent: "flex-end", margin: "14px 20px" }}>
           <Button onClick={showModal} type="primary">
             Add Policy
           </Button>
           <Policy visible={isModalOpen} onClose={handleCancel} isEditMode={isEditMode} policyData={selectedPolicy} />
-        </div >
-      }
-      <div style={{ padding: "16px", backgroundColor: token.colorBgLayout === "White" ? "white" : "black", marginBottom: "30px" }}>
-        <Card style={{ marginBottom: "50px", padding: "20px" }}>
-          {loading ? (
-            <Spinner />
-          ) : (
-            isAdmin ? (
+        </div>
+      )}
+      <div className="ScrollInProgress" style={{ height: "calc(100vh - 130px)" }}>
+        <div style={{ padding: "16px" }}>
+          <Card style={{ marginBottom: "20px", padding: "20px", position: "relative", height: "calc(100vh - 155px)" }}>
+            {loading ? (
+              <Spinner />
+            ) : isAdmin ? (
               <DragDropContext onDragEnd={handleDragEnd}>
                 <Droppable droppableId="policies-list">
                   {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps} >
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
                       {orderedPolicies.map((policy, index) => (
                         <Draggable key={policy._id} draggableId={policy._id.toString()} index={index}>
                           {(provided) => (
@@ -166,16 +167,16 @@ const HrPolicies = () => {
                 </Droppable>
               </DragDropContext>
             ) : (
-              <div>
+              <div className="ScrollInProgress" style={{ height: "calc(100vh - 205px)", overflowY: "auto", position: "absolute", right: "0", width: "100%", padding: "0px 20px" }}>
                 {orderedPolicies.map((policy) => (
-                  <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px" }}>
-                    <div dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
+                  <Card key={policy._id} title={policy.policyTitle} style={{ marginBottom: "24px", background: "#3c3c3c46", backdropFilter: "blur(12px)" }}>
+                    <div style={{ marginLeft: "15px" }} dangerouslySetInnerHTML={{ __html: policy.policyDescription }}></div>
                   </Card>
                 ))}
               </div>
-            )
-          )}
-        </Card>
+            )}
+          </Card>
+        </div>
       </div>
     </>
   );

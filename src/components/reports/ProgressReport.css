@@ -1,0 +1,44 @@
+.ant-steps .ant-steps-item-process .ant-steps-item-icon {
+    background-color: #49494B;
+    border-color: #49494B;
+}
+
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #49494B;
+}
+
+.ant-steps .ant-steps-item-wait .ant-steps-item-icon {
+    background-color: white;
+    border-color: transparent;
+    color: #49494B;
+}
+
+.ant-steps.ant-steps-vertical>.ant-steps-item>.ant-steps-item-container>.ant-steps-item-tail::after {
+    height: 130px;
+    margin-top: 16px;
+}
+
+.report-overlay {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 31.5vw;
+    height: calc(100vh - 0px);
+    margin-right: 20px;
+    background: #49494B;
+    mix-blend-mode: overlay;
+    z-index: 2;
+    pointer-events: none;
+
+    -webkit-mask-image: url('/REPORT.png');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    /* -webkit-mask-position: calc(100% - 20px) 50px; */
+    -webkit-mask-position-x: right;
+    -webkit-mask-position-y: bottom;
+
+    mask-image: url('/REPORT.png');
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    /* mask-position: calc(100% - 20px) center; */
+}

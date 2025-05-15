@@ -1,8 +1,8 @@
-import { Button, message, Select, theme, Tooltip } from 'antd';
+import { Button, Col, Row, theme, Tooltip, message, Select } from 'antd';
 import Leaves from './Leaves';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { DownOutlined, UpOutlined } from '@ant-design/icons'
 import "../../index.css"
 import { useCallback, useEffect, useState } from 'react'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { fetchLeaves } from '../../redux/actions/leaveActions';
 import isBetween from 'dayjs/plugin/isBetween';
 import { GetMonthlySummary } from '../../services/monthlySummaryAPI';
+import "./MonthlySummary.css"
 import { GetInternsByMentorId } from '../../services/adminAPI';
 import { GetLeaveRequests } from '../../services/leaveAPI';
 
@@ -29,6 +30,33 @@ const MonthlySummary = () => {
     const [calendarLoading, setCalendarLoading] = useState(false);
     const [officeHoliday, setOfficeHoliday] = useState(null);
     const [eventList, setEventList] = useState([]);
+    const [monthImage, setMonthImage] = useState("JAN");
+    const [visibleMonthRange, setVisibleMonthRange] = useState({
+        start: dayjs().startOf("month"),
+        end: dayjs().endOf("month")
+    });
+    const [calendarLabel, setCalendarLabel] = useState("");
+
+    const [calendarDimensions, setCalendarDimensions] = useState({
+        height: document.documentElement.clientHeight - 247,
+        width: document.documentElement.clientWidth - 600,
+    });
+
+    // Handle window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setCalendarDimensions({
+                height: document.documentElement.clientHeight - 247,
+                width: document.documentElement.clientWidth - 600,
+            });
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     const [internId, setInternId] = useState("");
     const [students, setStudents] = useState<{ _id: string; fullName: string }[]>([]);
     const [customLeaves, setCustomLeaves] = useState([]);
@@ -60,11 +88,21 @@ const MonthlySummary = () => {
 
             const selectedMonth = dayjs(date).month() + 1;
             const selectedYear = dayjs(date).year();
+            setCalendarLabel(dayjs(date).format("YYYY"));
+
             const userId = user?.admin ? internId : user?._id;
             const payload = { year: selectedYear, month: selectedMonth, userId: userId };
 
             const response = await GetLeaveRequests(payload);
             setCustomLeaves(response);
+
+            setVisibleMonthRange({
+                start: dayjs(date).startOf("month"),
+                end: dayjs(date).endOf("month"),
+            });
+
+            const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            setMonthImage(monthNames[dayjs(date).month()]);
 
             const res = await GetMonthlySummary(payload);
             setMonthlySummary(res);
@@ -138,6 +176,7 @@ const MonthlySummary = () => {
         const isWeekend = day === 0 || day === 6;
         const today = dayjs().startOf('day');
         const isCurrentDay = dayjs(date).isSame(today, 'day');
+        const isInVisibleMonth = dayjs(date).isBetween(visibleMonthRange.start.subtract(1, "day"), visibleMonthRange.end.add(1, "day"));
 
         const isHalfLeave = eventList?.some(event => (event.type === 'half leave') &&
             dayjs(date).isBetween(event.start, event.end, 'day', '[]')
@@ -154,7 +193,8 @@ const MonthlySummary = () => {
         if (isWeekend || isHoliday) {
             return {
                 style: {
-                    backgroundColor: token.colorBgLayout === "White" ? "#e6e6e6" : "#474646",
+                    backgroundColor: "#3c3c3c46",
+                    margin: "4px 4px 0px 0px",
                 },
             };
         }
@@ -162,7 +202,7 @@ const MonthlySummary = () => {
         if (isHalfLeave) {
             return {
                 style: {
-                    backgroundColor: "#FFD9004C",
+                    backgroundColor: "#515151",
                 },
             };
         }
@@ -170,7 +210,7 @@ const MonthlySummary = () => {
         else if (!isHalfLeave && !isEventDay && isCurrentDay) {
             return {
                 style: {
-                    backgroundColor: "transparent",
+                    backgroundColor: "#ffffff80",
                 },
             };
         }
@@ -178,7 +218,15 @@ const MonthlySummary = () => {
         if (isEventDay) {
             return {
                 style: {
-                    backgroundColor: '#6c6ccda8',
+                    backgroundColor: 'black',
+                },
+            };
+        }
+
+        if (isInVisibleMonth && !isWeekend && !isEventDay && !isHoliday && !isHalfLeave && !isCurrentDay) {
+            return {
+                style: {
+                    backgroundColor: "#ffffff80",
                 },
             };
         }
@@ -186,16 +234,6 @@ const MonthlySummary = () => {
         return {};
 
     }
-
-    const CalendarToolbar = ({ label, onNavigate }) => (
-        < div >
-            <div className={token.colorBgLayout === "White" ? "" : "BgCard"} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: "18px" }}>
-                <span onClick={() => onNavigate('PREV')} style={{ marginRight: "7px", cursor: "pointer" }}> <LeftOutlined /> </span>
-                {label}
-                <span onClick={() => onNavigate('NEXT')} style={{ marginLeft: "7px", cursor: "pointer" }}> <RightOutlined /> </span>
-            </div>
-        </div >
-    );
 
     const CustomEvent = ({ event }) => {
 
@@ -217,7 +255,7 @@ const MonthlySummary = () => {
             <Tooltip
                 title={tooltipText || ``}
                 placement="top"
-                overlayInnerStyle={{ backgroundColor: "#474787" }}
+                overlayInnerStyle={{ backgroundColor: "#fff", color: "black" }}
             >
                 <span style={{
                     display: "flex",
@@ -240,77 +278,170 @@ const MonthlySummary = () => {
 
     return (
         <>
+            <div
+                style={{ height: "calc(100vh - 130px)" }}>
+                <Row gutter={16}>
+                    <Col md={20}>
+                        <div
+                            style={{ display: "flex", alignItems: "center", padding: "60px 0px 0px 70px" }}>
+                            <div>
+                                <div className='containerCalendar'>
+                                    {calendarLoading && (
+                                        <div className='spinner'>
+                                            <Spinner />
+                                        </div>
+                                    )}
+                                    <Calendar
+                                        localizer={localizer}
+                                        events={eventList}
+                                        startAccessor="start"
+                                        endAccessor="end"
+                                        date={currentDate}
+                                        onNavigate={handleNavigate}
+                                        style={{
+                                            height: `${calendarDimensions.height}px`,
+                                            width: `${calendarDimensions.width}px`,
+                                            position: "relative",
+                                            zIndex: "0",
+                                        }}
+                                        components={{
+                                            event: CustomEvent,
+                                            header: ({ date }) => <div style={{ color: "#49494B" }} >
+                                                {dayjs(date).format('dddd').toUpperCase()}
+                                            </div>,
+                                            month: {
+                                                dateHeader: ({ date, label }) => {
+                                                    const isWeekend = dayjs(date).day() === 0 || dayjs(date).day() === 6;
+                                                    const isHoliday = officeHoliday?.some(holiday => dayjs(holiday.date).isSame(date, 'day'));
+                                                    const isEventDay = eventList?.some(event =>
+                                                        (event.type === 'casual leave' || event.type === 'sick leave') &&
+                                                        dayjs(date).isBetween(event.start, event.end, 'day', '[]')
+                                                    );
+                                                    const isHalfLeave = eventList?.some(event => (event.type === 'half leave') &&
+                                                        dayjs(date).isBetween(event.start, event.end, 'day', '[]')
+                                                    );
 
-            <div style={{ height: "100vh" }} className={token.colorBgLayout === "White" ? "" : "BgCard"}>
-                {user && !user.admin &&
-                    < div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
-                        <Button onClick={showModal} type="primary">
-                            Apply Leave
-                        </Button>
-                        <Leaves visible={isModalOpen} onClose={handleCancel} />
-                    </div>
-                }
-                {user && user.admin &&
-                    < div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
-                        <Select
-                            showSearch
-                            style={{ marginLeft: "15px" }}
-                            placeholder="Select Student"
-                            options={students.map((student) => ({
-                                value: student._id,
-                                label: student.fullName,
-                            }))}
-                            onChange={handleStudentChange}
-                        />
-                    </div>
-                }
-                <div style={{ width: '800px', margin: 'auto', marginTop: "20px", marginBottom: "65px" }}>
-                    <div className='containerCalendar'>
-                        {calendarLoading && (
-                            <div className='spinner'>
-                                <Spinner />
+                                                    const isWhite = isWeekend || isHoliday || isEventDay || isHalfLeave;
+
+                                                    return (
+                                                        <div style={{
+                                                            color: isWhite ? 'white' : "",
+                                                            margin: "5px 5px 0px 0px",
+                                                        }}>
+                                                            {label}
+                                                        </div>
+                                                    );
+                                                }
+                                            },
+                                        }}
+                                        views={['month']}
+                                        selectable={false}
+                                        dayPropGetter={dayProp}
+                                    />
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "8px", marginBottom: "8px" }}>
+                                    <div style={{
+                                        width: `${calendarDimensions.width}px`,
+                                        color: "white",
+                                        padding: '10px',
+                                        display: 'flex',
+                                        justifyContent: 'space-around   ',
+                                        alignItems: 'center',
+                                        backgroundColor: "#ffffff80",
+                                        height: "40px",
+                                        borderRadius: "12px",
+                                    }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                            <span style={{ color: "#49494B" }}>TOTAL WORKING DAYS: </span>
+                                            <span style={{ color: "black", marginRight: '15px' }}>
+                                                {monthlySummary?.totalWorkingDays || 0}
+                                            </span>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                            <span style={{ color: "#49494B" }}>TOTAL HOURS:</span>
+                                            <span style={{ color: "black", marginRight: '15px' }}>
+                                                {monthlySummary?.totalWorkingHours || 0}
+                                            </span>
+                                        </div>
+                                        <span>
+                                            {monthlySummary?.shortage < 0 ? (
+                                                <>
+                                                    <span style={{ color: "#49494B" }}>EXTRA HOURS:</span>
+                                                    <span style={{ color: "black" }}>
+                                                        {(Math.abs(monthlySummary.shortage)).toFixed(2)}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span style={{ color: "#49494B" }}>SHORTAGE HOURS:</span>  <span style={{ color: "black" }}>
+                                                        {(monthlySummary?.shortage || 0).toFixed(2)}
+                                                    </span>
+                                                </>
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        )}
-                        <Calendar
-                            localizer={localizer}
-                            events={eventList}
-                            className={token.colorBgLayout === "White" ? "" : "Monthcalendar"}
-                            startAccessor="start"
-                            endAccessor="end"
-                            date={currentDate}
-                            onNavigate={handleNavigate}
-                            style={{ height: 450, width: 800, position: "relative", zIndex: "0" }}
-                            components={{
-                                event: CustomEvent,
-                                toolbar: CalendarToolbar,
-                                header: (props) => <div className={token.colorBgLayout === "White" ? "" : "BgCard"}>{props.label}</div>,
-                                month: {
-                                    dateHeader: (props) => <div className={token.colorBgLayout === "White" ? "" : "dateColorWhite"}>{props.label}</div>
-                                },
-                            }}
-                            views={['month']}
-                            selectable={false}
-                            dayPropGetter={dayProp}
-                        />
-                    </div>
-                    <div style={{ marginTop: '75px', backgroundColor: "#474787", color: "white", padding: '10px', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                        <span style={{ marginRight: '15px' }}>Total Working Days: <b>{monthlySummary?.totalWorkingDays || 0}</b></span>
-                        <span style={{ marginRight: '15px' }}>Total Hours: <b>{monthlySummary?.totalWorkingHours || 0}</b></span>
-                        <span>
-                            {monthlySummary?.shortage < 0 ? (
-                                <>Extra: <b style={{ color: '#50C150' }}>{Math.abs(monthlySummary.shortage).toFixed(2)} Hours</b></>
-                            ) : (
-                                <>Shortage: <b style={{ color: '#E65A5A' }}>{(monthlySummary?.shortage || 0).toFixed(2)} Hours</b></>
-                            )}
-                        </span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-start', paddingTop: '8px', }}>
-                        <span style={{ marginRight: '15px', color: '#6C6CCD' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Leave</span></span>
-                        <span style={{ marginRight: '15px', color: '#e6e6e6' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Holiday</span></span>
-                        <span style={{ color: '#FFD9004C' }}>● <span className={token.colorBgLayout === "White" ? "BgText" : "BgCard"} style={{ color: "" }}>Halfday</span></span>
-                    </div>
-                </div>
-            </div >
+                        </div>
+                    </Col>
+                    <Col md={4}>
+                        {user && !user.admin &&
+                            <div style={{
+                                display: 'flex', justifyContent: 'end', padding: '10px', marginRight: "8px",
+                            }}>
+                                <Button onClick={showModal} type="primary" style={{ backgroundColor: "#323791" }}>
+                                    APPLY LEAVE
+                                </Button>
+                                <Leaves visible={isModalOpen} onClose={handleCancel} />
+                            </div>
+                        }
+                        {user && user.admin &&
+                            < div style={{ display: 'flex', justifyContent: 'end', padding: '10px', marginBottom: "65px" }}>
+                                <Select
+                                    showSearch
+                                    style={{ marginLeft: "15px" }}
+                                    placeholder="Select Student"
+                                    options={students.map((student) => ({
+                                        value: student._id,
+                                        label: student.fullName,
+                                    }))}
+                                    onChange={handleStudentChange}
+                                />
+                            </div>
+                        }
+                    </Col>
+                </Row>
+            </div>
+            <span className='month-up-nav' onClick={() => handleNavigate(dayjs(currentDate).add(1, 'month').toDate())}>
+                <UpOutlined className="custom-up-icon" />
+            </span>
+            <span className='month-down-nav' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'month').toDate())}>
+                <DownOutlined className="custom-up-icon" />
+            </span>
+
+            <div className='year-nav'>
+                {calendarLabel}
+            </div>
+            <span className='year-down-nav' onClick={() => handleNavigate(dayjs(currentDate).subtract(1, 'year').toDate())}>
+                <DownOutlined />
+            </span>
+
+            <span className='year-up-nav' style={{ cursor: "pointer" }} onClick={() => handleNavigate(dayjs(currentDate).add(1, 'year').toDate())}>
+                <UpOutlined />
+            </span>
+
+
+            <div
+                className="Monthly-Summary-overlay"
+                style={{
+                    position: "absolute",
+                    WebkitMaskImage: `url('/${monthImage}.png')`,
+                    maskImage: `url('/${monthImage}.png')`,
+                }}
+            >
+            </div>
+
+
 
         </>
     );

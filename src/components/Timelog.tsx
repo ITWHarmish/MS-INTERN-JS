@@ -59,31 +59,31 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
     return (
         <>
-            <Card style={{ position: "relative", height: "100%" }}
-                title={<div>
-                    <span>Timelog :</span>
-                    <span style={{ fontWeight: "normal", marginLeft: "7px" }}>{`${totalHours.toFixed(2)} hours`}</span>
-                </div>}
+            <Card style={{ position: "relative", height: "calc(100vh - 148.5px)" }}
+                title={
+                    <div>
+                        <span style={{ marginLeft: "8px" }}>TIMELOG :</span>
+                        <span style={{ fontWeight: "normal", marginLeft: "7px" }}>{`${totalHours.toFixed(2)} HOURS`}</span>
+                    </div>
+                }
                 extra={
-                    <>
-                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                            {user && user.admin &&
-                                < div>
-                                    <Select
-                                        showSearch
-                                        style={{ marginLeft: "15px" }}
-                                        placeholder="Select Student"
-                                        options={students.map((student) => ({
-                                            value: student._id,
-                                            label: student.fullName,
-                                        }))}
-                                        onChange={handleStudentChange}
-                                    />
-                                </div>
-                            }
-                            <DatePicker defaultValue={selectedDate} onChange={handleDateChange} />
-                        </div>
-                    </>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        {user && user.admin &&
+                            <div>
+                                <Select
+                                    showSearch
+                                    style={{ marginLeft: "15px" }}
+                                    placeholder="Select Student"
+                                    options={students.map((student) => ({
+                                        value: student._id,
+                                        label: student.fullName,
+                                    }))}
+                                    onChange={handleStudentChange}
+                                />
+                            </div>
+                        }
+                        <DatePicker style={{ marginRight: "8px" }} className='picker-timelog' defaultValue={selectedDate} onChange={handleDateChange} />
+                    </div>
                 }>
                 <Tasktable selectedDate={selectedDate} internId={internId} />
             </Card >

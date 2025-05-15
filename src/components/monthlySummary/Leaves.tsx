@@ -148,7 +148,7 @@ const Leaves = ({ visible, onClose }) => {
                         <div>
                             <div style={{ marginBottom: "7px" }}>
                                 <label>
-                                    <span style={{ color: 'red' }}>*</span> Date Range
+                                    <span style={{ color: 'red' }}>*</span> <span style={{ color: "white" }}>Date Range</span>
                                 </label><br />
                             </div>
                             <RangePicker
@@ -160,19 +160,19 @@ const Leaves = ({ visible, onClose }) => {
                             />
                             {error && !dateRange && error === "Date range is required" && <span style={{ color: 'red', fontSize: '12px' }}>{error}</span>}
                         </div>
-                        <div>
+                        <div style={{}}>
                             <div style={{ marginBottom: "7px" }}>
-                                <label>No. of days</label><br />
+                                <label style={{ color: "white", marginLeft: "7px" }}>No. of days</label><br />
                             </div>
                             <Input disabled type="text" style={{ width: "100%" }} value={numDays} />
                         </div>
                         <div>
-                            <div style={{ marginBottom: "7px", marginLeft: "10px" }}>
+                            <div style={{ marginBottom: "7px", marginLeft: "20px" }}>
                                 <label>
-                                    <span style={{ color: 'red' }}>*</span> Leave Type
+                                    <span style={{ color: 'red' }}>*</span> <span style={{ color: "white" }}>Leave Type</span>
                                 </label><br />
                             </div>
-                            <Select placeholder="Select Leave Type" style={{ width: "100%", marginLeft: "10px" }} value={leaveType}
+                            <Select placeholder="Select Leave Type" style={{ width: "100%", marginLeft: "20px" }} value={leaveType}
                                 onChange={handleLeaveTypeChange}>
                                 <Select.Option value="sick leave">Sick Leave</Select.Option>
                                 <Select.Option value="casual leave">Casual Leave</Select.Option>
@@ -184,8 +184,8 @@ const Leaves = ({ visible, onClose }) => {
 
                     <div style={{ display: "flex", marginBottom: "15px" }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
-                            <label>Want to send mail</label>
-                            <Switch style={{ marginLeft: "10px", width: "20px" }} checked={sendMail} onChange={setSendMail} />
+                            <label style={{ color: "white" }}>Want to send mail</label>
+                            <Switch style={{ marginLeft: "10px", width: "20px", }} checked={sendMail} onChange={setSendMail} />
                         </div>
 
                         {
@@ -198,11 +198,11 @@ const Leaves = ({ visible, onClose }) => {
                                             display: "flex",
                                             flexDirection: "column",
                                         }}>
-                                            <label style={{ marginRight: "7px", marginBottom: "7px" }}>Mail to</label>
+                                            <label style={{ marginLeft: "7px", marginBottom: "7px", color: "white" }}>Mail to</label>
                                             <Input disabled type="text" style={{
                                                 marginRight: "7px"
                                             }}
-                                                value={user?.internshipDetails?.mentor?.mentorEmail}
+                                                value={user?.internshipDetails?.mentor?.email}
                                             />
                                         </div>
                                         <div>
@@ -210,7 +210,7 @@ const Leaves = ({ visible, onClose }) => {
                                                 display: "flex",
                                                 flexDirection: "column",
                                             }}>
-                                                <label style={{ marginRight: "7px", marginBottom: "7px" }}>CC</label>
+                                                <label style={{ marginLeft: "7px", marginBottom: "7px", color: "white" }}>CC</label>
                                                 <Input disabled type="text"
                                                     value={"hr@toshalinfotech.com"}
                                                 />
@@ -227,7 +227,7 @@ const Leaves = ({ visible, onClose }) => {
                                 <>
                                     <div>
                                         <div style={{ marginBottom: "7px" }} >
-                                            <label><span style={{ color: 'red' }}>*</span> Reason
+                                            <label><span style={{ color: 'red' }}>*</span> <span style={{ color: "white" }}>Reason</span>
                                             </label><br />
                                         </div>
                                         <Input
@@ -251,7 +251,8 @@ const Leaves = ({ visible, onClose }) => {
                             <div style={{ marginBottom: "20px" }}>
                                 <div style={{ marginBottom: '7px' }}>
                                     <label>
-                                        <span style={{ color: 'red' }}>*</span> Email Preview
+                                        <span style={{ color: 'red' }}>*</span>
+                                        <span style={{ color: "white" }}> Email Preview</span>
                                     </label><br />
                                 </div>
                                 <QuillEditor
