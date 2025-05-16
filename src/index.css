@@ -27,19 +27,17 @@ body {
   z-index: 1;
 }
 
-
 .layout {
   overflow: hidden;
   height: 100vh;
   width: 100%;
-  background: url('/BURN1.png') no-repeat top center/cover;
+  background: url("/BURN1.png") no-repeat top center/cover;
   background-attachment: fixed;
 }
 
 .container-img {
-  background: url('/BURN1.png') no-repeat top center/cover;
+  background: url("/BURN1.png") no-repeat top center/cover;
   background-attachment: fixed;
-
 }
 
 .calculate-hours-card {
@@ -93,7 +91,6 @@ input:-webkit-autofill:active {
   /* Delay default autofill styles */
 }
 
-
 :where(.css-dev-only-do-not-override-82w5ug).ant-btn-sm.ant-btn-icon-only {
   width: 30px;
 }
@@ -143,23 +140,24 @@ input:-webkit-autofill:active {
   width: 100%;
 }
 
-:where(.css-dev-only-do-not-override-1bp3pgj).ant-card .ant-card-meta-detail>div:not(:last-child) {
+:where(.css-dev-only-do-not-override-1bp3pgj).ant-card
+  .ant-card-meta-detail
+  > div:not(:last-child) {
   margin-bottom: -5px;
 }
 
 :where(.css-dev-only-do-not-override-1vn0kyl).ant-divider-horizontal {
-  margin: 10px 0
+  margin: 10px 0;
 }
 
-
-.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected {
+.ant-menu-light.ant-menu-horizontal > .ant-menu-item-selected {
   justify-content: center;
   display: flex;
   align-items: center;
   height: 50px;
 }
 
-.ant-menu-light.ant-menu-horizontal>.ant-menu-item {
+.ant-menu-light.ant-menu-horizontal > .ant-menu-item {
   justify-content: center;
   display: flex;
   align-items: center;
@@ -175,7 +173,6 @@ input:-webkit-autofill:active {
   background-color: white;
   color: black;
 }
-
 
 .navbarSpanDark {
   color: white;
@@ -224,7 +221,6 @@ input:-webkit-autofill:active {
 
 .Done-card {
   border: none !important;
-
 }
 
 /* Remove default blue background */
@@ -265,7 +261,6 @@ input:-webkit-autofill:active {
   left: 85px !important;
 }
 
-
 .nav {
   color: white;
   display: flex;
@@ -296,21 +291,21 @@ input:-webkit-autofill:active {
 /* navbar menu changes */
 
 .check .ant-menu-item {
-  color: #49494B !important;
+  color: #49494b !important;
   transition: all 0.3s ease-in-out;
 }
 
 .ant-menu-item-icon svg {
-  color: #49494B !important;
-  fill: #49494B !important;
+  color: #49494b !important;
+  fill: #49494b !important;
 }
 
-.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
-  border-bottom-color: #49494B !important;
+.ant-menu-light.ant-menu-horizontal > .ant-menu-item-selected::after {
+  border-bottom-color: #49494b !important;
 }
 
-.ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
-  border-bottom-color: #49494B !important;
+.ant-menu-light.ant-menu-horizontal > .ant-menu-item:hover::after {
+  border-bottom-color: #49494b !important;
 }
 
 /* modal Changes */
@@ -332,7 +327,8 @@ input:-webkit-autofill:active {
   vertical-align: top;
   background: #3c3c3c46 !important;
   border-radius: 16px;
-  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
   transition: margin 0.3s;
   display: inline-block;
   pointer-events: auto;
@@ -347,8 +343,6 @@ input:-webkit-autofill:active {
   background-color: rgb(0 0 0 / 40%) !important;
 }
 
-
-
 /* login Chnages */
 
 /* Change background color for Ant Design solid button on active state */
@@ -357,11 +351,10 @@ input:-webkit-autofill:active {
   color: black !important;
 }
 
-
 .container {
   min-height: 100vh;
   width: 100%;
-  background: url('/BURN1.png') no-repeat top center/cover;
+  background: url("/BURN1.png") no-repeat top center/cover;
   background-attachment: fixed;
   display: flex;
   justify-content: center;
@@ -417,7 +410,6 @@ input:-webkit-autofill:active {
   color: rgba(255, 255, 255, 0.683) !important;
 }
 
-
 /* Button */
 .ant-btn,
 .ant-btn.ant-btn-primary {
@@ -432,7 +424,6 @@ input:-webkit-autofill:active {
 
 .ant-btn-variant-outlined:disabled {
   background: transparent !important;
-
 }
 
 .picker-timelog {
@@ -478,7 +469,6 @@ h2 {
   padding: 5px 10px;
 }
 
-
 .ant-select-selector,
 .ant-picker-outlined {
   background: transparent !important;
@@ -489,7 +479,7 @@ h2 {
   border-bottom-left-radius: 0 !important;
 }
 
-.ant-picker .ant-picker-input>input {
+.ant-picker .ant-picker-input > input {
   color: white !important;
 }
 
@@ -524,8 +514,6 @@ h2 {
 .ant-input {
   margin-right: 2px;
 }
-
-
 
 /* Navbar CSS */
 .check.ant-menu {
@@ -578,7 +566,7 @@ h2 {
   border: none !important;
 }
 
-.ant-table-wrapper .ant-table-thead>tr>th {
+.ant-table-wrapper .ant-table-thead > tr > th {
   background: transparent !important;
   color: white !important;
   font-weight: 400;
@@ -586,22 +574,21 @@ h2 {
   padding: 12px;
 }
 
-
-.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover {
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-placeholder:hover {
   background: transparent !important;
   cursor: default;
 }
 
-.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover td {
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-placeholder:hover td {
   background: transparent !important;
 }
 
 /* Remove only the border (white line) */
-.ant-table-placeholder>td {
+.ant-table-placeholder > td {
   border: none !important;
 }
 
-.ant-table-wrapper .ant-table-tbody>tr>td {
+.ant-table-wrapper .ant-table-tbody > tr > td {
   border-bottom: 1px solid rgba(255, 255, 255, 0.406);
   color: #fff;
   border-right: 0 !important;
@@ -631,7 +618,7 @@ h2 {
 }
 
 /* Remove top-right corner from the last column header */
-.ant-table thead>tr>th:last-child {
+.ant-table thead > tr > th:last-child {
   border-top-right-radius: 0 !important;
 }
 
@@ -641,7 +628,7 @@ th.ant-table-cell {
 }
 
 th.ant-table-cell:not(:last-child)::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 25%;
   right: 0;
@@ -649,8 +636,6 @@ th.ant-table-cell:not(:last-child)::after {
   width: 1px;
   background-color: #fff;
 }
-
-
 
 .ant-table-placeholder {
   background-color: transparent !important;
@@ -725,15 +710,25 @@ th.ant-table-cell:not(:last-child)::after {
   font-weight: normal !important;
 }
 
-.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner {
   color: white !important;
 }
 
-.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
   background: #111731 !important;
 }
 
-.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
   background: #111731 !important;
 }
 
@@ -757,7 +752,6 @@ th.ant-table-cell:not(:last-child)::after {
   border-bottom-right-radius: 0px !important;
   border-bottom-left-radius: 12px !important;
   border-top-right-radius: 12px !important;
-
 }
 
 .ant-switch.ant-switch-checked {
@@ -772,7 +766,7 @@ th.ant-table-cell:not(:last-child)::after {
   background-color: white !important;
 }
 
-.ant-steps-item-container>.ant-steps-item-tail {
+.ant-steps-item-container > .ant-steps-item-tail {
   margin-left: 16px !important;
 }
 
@@ -787,18 +781,108 @@ th.ant-table-cell:not(:last-child)::after {
 }
 
 .ant-message .ant-message-notice-wrapper .ant-message-notice-content {
-  background: #49494B !important;
+  background: #49494b !important;
   color: #fff !important;
 }
 
-.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range:not(.ant-picker-cell-disabled):before {
-  background: #49494B !important;
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-in-range:not(
+    .ant-picker-cell-disabled
+  ):before {
+  background: #49494b !important;
 }
 
-.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
-  background: #49494B !important;
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background: #49494b !important;
 }
 
-.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
-  background: #49494B !important;
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background: #49494b !important;
+}
+
+/* animation */
+
+.monthlysummary {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+.custom-card-team-intro {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.hrpolicies {
+  animation: slideInBottom 0.6s ease-out forwards;
+}
+.custom-card-team-profile {
+  animation: slideInBottom 0.6s ease-out forwards;
+}
+
+@keyframes slideInBottom {
+  from {
+    transform: translatey(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translatey(0);
+    opacity: 1;
+  }
+}
+
+.progressreport {
+  animation: slideInTop 0.6s ease-out forwards;
+}
+
+@keyframes slideInTop {
+  from {
+    transform: translatey(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translatey(0);
+    opacity: 1;
+  }
+}
+
+.internlist {
+  animation: slideIn 0.6s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scaleX(2.1);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
