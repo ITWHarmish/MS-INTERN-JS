@@ -1,29 +1,32 @@
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './components/Layout.tsx'
-import MainPage from './components/MainPage.tsx'
-import { Provider } from 'react-redux'
-import { store } from './redux/store.ts'
-import Login from './components/auth/Login.tsx'
-import Profile from './components/profile/Profile.tsx'
-import { ConfigProvider } from 'antd'
-import FillUpForm from './components/profile/FillUpForm.tsx'
-import MonthlySummary from './components/monthlySummary/MonthlySummary.tsx'
-import HrPolicies from './components/hrPolicies/HrPolicies.tsx'
-import ProgressReports from './components/reports/ProgressReports.tsx'
-import ReportUserDetail from './components/reports/ReportUserDetail.tsx'
-import ReportTable from './components/reports/ReportTable.tsx'
-import ProgressReportPDF from './components/reports/ProgressReportPDF.tsx'
-import ReportEvaluation from './components/reports/ReportEvaluation.tsx'
-import ReportSubmitted from './components/reports/ReportSubmitted.tsx'
-import InternList from './components/admin/InternList.tsx'
-import Team from './components/developingTeam/Team.tsx'
-import TermsAndConditions from './components/privacyPolicy/TermsAndConditions.tsx'
-import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy.tsx'
+import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./components/Layout.tsx";
+import MainPage from "./components/MainPage.tsx";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.ts";
+import Login from "./components/auth/Login.tsx";
+import Profile from "./components/profile/Profile.tsx";
+import { ConfigProvider } from "antd";
+import FillUpForm from "./components/profile/FillUpForm.tsx";
+import MonthlySummary from "./components/monthlySummary/MonthlySummary.tsx";
+import HrPolicies from "./components/hrPolicies/HrPolicies.tsx";
+import ProgressReports from "./components/reports/ProgressReports.tsx";
+import ReportUserDetail from "./components/reports/ReportUserDetail.tsx";
+import ReportTable from "./components/reports/ReportTable.tsx";
+import ProgressReportPDF from "./components/reports/ProgressReportPDF.tsx";
+import ReportEvaluation from "./components/reports/ReportEvaluation.tsx";
+import ReportSubmitted from "./components/reports/ReportSubmitted.tsx";
+import InternList from "./components/admin/InternList.tsx";
+import Team from "./components/developingTeam/Team.tsx";
+import TermsAndConditions from "./components/privacyPolicy/TermsAndConditions.tsx";
+import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login />
+    element: <Login />,
   },
   {
     path: "/",
@@ -31,92 +34,89 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <MainPage />
+        element: <MainPage />,
       },
       {
         path: "/profile",
-        element: <Profile />
+        element: <Profile />,
       },
       {
         path: "/profile/:id",
-        element: <Profile />
+        element: <Profile />,
       },
       {
         path: "/monthlySummary",
-        element: <MonthlySummary />
+        element: <MonthlySummary />,
       },
       {
         path: "/hrPolicy",
-        element: <HrPolicies />
+        element: <HrPolicies />,
       },
       {
         path: "/report",
-        element: <ProgressReports />
+        element: <ProgressReports />,
       },
       {
         path: "/reportuser",
-        element: <ReportUserDetail />
+        element: <ReportUserDetail />,
       },
       {
         path: "/reportuser/:reportId",
-        element: <ReportUserDetail />
+        element: <ReportUserDetail />,
       },
       {
         path: "/reporttable",
-        element: <ReportTable />
+        element: <ReportTable />,
       },
       {
         path: "/reporttable/:reportId",
-        element: <ReportTable />
+        element: <ReportTable />,
       },
       {
         path: "/reportevaluation/:reportId",
-        element: <ReportEvaluation />
+        element: <ReportEvaluation />,
       },
       {
         path: "/report/pdf/:reportId",
-        element: <ProgressReportPDF />
+        element: <ProgressReportPDF />,
       },
       {
         path: "/report/submit",
-        element: <ReportSubmitted />
+        element: <ReportSubmitted />,
       },
       {
         path: "/intern/list",
-        element: <InternList />
+        element: <InternList />,
       },
       {
         path: "/developing/team",
-        element: <Team />
+        element: <Team />,
       },
-
-    ]
+    ],
   },
   {
     path: "/fillUpForm",
-    element: <FillUpForm />
+    element: <FillUpForm />,
   },
   {
     path: "/privacy-policy",
-    element: <PrivacyPolicy />
+    element: <PrivacyPolicy />,
   },
 
   {
     path: "/terms-and-conditions",
-    element: <TermsAndConditions />
+    element: <TermsAndConditions />,
   },
+]);
 
-
-])
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   // <StrictMode>
 
   <Provider store={store}>
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#474787',
+          colorPrimary: "#474787",
           borderRadius: 16,
           fontFamily: "Rubik",
           colorPrimaryBg: "#ebf2ed",
@@ -124,9 +124,11 @@ createRoot(document.getElementById('root')!).render(
         },
       }}
     >
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </ConfigProvider>
   </Provider>
 
-  // </StrictMode> 
-)
+  // </StrictMode>
+);

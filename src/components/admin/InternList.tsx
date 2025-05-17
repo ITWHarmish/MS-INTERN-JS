@@ -1,58 +1,54 @@
-import { Table, Card, Button, message } from "antd";
+import { Table, Card, Button } from "antd";
 import type { TableProps } from "antd";
 import { IColumnsReports } from "../../types/IReport";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GetInternsByMentorId, GetSpaceId } from "../../services/adminAPI";
 import AddIntern from "./AddIntern";
+import { useQuery } from "@tanstack/react-query";
 
 const InternList = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState<{ _id: string; fullName: string }[]>(
-    []
-  );
-  const [space, setSpace] = useState<string | null>(null);
 
-  const fetchInterns = async () => {
-    if (!user || !user._id) {
-      console.warn("User or Mentor ID is missing, skipping API call");
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await GetInternsByMentorId(user._id);
-      setStudents(res.data || []);
-    } catch (error) {
-      console.error("Error Intern List:", error);
-      message.error("Failed to fetch Intern List.");
-    } finally {
-      setLoading(false);
-    }
+  const fetchInterns = async (mentorId: string) => {
+    const res = await GetInternsByMentorId(mentorId);
+    return res.data || [];
   };
 
-  useEffect(() => {
-    fetchInterns();
-    fetchSpaceId();
-  }, [user]);
-
   const fetchSpaceId = async () => {
-    if (user && user.admin) {
-      setLoading(true);
-      try {
-        const res = await GetSpaceId();
-        const spaces = res.data?.filter((item) => item.name);
-        setSpace(spaces);
-      } catch (error) {
-        console.error("Error fetching space ID:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+    const res = await GetSpaceId();
+    return res.data?.filter((item) => item.name);
+  };
+
+  const { data: space = [], isLoading: spaceLoading } = useQuery({
+    queryKey: ["space"],
+    queryFn: fetchSpaceId,
+    enabled: !!user?.admin,
+  });
+  const {
+    data: students = [],
+    isLoading: internsLoading,
+    refetch: refetchInterns,
+  } = useQuery({
+    queryKey: ["interns", user?._id],
+    queryFn: () => fetchInterns(user?._id),
+    enabled: !!user?._id, // prevents query if user._id is not available
+  });
+
+  const handleFileClick = (id: string) => {
+    navigate(`/profile/${id}`);
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   const columns: TableProps<IColumnsReports>["columns"] = [
@@ -77,7 +73,7 @@ const InternList = () => {
             textDecoration: "underline",
           }}
         >
-          {`${fullName}`}
+          {fullName}
         </a>
       ),
     },
@@ -88,18 +84,6 @@ const InternList = () => {
       align: "center",
     },
   ];
-
-  const handleFileClick = (id: string) => {
-    navigate(`/profile/${id}`);
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <>
@@ -121,7 +105,7 @@ const InternList = () => {
                 space={space}
                 visible={isModalOpen}
                 onClose={handleCancel}
-                fetchInterns={fetchInterns}
+                fetchInterns={refetchInterns}
               />
             </>
           }
@@ -133,7 +117,7 @@ const InternList = () => {
               pagination={false}
               bordered
               size="small"
-              loading={loading}
+              loading={internsLoading || spaceLoading}
               sticky={true}
               className="ScrollInProgress"
               style={{
