@@ -21,6 +21,7 @@ import Team from "./components/developingTeam/Team.tsx";
 import TermsAndConditions from "./components/privacyPolicy/TermsAndConditions.tsx";
 import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -126,6 +127,7 @@ createRoot(document.getElementById("root")!).render(
     >
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={true} />
       </QueryClientProvider>
     </ConfigProvider>
   </Provider>

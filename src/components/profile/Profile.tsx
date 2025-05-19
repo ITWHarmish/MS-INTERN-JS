@@ -6,27 +6,49 @@ import { useEffect, useState } from "react";
 import { GetCurrentUser } from "../../services/authAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Profile.css";
-import { AccountBookOutlined, BankOutlined, BarsOutlined, CalendarOutlined, CheckSquareOutlined, CodeOutlined, FieldTimeOutlined, FileTextOutlined, GithubOutlined, LinkedinOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  AccountBookOutlined,
+  BankOutlined,
+  BarsOutlined,
+  CalendarOutlined,
+  CheckSquareOutlined,
+  CodeOutlined,
+  FieldTimeOutlined,
+  FileTextOutlined,
+  GithubOutlined,
+  LinkedinOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { GetFullAttendanceSummary } from "../../services/monthlySummaryAPI";
 import { CalculateCompletionRate } from "../../services/todoAPI";
 
 const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const { telegramUser } = useSelector((state: RootState) => state.telegramAuth);
+  const { telegramUser } = useSelector(
+    (state: RootState) => state.telegramAuth
+  );
   const { Text } = Typography;
   const [activeTab, setActiveTab] = useState("internship");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   console.log("loading:", loading); // Log unused variable
   const [selectedUser, setSelectedUser] = useState(user);
-  const [attendanceSummary, setAttendanceSummary] = useState<{ totalLeaves?: number; halfLeaves?: number; attendanceRate?: number } | null>(null)
-  const [completionRate, setCompletionRate] = useState<{ completionRate: number } | null>(null)
+  const [attendanceSummary, setAttendanceSummary] = useState<{
+    totalLeaves?: number;
+    halfLeaves?: number;
+    attendanceRate?: number;
+  } | null>(null);
+  const [completionRate, setCompletionRate] = useState<{
+    completionRate: number;
+  } | null>(null);
   const { id } = useParams();
 
   const getInitials = (name?: string) => {
     if (!name) return "";
 
-    const words = name.trim().split(" ")
+    const words = name.trim().split(" ");
 
     if (words.length === 0) return "";
     if (words.length === 1) return words[0][0]?.toUpperCase() || "";
@@ -39,22 +61,21 @@ const Profile = () => {
   const fetchAttedanceSummary = async () => {
     const res = await GetFullAttendanceSummary({ userId: id });
     setAttendanceSummary(res);
-  }
+  };
 
   const fetchCompletionRate = async () => {
     const res = await CalculateCompletionRate(id);
     setCompletionRate(res);
-  }
+  };
 
   useEffect(() => {
     fetchAttedanceSummary();
     fetchCompletionRate();
-  }, [id])
-
+  }, [id]);
 
   useEffect(() => {
-    setSelectedUser(user)
-  }, [user])
+    setSelectedUser(user);
+  }, [user]);
 
   useEffect(() => {
     if (id) {
@@ -72,10 +93,10 @@ const Profile = () => {
             }
           }
         }
-      }
+      };
       fetchUser();
     }
-  }, [user, id])
+  }, [user, id]);
 
   useEffect(() => {
     if (user) {
@@ -88,13 +109,19 @@ const Profile = () => {
       }
     }
     setLoading(false);
-  }, [user, navigate])
+  }, [user, navigate]);
 
   return (
     <>
       <div className="image-container">
         <div>
-          <Row className="" style={{ height: "calc(100vh - 125px )", padding: "10px 18px 10px 18px", }}>
+          <Row
+            className=""
+            style={{
+              height: "calc(100vh - 125px )",
+              padding: "10px 18px 10px 18px",
+            }}
+          >
             <Col md={6}>
               <div>
                 <Card
@@ -103,7 +130,7 @@ const Profile = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    marginRight: "5px"
+                    marginRight: "5px",
                   }}
                 >
                   <div
@@ -117,9 +144,12 @@ const Profile = () => {
                       src={telegramUser?.google?.profile?.picture || undefined}
                       shape="circle"
                       size={100}
-                      icon={!telegramUser?.google?.profile?.picture ? initials : undefined}
-                      style={{
-                      }}
+                      icon={
+                        !telegramUser?.google?.profile?.picture
+                          ? initials
+                          : undefined
+                      }
+                      style={{}}
                     />
                     <h3 style={{ fontWeight: "bold", marginBottom: "1rem" }}>
                       {(selectedUser?.fullName ?? "").toUpperCase()}
@@ -136,13 +166,26 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <MailOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <MailOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "white" }}
+                          >
                             E-MAIL
                           </Text>
                           <br />
-                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                          <Text
+                            strong
+                            style={{ color: "#fff", fontSize: "14px" }}
+                          >
                             {selectedUser?.email}
                           </Text>
                         </div>
@@ -156,13 +199,26 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <PhoneOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <PhoneOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "white" }}
+                          >
                             PHONE NUMBER:
                           </Text>
                           <br />
-                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                          <Text
+                            strong
+                            style={{ color: "#fff", fontSize: "14px" }}
+                          >
                             {selectedUser?.internsDetails?.phoneNumber}
                           </Text>
                         </div>
@@ -176,22 +232,52 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <BankOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <BankOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }} >
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "white" }}
+                          >
                             COLLEGGE NAME:
                           </Text>
                           <br />
-                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                          <Text
+                            strong
+                            style={{ color: "#fff", fontSize: "14px" }}
+                          >
                             {selectedUser?.internsDetails?.collegeName}
                           </Text>
                         </div>
                       </div>
                     </div>
 
-                    <div style={{ marginTop: "1.5rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
-                      <a href={selectedUser?.internsDetails?.linkedinURL} target="_blank"><LinkedinOutlined style={{ fontSize: "30px" }} /></a>
-                      <a href={selectedUser?.internsDetails?.githubURL} target="_blank"><GithubOutlined style={{ fontSize: "30px" }} /></a>
+                    <div
+                      style={{
+                        marginTop: "1.5rem",
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "1rem",
+                      }}
+                    >
+                      <a
+                        href={selectedUser?.internsDetails?.linkedinURL}
+                        target="_blank"
+                      >
+                        <LinkedinOutlined style={{ fontSize: "30px" }} />
+                      </a>
+                      <a
+                        href={selectedUser?.internsDetails?.githubURL}
+                        target="_blank"
+                      >
+                        <GithubOutlined style={{ fontSize: "30px" }} />
+                      </a>
                     </div>
                   </div>
                 </Card>
@@ -205,7 +291,9 @@ const Profile = () => {
                   padding: "1rem",
                 }}
               >
-                <div style={{ display: "flex", gap: "2rem", paddingBottom: "4px" }}>
+                <div
+                  style={{ display: "flex", gap: "2rem", paddingBottom: "4px" }}
+                >
                   <div
                     onClick={() => setActiveTab("internship")}
                     style={{
@@ -216,7 +304,14 @@ const Profile = () => {
                       color: "white",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", paddingBottom: "4px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        paddingBottom: "4px",
+                      }}
+                    >
                       <FileTextOutlined style={{ fontSize: "16px" }} />
                       <span>INTERNSHIP DETAILS</span>
                     </div>
@@ -242,7 +337,14 @@ const Profile = () => {
                       color: "white",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", paddingBottom: "4px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        paddingBottom: "4px",
+                      }}
+                    >
                       <BarsOutlined style={{ fontSize: "16px" }} />
                       <span>USER ANALYTICS</span>
                     </div>
@@ -271,14 +373,29 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <CalendarOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <CalendarOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "white" }}
+                          >
                             JOINING DATE
                           </Text>
                           <br />
-                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {dayjs(selectedUser?.internsDetails?.joiningDate).format("DD MMM YYYY")}
+                          <Text
+                            strong
+                            style={{ color: "#fff", fontSize: "14px" }}
+                          >
+                            {dayjs(
+                              selectedUser?.internsDetails?.joiningDate
+                            ).format("DD MMM YYYY")}
                           </Text>
                         </div>
                       </div>
@@ -291,13 +408,26 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <FieldTimeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <FieldTimeOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }}>
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "white" }}
+                          >
                             DURATION
                           </Text>
                           <br />
-                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
+                          <Text
+                            strong
+                            style={{ color: "#fff", fontSize: "14px" }}
+                          >
                             {selectedUser?.internsDetails?.duration} MONTHS
                           </Text>
                         </div>
@@ -311,34 +441,91 @@ const Profile = () => {
                           maxWidth: "320px",
                         }}
                       >
-                        <CodeOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <CodeOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "white" }} >
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "white" }}
+                          >
                             STREAM
                           </Text>
                           <br />
-                          <Text strong style={{ color: "#fff", fontSize: "14px" }}>
-                            {(selectedUser?.internsDetails?.stream ?? "").toUpperCase()}
+                          <Text
+                            strong
+                            style={{ color: "#fff", fontSize: "14px" }}
+                          >
+                            {(
+                              selectedUser?.internsDetails?.stream ?? ""
+                            ).toUpperCase()}
                           </Text>
                         </div>
                       </div>
                     </div>
                     <div style={{ marginTop: "2rem" }}>
-                      <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <UserOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#fff" }}>HR</Text><br />
-                          <Text strong style={{ color: "white" }}>RIDDHI JARIWALA</Text><br />
-                          <Text style={{ color: "white" }}>hr@toshalinfotech.com</Text>
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "#fff" }}
+                          >
+                            HR
+                          </Text>
+                          <br />
+                          <Text strong style={{ color: "white" }}>
+                            RIDDHI JARIWALA
+                          </Text>
+                          <br />
+                          <Text style={{ color: "white" }}>
+                            hr@toshalinfotech.com
+                          </Text>
                         </div>
                       </div>
 
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <UserOutlined style={{ fontSize: "24px", marginRight: "12px", borderRight: "1px solid white", paddingRight: "10px" }} />
+                        <UserOutlined
+                          style={{
+                            fontSize: "24px",
+                            marginRight: "12px",
+                            borderRight: "1px solid white",
+                            paddingRight: "10px",
+                          }}
+                        />
                         <div>
-                          <Text type="secondary" style={{ fontSize: "12px", color: "#fff" }}>MENTOR</Text><br />
-                          <Text strong style={{ color: "white" }}>{selectedUser?.internshipDetails?.mentor?.fullName}</Text><br />
-                          <Text style={{ color: "white" }}>{selectedUser?.internshipDetails?.mentor?.email}</Text>
+                          <Text
+                            type="secondary"
+                            style={{ fontSize: "12px", color: "#fff" }}
+                          >
+                            MENTOR
+                          </Text>
+                          <br />
+                          <Text strong style={{ color: "white" }}>
+                            {selectedUser?.internshipDetails?.mentor?.fullName}
+                          </Text>
+                          <br />
+                          <Text style={{ color: "white" }}>
+                            {selectedUser?.internshipDetails?.mentor?.email}
+                          </Text>
                         </div>
                       </div>
                     </div>
@@ -358,9 +545,42 @@ const Profile = () => {
                             borderColor: "transparent",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{attendanceSummary?.halfLeaves}</Text>
-                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0" }}><span style={{ fontWeight: "100px", fontSize: "12px" }}>HALF DAY</span> <span style={{ fontSize: "25px", marginLeft: "7px", }}><AccountBookOutlined /></span></Text>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Text
+                              style={{
+                                color: "#fff",
+                                position: "absolute",
+                                left: "7px",
+                                bottom: "0px",
+                                fontSize: "25px",
+                              }}
+                            >
+                              {attendanceSummary?.halfLeaves}
+                            </Text>
+                            <Text
+                              style={{
+                                color: "#fff",
+                                position: "absolute",
+                                right: "7px",
+                                bottom: "0",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  fontWeight: "100px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                HALF DAY
+                              </span>{" "}
+                              <span
+                                style={{ fontSize: "25px", marginLeft: "7px" }}
+                              >
+                                <AccountBookOutlined />
+                              </span>
+                            </Text>
                           </div>
                         </Card>
                       </Col>
@@ -371,12 +591,48 @@ const Profile = () => {
                             height: "100px",
                             position: "relative",
                             borderRadius: "12px",
-                            borderColor: "transparent"
+                            borderColor: "transparent",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{attendanceSummary ? attendanceSummary.totalLeaves : "N/A"}</Text>
-                            <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "0px" }}> <span style={{ fontWeight: "100px", fontSize: "12px" }}>LEAVE</span> <span style={{ fontSize: "25px", marginLeft: "7px" }}><AccountBookOutlined /></span></Text>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Text
+                              style={{
+                                color: "#fff",
+                                position: "absolute",
+                                left: "7px",
+                                bottom: "0px",
+                                fontSize: "25px",
+                              }}
+                            >
+                              {attendanceSummary
+                                ? attendanceSummary.totalLeaves
+                                : "N/A"}
+                            </Text>
+                            <Text
+                              style={{
+                                color: "#fff",
+                                position: "absolute",
+                                right: "7px",
+                                bottom: "0px",
+                              }}
+                            >
+                              {" "}
+                              <span
+                                style={{
+                                  fontWeight: "100px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                LEAVE
+                              </span>{" "}
+                              <span
+                                style={{ fontSize: "25px", marginLeft: "7px" }}
+                              >
+                                <AccountBookOutlined />
+                              </span>
+                            </Text>
                           </div>
                         </Card>
                       </Col>
@@ -389,15 +645,55 @@ const Profile = () => {
                             height: "100px",
                             position: "relative",
                             borderRadius: "12px",
-                            borderColor: "transparent"
+                            borderColor: "transparent",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{completionRate ? `${Math.round(completionRate.completionRate)}%` : "N/A"}
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Text
+                              style={{
+                                color: "#fff",
+                                position: "absolute",
+                                left: "7px",
+                                bottom: "0px",
+                                fontSize: "25px",
+                              }}
+                            >
+                              {completionRate
+                                ? `${Math.round(
+                                    completionRate.completionRate
+                                  )}%`
+                                : "N/A"}
                             </Text>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
-                              <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontSize: "12px" }}> <span style={{ fontWeight: "100px" }}>TASK COMPLETION</span>
-                                <span style={{}}><CheckSquareOutlined style={{ fontSize: "25px", marginLeft: "7px" }} /></span>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#fff",
+                                  position: "absolute",
+                                  right: "7px",
+                                  bottom: "7px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {" "}
+                                <span style={{ fontWeight: "100px" }}>
+                                  TASK COMPLETION
+                                </span>
+                                <span style={{}}>
+                                  <CheckSquareOutlined
+                                    style={{
+                                      fontSize: "25px",
+                                      marginLeft: "7px",
+                                    }}
+                                  />
+                                </span>
                               </Text>
                             </div>
                           </div>
@@ -410,13 +706,50 @@ const Profile = () => {
                             height: "100px",
                             position: "relative",
                             borderRadius: "12px",
-                            borderColor: "transparent"
+                            borderColor: "transparent",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "center", }}>
-                            <Text style={{ color: "#fff", position: "absolute", left: "7px", bottom: "0px", fontSize: "25px" }}>{attendanceSummary && `${Math.round(attendanceSummary?.attendanceRate)}%`}</Text>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
-                              <Text style={{ color: "#fff", position: "absolute", right: "7px", bottom: "7px", fontWeight: "100px", fontSize: "12px" }}>ATTENDANCE <span style={{ marginLeft: "7px" }}><CheckSquareOutlined style={{ fontSize: "25px" }} /></span></Text>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Text
+                              style={{
+                                color: "#fff",
+                                position: "absolute",
+                                left: "7px",
+                                bottom: "0px",
+                                fontSize: "25px",
+                              }}
+                            >
+                              {attendanceSummary &&
+                                `${Math.round(
+                                  attendanceSummary?.attendanceRate
+                                )}%`}
+                            </Text>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#fff",
+                                  position: "absolute",
+                                  right: "7px",
+                                  bottom: "7px",
+                                  fontWeight: "100px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                ATTENDANCE{" "}
+                                <span style={{ marginLeft: "7px" }}>
+                                  <CheckSquareOutlined
+                                    style={{ fontSize: "25px" }}
+                                  />
+                                </span>
+                              </Text>
                             </div>
                           </div>
                         </Card>
@@ -424,18 +757,12 @@ const Profile = () => {
                     </Row>
                   </div>
                 )}
-
               </Card>
-
             </Col>
           </Row>
         </div>
-
-
       </div>
       <div className="overlay"></div>
-
-
     </>
   );
 };

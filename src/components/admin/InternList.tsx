@@ -1,4 +1,4 @@
-import { Table, Card, Button } from "antd";
+import { Table, Card, Button, Switch } from "antd";
 import type { TableProps } from "antd";
 import { IColumnsReports } from "../../types/IReport";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 const InternList = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchInterns = async (mentorId: string) => {
@@ -28,6 +29,7 @@ const InternList = () => {
     queryKey: ["space"],
     queryFn: fetchSpaceId,
     enabled: !!user?.admin,
+    staleTime: Infinity,
   });
   const {
     data: students = [],
@@ -36,7 +38,8 @@ const InternList = () => {
   } = useQuery({
     queryKey: ["interns", user?._id],
     queryFn: () => fetchInterns(user?._id),
-    enabled: !!user?._id, // prevents query if user._id is not available
+    enabled: !!user?._id,
+    staleTime: Infinity,
   });
 
   const handleFileClick = (id: string) => {
@@ -82,6 +85,13 @@ const InternList = () => {
       dataIndex: "email",
       key: "email",
       align: "center",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      align: "center",
+      render: (_, record: { _id: string }) => <Switch />,
     },
   ];
 
