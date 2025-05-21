@@ -15,42 +15,80 @@ import Spinner from "../../utils/Spinner";
 import { UserRegister } from "../../services/authAPI";
 import { RootState } from "../../redux/store";
 import { IProfile } from "../../types/ILogin";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AddIntern = ({ space, visible, onClose, fetchInterns }) => {
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
   const [isAdmin, setIsAdmin] = useState(false);
+  const queryClient = useQueryClient();
 
-  const handleSubmit = async (values) => {
-    let payload: IProfile = {
-      fullName: values.fullName,
-      email: values.email,
-      password: values.password,
-    };
-
-    if (isAdmin) {
-      payload.admin = true;
-    } else {
-      payload = {
-        ...payload,
-        spreadId: values.spreadId,
-        spaceId: values.spaceId,
-        mentorId: user._id,
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: any) => {
+      let payload: IProfile = {
+        fullName: values.fullName,
+        email: values.email,
+        password: values.password,
       };
-    }
-    try {
-      setLoading(true);
-      await UserRegister(payload);
-      fetchInterns();
+
+      if (isAdmin) {
+        payload.admin = true;
+      } else {
+        payload = {
+          ...payload,
+          spreadId: values.spreadId,
+          spaceId: values.spaceId,
+          mentorId: user._id,
+        };
+      }
+
+      return await UserRegister(payload);
+      return console.log(UserRegister(payload));
+    },
+    onSuccess: () => {
       message.success("Intern Added Successfully!");
-    } catch (error) {
+
+      queryClient.invalidateQueries({ queryKey: ["interns"] });
+      console.log(fetchInterns());
+      fetchInterns();
+      onClose();
+    },
+    onError: (error: any) => {
       console.error("Error While Adding Intern: ", error);
       message.error("Intern failed to add!");
-    } finally {
-      setLoading(false);
-      onClose();
-    }
-  };
+    },
+  });
+
+  // const handleSubmit = async (values) => {
+  //   let payload: IProfile = {
+  //     fullName: values.fullName,
+  //     email: values.email,
+  //     password: values.password,
+  //   };
+
+  //   if (isAdmin) {
+  //     payload.admin = true;
+  //   } else {
+  //     payload = {
+  //       ...payload,
+  //       spreadId: values.spreadId,
+  //       spaceId: values.spaceId,
+  //       mentorId: user._id,
+  //     };
+  //   }
+  //   try {
+  //     setLoading(true);
+  //     await UserRegister(payload);
+  //     fetchInterns();
+  //     message.success("Intern Added Successfully!");
+  //   } catch (error) {
+  //     console.error("Error While Adding Intern: ", error);
+  //     message.error("Intern failed to add!");
+  //   } finally {
+  //     setLoading(false);
+  //     onClose();
+  //   }
+  // };
 
   return (
     <Modal
@@ -61,11 +99,11 @@ const AddIntern = ({ space, visible, onClose, fetchInterns }) => {
       centered
       width={1000}
     >
-      {loading ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <div style={{ padding: "20px" }}>
-          <Form onFinish={handleSubmit} layout="vertical">
+          <Form onFinish={mutate} layout="vertical">
             <Row gutter={24}>
               <Col span={12}>
                 <Form.Item

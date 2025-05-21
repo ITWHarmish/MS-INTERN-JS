@@ -17,6 +17,7 @@ const InternList = () => {
 
   const fetchInterns = async (mentorId: string) => {
     const res = await GetInternsByMentorId(mentorId);
+    console.log(res.data);
     return res.data || [];
   };
 
