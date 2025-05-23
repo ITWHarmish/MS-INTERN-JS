@@ -5,43 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { GetInternsByMentorId, GetSpaceId } from "../../services/adminAPI";
 import AddIntern from "./AddIntern";
-import { useQuery } from "@tanstack/react-query";
+import { getInternsHook, spaceListHook } from "../../hooks/internlistHook";
 
 const InternList = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchInterns = async (mentorId: string) => {
-    const res = await GetInternsByMentorId(mentorId);
-    console.log(res.data);
-    return res.data || [];
-  };
+  const { data: space = [], isLoading: spaceLoading } = spaceListHook(user);
 
-  const fetchSpaceId = async () => {
-    const res = await GetSpaceId();
-    return res.data?.filter((item) => item.name);
-  };
-
-  const { data: space = [], isLoading: spaceLoading } = useQuery({
-    queryKey: ["space"],
-    queryFn: fetchSpaceId,
-    enabled: !!user?.admin,
-    staleTime: Infinity,
-  });
-  const {
-    data: students = [],
-    isLoading: internsLoading,
-    refetch: refetchInterns,
-  } = useQuery({
-    queryKey: ["interns", user?._id],
-    queryFn: () => fetchInterns(user?._id),
-    enabled: !!user?._id,
-    staleTime: Infinity,
-  });
+  const { data: students = [], isLoading: internsLoading } =
+    getInternsHook(user);
 
   const handleFileClick = (id: string) => {
     navigate(`/profile/${id}`);
@@ -116,7 +91,6 @@ const InternList = () => {
                 space={space}
                 visible={isModalOpen}
                 onClose={handleCancel}
-                fetchInterns={refetchInterns}
               />
             </>
           }

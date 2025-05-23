@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
-import { Button, Card, message } from "antd";
+import { Button, Card } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import {
-  DeletePolicy,
-  GetPolicies,
-  UpdatePoliciesOrder,
-} from "../../services/hrPolicyAPI";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-// import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
 import Policy from "./Policy";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IPolicy } from "../../types/IPolicy";
 import ModalCard from "../../utils/ModalCard";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import { updatePoliciesOrder } from "../../../../MS-INTERN-API/src/controllers/hrPolicies";
+
+import {
+  deletePilicyHook,
+  editHook,
+  policiesHook,
+  updatePoliciesOrderHook,
+} from "../../hooks/hrPoliciesHook";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -32,63 +31,24 @@ const getItemStyle = (draggableStyle) => ({
 });
 
 const HrPolicies = () => {
-  // const { policies } = useSelector((state: RootState) => state.policy);
-  // const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [orderedPolicies, setOrderedPolicies] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePolicyId, setDeletePolicyId] = useState<string | null>(null);
-  // const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.admin;
-  const QueryClient = useQueryClient();
 
-  const {
-    data: policies = [],
-    isLoading,
-    refetch: refetchPolicies,
-  } = useQuery({
-    queryKey: ["policies"],
-    queryFn: GetPolicies,
-    staleTime: Infinity,
-  });
-
-  // useEffect(() => {
-  //   const fetchPolicyData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       await GetPolicies();
-  //       dispatch(fetchPolicies());
-  //     } catch {
-  //       console.error("Failed to fetch policies");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchPolicyData();
-  // }, [dispatch]);
+  const { data: policies = [], isLoading } = policiesHook();
 
   useEffect(() => {
     setOrderedPolicies([...policies]);
   }, [policies]);
 
-  const deleteMutation = useMutation({
-    mutationFn: DeletePolicy,
-    onSuccess: () => {
-      message.success("Policy Deleted Successfully");
-      QueryClient.invalidateQueries({ queryKey: ["policies"] });
-    },
-  });
+  const deleteMutation = deletePilicyHook();
 
-  const UpdateOrderMutation = useMutation({
-    mutationFn: UpdatePoliciesOrder,
-    onSuccess: () => {
-      message.success("polices oder Update successfully");
-      QueryClient.invalidateQueries({ queryKey: ["policies"] });
-    },
-  });
+  const UpdateOrderMutation = updatePoliciesOrderHook();
 
   const handleDelete = (id) => {
     setDeletePolicyId(id);
@@ -108,23 +68,7 @@ const HrPolicies = () => {
     setIsModalOpen(true);
   };
 
-  // const handleEdit = useMutation({
-  //   mutationFn: async (policy) => {
-  //     setIsEditMode(true);
-  //     setSelectedPolicy(policy);
-  //     setIsModalOpen(true);
-  //   },
-  //   onSuccess: () => {
-  //     message.success("Policy Updated Successfully");
-  //     QueryClient.invalidateQueries({ queryKey: ["policies"] });
-  //   },
-  // });
-
-  const handleEdit = (policy) => {
-    setIsEditMode(true);
-    setSelectedPolicy(policy);
-    setIsModalOpen(true);
-  };
+  const handleEdit = editHook(setIsEditMode, setSelectedPolicy, setIsModalOpen);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -166,7 +110,6 @@ const HrPolicies = () => {
             onClose={handleCancel}
             isEditMode={isEditMode}
             policyData={selectedPolicy}
-            refetchPolicies={refetchPolicies}
           />
         </div>
       )}
@@ -220,7 +163,7 @@ const HrPolicies = () => {
                                     shape="circle"
                                     icon={<EditOutlined />}
                                     size="small"
-                                    onClick={() => handleEdit(policy)}
+                                    onClick={() => handleEdit.mutate(policy)}
                                   />
                                   <Button
                                     shape="circle"

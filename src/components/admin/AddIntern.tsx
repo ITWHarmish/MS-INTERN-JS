@@ -17,7 +17,7 @@ import { RootState } from "../../redux/store";
 import { IProfile } from "../../types/ILogin";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const AddIntern = ({ space, visible, onClose, fetchInterns }) => {
+const AddIntern = ({ space, visible, onClose }) => {
   // const [loading, setLoading] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -43,14 +43,10 @@ const AddIntern = ({ space, visible, onClose, fetchInterns }) => {
       }
 
       return await UserRegister(payload);
-      return console.log(UserRegister(payload));
     },
     onSuccess: () => {
       message.success("Intern Added Successfully!");
-
       queryClient.invalidateQueries({ queryKey: ["interns"] });
-      console.log(fetchInterns());
-      fetchInterns();
       onClose();
     },
     onError: (error: any) => {
@@ -58,37 +54,6 @@ const AddIntern = ({ space, visible, onClose, fetchInterns }) => {
       message.error("Intern failed to add!");
     },
   });
-
-  // const handleSubmit = async (values) => {
-  //   let payload: IProfile = {
-  //     fullName: values.fullName,
-  //     email: values.email,
-  //     password: values.password,
-  //   };
-
-  //   if (isAdmin) {
-  //     payload.admin = true;
-  //   } else {
-  //     payload = {
-  //       ...payload,
-  //       spreadId: values.spreadId,
-  //       spaceId: values.spaceId,
-  //       mentorId: user._id,
-  //     };
-  //   }
-  //   try {
-  //     setLoading(true);
-  //     await UserRegister(payload);
-  //     fetchInterns();
-  //     message.success("Intern Added Successfully!");
-  //   } catch (error) {
-  //     console.error("Error While Adding Intern: ", error);
-  //     message.error("Intern failed to add!");
-  //   } finally {
-  //     setLoading(false);
-  //     onClose();
-  //   }
-  // };
 
   return (
     <Modal

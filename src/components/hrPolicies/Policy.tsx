@@ -6,6 +6,7 @@ import { CreatePolicy, UpdatePolicy } from "../../services/hrPolicyAPI";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const toolBarOptions = [
   [{ header: [1, 2, false] }],
@@ -20,13 +21,7 @@ const toolBarOptions = [
   ["clean"],
 ];
 
-const Policy = ({
-  visible,
-  onClose,
-  isEditMode,
-  policyData,
-  refetchPolicies,
-}) => {
+const Policy = ({ visible, onClose, isEditMode, policyData }) => {
   const [loading, setLoading] = useState(false);
   const [editedText, setEditedText] = useState("");
   const [policyTitle, setPolicyTitle] = useState("");
@@ -42,45 +37,48 @@ const Policy = ({
     }
   }, [isEditMode, policyData]);
 
-  const handleSubmit = async () => {
-    if (!policyTitle || !editedText) {
-      message.error("Policy Title and Description are required!");
-      return;
-    }
-    setLoading(true);
-    try {
-      if (isEditMode && policyData) {
-        const updatedValues = {
-          policyTitle,
-          policyDescription: editedText,
-        };
-        await UpdatePolicy(policyData._id, updatedValues);
-        message.success("Policy Updated Successfully");
-      } else {
-        const values = {
-          policyTitle: policyTitle,
-          policyDescription: editedText,
-        };
-        await CreatePolicy(values);
-        message.success("Policy Added Successfully");
-      }
+  const QueryClient = useQueryClient();
 
-      dispatch(fetchPolicies());
-      if (message.success) {
-        setPolicyTitle("");
-        setEditedText("");
-        onClose();
+  const handleSubmit = useMutation({
+    mutationFn: async () => {
+      if (!policyTitle || !editedText) {
+        message.error("Policy Title and Description are required!");
+        return;
       }
-      if (refetchPolicies) {
-        refetchPolicies();
+      setLoading(true);
+      try {
+        if (isEditMode && policyData) {
+          const updatedValues = {
+            policyTitle,
+            policyDescription: editedText,
+          };
+          await UpdatePolicy(policyData._id, updatedValues);
+          message.success("Policy Updated Successfully");
+          QueryClient.invalidateQueries({ queryKey: ["policies"] });
+        } else {
+          const values = {
+            policyTitle: policyTitle,
+            policyDescription: editedText,
+          };
+          await CreatePolicy(values);
+          message.success("Policy Added Successfully");
+          QueryClient.invalidateQueries({ queryKey: ["policies"] });
+        }
+
+        dispatch(fetchPolicies());
+        if (message.success) {
+          setPolicyTitle("");
+          setEditedText("");
+          onClose();
+        }
+      } catch (error) {
+        console.error("Error While Adding Intern: ", error);
+        message.error("Intern failed to add!");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error submitting policy:", error);
-      message.error("Failed Add the Policy");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+  });
 
   return (
     <>
@@ -129,7 +127,11 @@ const Policy = ({
               <Button onClick={onClose} style={{ marginRight: "10px" }}>
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} type="primary" loading={loading}>
+              <Button
+                type="primary"
+                loading={loading}
+                onClick={() => handleSubmit.mutate()}
+              >
                 {isEditMode ? "Update Policy" : "Add Policy"}
               </Button>
             </div>

@@ -1,5 +1,5 @@
 export interface IMonthlySummary {
-    userId?: string;
-    year: number;
-    month: number;
+  userId?: number;
+  year: number;
+  month: number;
 }

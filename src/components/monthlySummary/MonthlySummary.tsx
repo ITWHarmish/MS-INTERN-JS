@@ -1,4 +1,4 @@
-import { Button, Col, Row, theme, Tooltip, message, Select } from "antd";
+import { Button, Col, Row, theme, Tooltip, Select } from "antd";
 import Leaves from "./Leaves";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
@@ -6,28 +6,26 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import "../../index.css";
 import { useCallback, useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import Spinner from "../../utils/Spinner";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { fetchLeaves } from "../../redux/actions/leaveActions";
 import isBetween from "dayjs/plugin/isBetween";
-import { GetMonthlySummary } from "../../services/monthlySummaryAPI";
 import "./MonthlySummary.css";
-import { GetInternsByMentorId } from "../../services/adminAPI";
-import { GetLeaveRequests } from "../../services/leaveAPI";
+import { getInternsHook } from "../../hooks/internlistHook";
+import {
+  leaveRequestsHook,
+  monthlySummaryHook,
+} from "../../hooks/monthlySummaryHook";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
   const localizer = dayjsLocalizer(dayjs);
   const dispatch = useDispatch<AppDispatch>();
-  const { leaves } = useSelector((state: RootState) => state.leave);
   const { user } = useSelector((state: RootState) => state.auth);
   const { token } = theme.useToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [monthlySummary, setMonthlySummary] = useState(null);
-  const [calendarLoading, setCalendarLoading] = useState(false);
   const [officeHoliday, setOfficeHoliday] = useState(null);
   const [eventList, setEventList] = useState([]);
   const [monthImage, setMonthImage] = useState("JAN");
@@ -58,109 +56,64 @@ const MonthlySummary = () => {
     };
   }, []);
   const [internId, setInternId] = useState("");
-  const [students, setStudents] = useState<{ _id: string; fullName: string }[]>(
-    []
+
+  const { data: students = [] } = getInternsHook(user);
+
+  const { data: leaveRequests = [] } = leaveRequestsHook(user, internId);
+
+  const { data: monthlySummary = [] } = monthlySummaryHook(
+    user,
+    internId,
+    currentDate
   );
-  const [customLeaves, setCustomLeaves] = useState([]);
-
-  const fetchInterns = async () => {
-    if (!user || !user._id) {
-      console.warn("User or Mentor ID is missing, skipping API call");
-      return;
-    }
-    try {
-      if (user.admin) {
-        const res = await GetInternsByMentorId(user._id);
-        setStudents(res.data || []);
-      }
-    } catch (error) {
-      console.error("Error Intern List:", error);
-      message.error("Failed to fetch Intern List.");
-    }
-  };
-
-  useEffect(() => {
-    fetchInterns();
-  }, [user]);
 
   const handleNavigate = useCallback(
-    async (date) => {
-      try {
-        setCurrentDate(date);
-        setCalendarLoading(true);
+    async (date: Date) => {
+      setCurrentDate(date);
 
-        const selectedMonth = dayjs(date).month() + 1;
-        const selectedYear = dayjs(date).year();
-        setCalendarLabel(dayjs(date).format("YYYY"));
+      setCalendarLabel(dayjs(date).format("YYYY"));
 
-        const userId = user?.admin ? internId : user?._id;
-        const payload = {
-          year: selectedYear,
-          month: selectedMonth,
-          userId: userId,
-        };
-
-        const response = await GetLeaveRequests(payload);
-        setCustomLeaves(response);
-
-        setVisibleMonthRange({
-          start: dayjs(date).startOf("month"),
-          end: dayjs(date).endOf("month"),
-        });
-
-        const monthNames = [
-          "JAN",
-          "FEB",
-          "MAR",
-          "APR",
-          "MAY",
-          "JUN",
-          "JUL",
-          "AUG",
-          "SEP",
-          "OCT",
-          "NOV",
-          "DEC",
-        ];
-        setMonthImage(monthNames[dayjs(date).month()]);
-
-        const res = await GetMonthlySummary(payload);
-        setMonthlySummary(res);
-      } catch (error) {
-        console.error("Error while fetching the monthly summary: ", error);
-      } finally {
-        setTimeout(() => setCalendarLoading(false), 500);
-      }
+      const monthNames = [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
+      ];
+      setMonthImage(monthNames[dayjs(date).month()]);
+      setVisibleMonthRange({
+        start: dayjs(date).startOf("month"),
+        end: dayjs(date).endOf("month"),
+      });
     },
-    [internId, user?._id, user?.admin]
+    [user, internId]
   );
-
-  useEffect(() => {
-    dispatch(fetchLeaves());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!user?.admin && leaves) {
-      setCustomLeaves(leaves);
-    }
-  }, [leaves, user]);
 
   useEffect(() => {
     handleNavigate(currentDate);
   }, [handleNavigate, currentDate]);
 
   useEffect(() => {
-    if (
-      (customLeaves && customLeaves.length > 0) ||
-      (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)
-    ) {
-      const dynamicLeaves =
-        customLeaves.map((leave) => ({
-          start: new Date(leave.from),
-          end: new Date(leave.to),
-          title: "",
-          type: leave.leaveType,
-        })) || [];
+    if (!user?.isAdmin) {
+      dispatch(fetchLeaves());
+    }
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (leaveRequests && monthlySummary) {
+      const dynamicLeaves = leaveRequests.map((leave) => ({
+        start: new Date(leave.from),
+        end: new Date(leave.to),
+        title: "",
+        type: leave.leaveType,
+      }));
 
       const dynamicWorkHours = (monthlySummary?.daysArray || [])
         .filter((day) => Number(day.totalHours) > 0)
@@ -170,16 +123,11 @@ const MonthlySummary = () => {
           title: `${Number(day.totalHours).toFixed(2)}`,
         }));
 
-      const allEvents = [...dynamicLeaves, ...dynamicWorkHours];
-
-      setEventList(allEvents);
+      setEventList([...dynamicLeaves, ...dynamicWorkHours]);
+      const Holidays = monthlySummary?.daysArray?.filter((day) => day.holiday);
+      setOfficeHoliday(Holidays || null);
     }
-  }, [customLeaves, monthlySummary]);
-
-  useEffect(() => {
-    const holiday = monthlySummary?.daysArray?.filter((day) => day.holiday);
-    setOfficeHoliday(holiday);
-  }, [monthlySummary]);
+  }, [leaveRequests]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -323,11 +271,6 @@ const MonthlySummary = () => {
             >
               <div>
                 <div className="containerCalendar">
-                  {calendarLoading && (
-                    <div className="spinner">
-                      <Spinner />
-                    </div>
-                  )}
                   <Calendar
                     localizer={localizer}
                     events={eventList}
@@ -447,7 +390,8 @@ const MonthlySummary = () => {
                       </span>
                     </div>
                     <span>
-                      {monthlySummary?.shortage < 0 ? (
+                      {monthlySummary?.shortage &&
+                      monthlySummary?.shortage < 0 ? (
                         <>
                           <span style={{ color: "#49494B" }}>EXTRA HOURS:</span>
                           <span style={{ color: "black" }}>
