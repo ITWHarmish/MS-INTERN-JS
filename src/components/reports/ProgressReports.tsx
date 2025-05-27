@@ -211,11 +211,14 @@ const ProgressReports = () => {
                 <Select
                   showSearch
                   placeholder="Select Mentor"
-                  onChange={handleMentorChange}
                   options={mentors?.map((mentor) => ({
                     value: mentor._id,
                     label: mentor.fullName,
                   }))}
+                  onChange={handleMentorChange}
+                  filterOption={(input, option: any) =>
+                    option?.label.toLowerCase().includes(input.toLowerCase())
+                  }
                 />
 
                 <Select
@@ -228,6 +231,9 @@ const ProgressReports = () => {
                   }))}
                   disabled={!selectedMentor}
                   onChange={handleStudentChange}
+                  filterOption={(input, option: any) =>
+                    option?.label.toLowerCase().includes(input.toLowerCase())
+                  }
                 />
               </>
             ) : (

@@ -454,6 +454,9 @@ const MonthlySummary = () => {
                     label: student.fullName,
                   }))}
                   onChange={handleStudentChange}
+                  filterOption={(input, option: any) =>
+                    option?.label.toLowerCase().includes(input.toLowerCase())
+                  }
                 />
               </div>
             )}

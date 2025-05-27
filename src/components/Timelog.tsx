@@ -58,6 +58,9 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
                 label: student.fullName,
               }))}
               onChange={handleStudentChange}
+              filterOption={(input, option: any) =>
+                option?.label.toLowerCase().includes(input.toLowerCase())
+              }
             />
           )}
           <DatePicker
