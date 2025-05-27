@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./shared/Navbar";
 import { GetCurrentUser } from "../services/authAPI";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { setUser } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
@@ -9,41 +9,52 @@ import Footer from "./shared/Footer";
 import { ConfigProvider, Layout as Layouts } from "antd";
 import Cookies from "js-cookie";
 import Spinner from "../utils/Spinner";
+import { useQuery } from "@tanstack/react-query";
 
 const Layout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false);
-
   const token = Cookies.get("ms_intern_jwt");
 
+  // React Query hook to fetch user info
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => GetCurrentUser(),
+    enabled: !!token,
+    retry: false,
+  });
+
+  // On successful data fetch, store user in Redux
   useEffect(() => {
-    const fetchData = async () => {
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-      try {
-        setLoading(true);
-        const userInfo = await GetCurrentUser();
-        dispatch(setUser(userInfo.user));
-      } catch (error) {
-        console.error("Invalid token:", error);
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [navigate, dispatch, token]);
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (data?.user) {
+      dispatch(setUser(data.user));
+    }
+
+    if (isError) {
+      console.error("Invalid token or fetch failed.");
+      navigate("/login");
+    }
+  }, [token, data, isError, navigate, dispatch]);
 
   return (
     <ConfigProvider>
-      {loading ? (
+      {isLoading ? (
         <Spinner />
       ) : (
         <Layouts className="layout">
-          <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div
+            style={{
+              minHeight: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <Navbar />
             <Outlet />
             <Footer />

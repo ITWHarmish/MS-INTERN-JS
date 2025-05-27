@@ -52,8 +52,8 @@ const data = [
     name: "DAKSH PATEL",
     role: "REACT DEVELOPER",
     description:
-      "As a React developer, I implemented the UI for a time log system based on design guidance from a UI/UX mentor. I translated wireframes into responsive, reusable React components using best practices for usability and accessibility. Throughout the process, I focused on delivering a clean, intuitive interface that balances visual clarity with functional efficiency, reflecting both my development skills and the collaborative design process.",
-    image: "/avatar/daksh-img.png",
+      "As a React developer, I built a time log system UI using responsive, reusable components. I used React Query for efficient data management and added animations to enhance user experience. The result was a clean, intuitive interface with strong focus on performance and usability.",
+    image: "/avatar/daksh-img1.png",
   },
 ];
 

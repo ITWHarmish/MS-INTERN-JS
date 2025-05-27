@@ -17,7 +17,7 @@ import { fetchTodos } from "../redux/actions/todosAction";
 import Spinner from "../utils/Spinner";
 import { gsap } from "gsap";
 
-const token = Cookies.get('ms_intern_jwt')
+const token = Cookies.get("ms_intern_jwt");
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const MainPage = () => {
   const [internId, setInternId] = useState("");
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
-  const { user } = useSelector((state: RootState) => state.auth)
+  const { user } = useSelector((state: RootState) => state.auth);
   const timelogRef = useRef(null);
   const todoRef = useRef(null);
 
@@ -35,7 +35,7 @@ const MainPage = () => {
       gsap.fromTo(
         timelogRef.current,
         { x: -100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out",delay: 0.4 }
+        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.4 }
       );
       gsap.fromTo(
         todoRef.current,
@@ -71,7 +71,7 @@ const MainPage = () => {
         await axios.get(`${API_END_POINT}/oauth2callback`, {
           params: { code },
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -94,7 +94,7 @@ const MainPage = () => {
         navigate("/");
       }
     }
-  }, [user, navigate])
+  }, [user, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -106,7 +106,7 @@ const MainPage = () => {
       try {
         await Promise.all([
           dispatch(fetchTelegram()),
-          dispatch(fetchTodos({ userId: currentUserId }))
+          dispatch(fetchTodos({ userId: currentUserId })),
         ]);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -118,12 +118,18 @@ const MainPage = () => {
     fetchData();
   }, [user, internId, dispatch]);
 
-
   return (
     <>
-      {loading ?
-        <Spinner /> :
-        <Row className="Check" style={{ height: "calc(100vh - 130px )", padding: "10px 18px 10px 18px", }}>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Row
+          className="Check"
+          style={{
+            height: "calc(100vh - 130px )",
+            padding: "10px 18px 10px 18px",
+          }}
+        >
           <Col md={18}>
             <div
               ref={timelogRef}
@@ -133,16 +139,25 @@ const MainPage = () => {
                 zIndex: "3",
               }}
             >
-              <Timelog selectedDate={selectedDate} setSelectedDate={setSelectedDate} setInternId={setInternId} internId={internId} />
+              <Timelog
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                setInternId={setInternId}
+                internId={internId}
+              />
             </div>
           </Col>
           <Col md={6}>
             <div ref={todoRef}>
-              <TodoCard selectedDate={selectedDate} setLoading={setLoading} internId={internId} />
+              <TodoCard
+                selectedDate={selectedDate}
+                setLoading={setLoading}
+                internId={internId}
+              />
             </div>
           </Col>
-        </Row >
-      }
+        </Row>
+      )}
     </>
   );
 };

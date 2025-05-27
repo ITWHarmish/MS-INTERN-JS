@@ -3,55 +3,66 @@ import { Table, Card, Button, Select, message } from "antd";
 import type { TableProps } from "antd";
 import { IColumnsReports } from "../../types/IReport";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch, RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { fetchProgressReport } from "../../redux/actions/progressReportActions";
+import { useState } from "react";
 import {
   DeleteProgressReport,
   UpdateProgressReportStatus,
 } from "../../services/progressReportAPI";
-import {
-  GetInternReport,
-  GetInternsByMentorId,
-  GetMentorList,
-} from "../../services/adminAPI";
+
 import ModalCard from "../../utils/ModalCard";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { RootState } from "../../redux/store";
+import {
+  internsHook,
+  internsReportHook,
+  mentorsHook,
+} from "../../hooks/progressReportsHook";
 
 const ProgressReports = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const { progressReport } = useSelector((state: RootState) => state.report);
   const { user } = useSelector((state: RootState) => state.auth);
-  const [mentorListName, setMentorListName] = useState<
-    { _id: string; fullName: string }[]
-  >([]);
   const [selectedMentor, setSelectedMentor] = useState<string | null>(null);
-  const [students, setStudents] = useState<{ _id: string; fullName: string }[]>(
-    []
-  );
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
-  const [studentReports, setStudentReports] = useState<IColumnsReports[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await dispatch(fetchProgressReport());
-      } catch (error) {
-        console.error("Error fetching reports:", error);
-        message.error("Failed to fetch progress reports.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: mentors = [] } = mentorsHook(user);
 
-    fetchData();
-  }, [dispatch]);
+  const { data: students = [] } = internsHook(user, selectedMentor);
+
+  const { data: studentReports = [] } = internsReportHook(
+    selectedStudent,
+    user
+  );
+
+  const statusUpdateMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) =>
+      UpdateProgressReportStatus(id, { status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["studentReports"] });
+      message.success("Status updated successfully!");
+    },
+    onError: (error) => {
+      console.error("Failed to update status", error);
+      message.error("Failed to update status. Please try again.");
+    },
+  });
+
+  const deleteReportMutation = useMutation({
+    mutationFn: (id: string) => DeleteProgressReport(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["studentReports"] });
+      message.success("Report deleted successfully!");
+      setModalOpen(false);
+    },
+    onError: (error) => {
+      console.error("Error While deleting Report", error);
+      message.error("Failed to delete the report. Please try again.");
+    },
+  });
 
   const columns: TableProps<IColumnsReports>["columns"] = [
     {
@@ -154,165 +165,112 @@ const ProgressReports = () => {
     navigate(`/report/pdf/${id}`);
   };
 
-  const handleStatusChange = async (id: string, value: string) => {
-    const payload = {
-      status: value,
-    };
-    try {
-      await UpdateProgressReportStatus(id, payload);
-      dispatch(fetchProgressReport());
-      message.success("Status updated successfully!");
-    } catch (error) {
-      console.error("Failed to update status", error);
-      message.error("Failed to update status. Please try again.");
-    }
+  const handleStatusChange = (id: string, value: string) => {
+    statusUpdateMutation.mutate({ id, status: value });
   };
 
   const handleEdit = async (record) => {
     if (user?.admin) {
-      try {
-        await UpdateProgressReportStatus(record._id, { status: "in preview" });
-        dispatch(fetchProgressReport());
-      } catch (error) {
-        console.error("Failed to update status", error);
-        message.error("Failed to update status. Please try again.");
-      }
+      statusUpdateMutation.mutate({ id: record._id, status: "in preview" });
     }
     navigate(`/reportuser/${record._id}`);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     setDeleteId(id);
     setModalOpen(true);
   };
 
-  const confirmDelete = async () => {
-    if (!deleteId) return;
-    try {
-      setLoading(true);
-      await DeleteProgressReport(deleteId);
-      dispatch(fetchProgressReport());
-      message.success("Report deleted successfully!");
-    } catch (error) {
-      console.error("Error While deleting Report", error);
-      message.error("Failed to delete the report. Please try again.");
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setDeleteId(null);
+  const confirmDelete = () => {
+    if (deleteId) {
+      deleteReportMutation.mutate(deleteId);
     }
   };
 
-  useEffect(() => {
-    if (!user?.admin) return;
-    const fetchMentorList = async () => {
-      const res = await GetMentorList();
-      setMentorListName(res.data);
-    };
-    fetchMentorList();
-  }, [user?.admin]);
-
-  const handleMentorChange = async (mentorId: string) => {
+  const handleMentorChange = (mentorId: string) => {
     setSelectedMentor(mentorId);
-    try {
-      const res = await GetInternsByMentorId(mentorId);
-      setStudents(res.data || []);
-    } catch (error) {
-      console.error("Error fetching interns:", error);
-    }
+    setSelectedStudent(null);
   };
 
-  const handleStudentChange = async (studentId: string) => {
+  const handleStudentChange = (studentId: string) => {
     setSelectedStudent(studentId);
-    try {
-      if (user?.admin) {
-        setLoading(true);
-        const res = await GetInternReport(studentId);
-        setStudentReports(res.data || []);
-      }
-    } catch (error) {
-      console.error("Error fetching student reports:", error);
-      message.error("Failed to fetch student reports.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
-    <>
-      <div
-        style={{ padding: "10px 20px 0px 20px", height: "calc(100vh - 130px)" }}
-      >
-        <Card
-          className="progressreport"
-          style={{ position: "relative", height: "calc(100vh - 150px)" }}
-          title={"PROGRESS REPORT"}
-          extra={
-            <>
-              {user?.admin ? (
-                <>
-                  <Select
-                    showSearch
-                    placeholder="Select Mentor"
-                    onChange={handleMentorChange}
-                    options={mentorListName?.map((mentor) => ({
-                      value: mentor._id,
-                      label: mentor.fullName,
-                    }))}
-                  />
+    <div
+      style={{ padding: "10px 20px 0px 20px", height: "calc(100vh - 130px)" }}
+    >
+      <Card
+        className="progressreport"
+        style={{ position: "relative", height: "calc(100vh - 150px)" }}
+        title={"PROGRESS REPORT"}
+        extra={
+          <>
+            {user?.admin ? (
+              <>
+                <Select
+                  showSearch
+                  placeholder="Select Mentor"
+                  onChange={handleMentorChange}
+                  options={mentors?.map((mentor) => ({
+                    value: mentor._id,
+                    label: mentor.fullName,
+                  }))}
+                />
 
-                  <Select
-                    showSearch
-                    style={{ marginLeft: "15px" }}
-                    placeholder="Select Student"
-                    options={students.map((student) => ({
-                      value: student._id,
-                      label: student.fullName,
-                    }))}
-                    disabled={!selectedMentor}
-                    onChange={handleStudentChange}
-                  />
-                </>
-              ) : (
-                <Button
-                  onClick={() => {
-                    navigate("/reportuser");
-                  }}
-                  type="primary"
-                >
-                  ADD NEW REPORT
-                </Button>
-              )}
-            </>
-          }
-        >
-          <div style={{ paddingTop: "10px" }}>
-            <Table<IColumnsReports>
-              columns={columns}
-              dataSource={
-                user?.admin && selectedStudent ? studentReports : progressReport
-              }
-              pagination={false}
-              bordered
-              size="small"
-              loading={loading}
-              sticky={true}
-              locale={{ emptyText: <></> }}
-              className="ScrollInProgress"
-              style={{
-                height: "calc(65vh - 88px)",
-                position: "absolute",
-                overflowY: "auto",
-                overflowX: "hidden",
-                left: "10px",
-                right: "0",
-                paddingRight: "10px",
-              }}
-            />
-          </div>
-        </Card>
-      </div>
-    </>
+                <Select
+                  showSearch
+                  style={{ marginLeft: "15px" }}
+                  placeholder="Select Student"
+                  options={students?.map((student) => ({
+                    value: student._id,
+                    label: student.fullName,
+                  }))}
+                  disabled={!selectedMentor}
+                  onChange={handleStudentChange}
+                />
+              </>
+            ) : (
+              <Button
+                onClick={() => {
+                  navigate("/reportuser");
+                }}
+                type="primary"
+              >
+                ADD NEW REPORT
+              </Button>
+            )}
+          </>
+        }
+      >
+        <div style={{ paddingTop: "10px" }}>
+          <Table<IColumnsReports>
+            columns={columns}
+            dataSource={
+              user?.admin && selectedStudent ? studentReports : progressReport
+            }
+            pagination={false}
+            bordered
+            size="small"
+            loading={
+              statusUpdateMutation.isPending || deleteReportMutation.isPending
+            }
+            sticky={true}
+            locale={{ emptyText: <></> }}
+            className="ScrollInProgress"
+            style={{
+              height: "calc(65vh - 88px)",
+              position: "absolute",
+              overflowY: "auto",
+              overflowX: "hidden",
+              left: "10px",
+              right: "0",
+              paddingRight: "10px",
+            }}
+          />
+        </div>
+      </Card>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-
 import { Button, Card, Input, message, Modal, Select, theme } from "antd";
 import { useState } from "react";
 import {
@@ -13,6 +12,7 @@ import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
 import { useDispatch } from "react-redux";
 import { fetchTodos } from "../redux/actions/todosAction";
+// import { GetTodo } from "../services/todoAPI";
 import { AppDispatch, RootState } from "../redux/store";
 import { updateTodoInState } from "../redux/slices/todoSlice";
 import "../index.css";
@@ -21,11 +21,17 @@ import {
   SendTodosToGoogleChat,
 } from "../services/telegramAPI";
 import dayjs from "dayjs";
-import { SendTimelogToSheet } from "../services/timelogAPI";
+
 import { TodoCardProps } from "../types/ITodo";
 import ModalCard from "../utils/ModalCard";
+import { useMutation } from "@tanstack/react-query";
+import { todocardHook } from "../hooks/timeLogHook";
 
-const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId }) => {
+const TodoCard: React.FC<TodoCardProps> = ({
+  setLoading,
+  selectedDate,
+  internId,
+}) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector(
@@ -99,54 +105,107 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId 
     }
   };
 
-  const handleAddTodo = async () => {
-    if (!newTask.trim()) return;
+  const handleAddTodo = useMutation({
+    mutationFn: async () => {
+      if (!newTask.trim()) return;
 
-    const userId = user?.admin ? internId : user?._id;
-    if (!userId) {
-      message.error("User ID is missing.");
-      return;
-    }
+      const userId = user?.admin ? internId : user?._id;
+      if (!userId) {
+        message.error("User ID is missing.");
+        return;
+      }
 
-    const todo = {
-      userId: userId,
-      description: newTask,
-      date: currentDate,
-    };
-    setNewTask("");
-    setIsAddTodoModalOpen(false);
+      const todo = {
+        userId: userId,
+        description: newTask,
+        date: currentDate,
+      };
+      setNewTask("");
+      setIsAddTodoModalOpen(false);
 
-    try {
+      try {
+        setLoading(true);
+        await AddTodo(todo);
+        dispatch(fetchTodos({ userId }));
+        message.success("Task added successfully!");
+      } catch (error) {
+        console.error("Error adding todo:", error);
+        message.error("Failed to add the task. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  // const handleAddTodo = async () => {
+  //   if (!newTask.trim()) return;
+
+  //   const userId = user?.admin ? internId : user?._id;
+  //   if (!userId) {
+  //     message.error("User ID is missing.");
+  //     return;
+  //   }
+
+  //   const todo = {
+  //     userId: userId,
+  //     description: newTask,
+  //     date: currentDate,
+  //   };
+  //   setNewTask("");
+  //   setIsAddTodoModalOpen(false);
+
+  //   try {
+  //     setLoading(true);
+  //     await AddTodo(todo);
+  //     dispatch(fetchTodos({ userId }));
+  //     message.success("Task added successfully!");
+  //   } catch (error) {
+  //     console.error("Error adding todo:", error);
+  //     message.error("Failed to add the task. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleDelete = useMutation({
+    mutationFn: async (id: string) => {
+      const userId = user?.admin ? internId : user?._id;
+      if (!userId) {
+        message.error("User ID is missing.");
+        return;
+      }
       setLoading(true);
-      await AddTodo(todo);
-      dispatch(fetchTodos({ userId }));
-      message.success("Task added successfully!");
-    } catch (error) {
-      console.error("Error adding todo:", error);
-      message.error("Failed to add the task. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        await DeleteTodo(id);
+        dispatch(fetchTodos({ userId }));
+        message.success("Task deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting task:", error);
+        message.error("Failed to delete the task. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
-  const handleDelete = async (id: string) => {
-    const userId = user?.admin ? internId : user?._id;
-    if (!userId) {
-      message.error("User ID is missing.");
-      return;
-    }
-    setLoading(true);
-    try {
-      await DeleteTodo(id);
-      dispatch(fetchTodos({ userId }));
-      message.success("Task deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting task:", error);
-      message.error("Failed to delete the task. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleDelete = async (id: string) => {
+  //   const userId = user?.admin ? internId : user?._id;
+  //   if (!userId) {
+  //     message.error("User ID is missing.");
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   try {
+  //     await DeleteTodo(id);
+  //     dispatch(fetchTodos({ userId }));
+  //     message.success("Task deleted successfully!");
+  //   } catch (error) {
+  //     console.error("Error deleting task:", error);
+  //     message.error("Failed to delete the task. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleSendTodo = async () => {
     const inProgressTodos = todos.filter(
@@ -235,29 +294,33 @@ ${description.map((task) => `• ${task}`).join("\n")}
       return;
     }
     const formattedTasks = `𝗗𝗮𝘆 𝗲𝗻𝗱 𝘀𝘁𝗮𝘁𝘂𝘀:
-${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0
+${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${
+      inProgressTodos.length > 0
         ? `
 ${inProgressTodos
-          .map((task) => `• ${task.description} - In Progress `)
-          .join("\n")}`
+  .map((task) => `• ${task.description} - In Progress `)
+  .join("\n")}`
         : ""
-      }
+    }
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
       setIsDayEndModalOpen(false);
       setLoading(true);
 
-      const SendTimelogToSpreadSheets = SendTimelogToSheet(messageText).catch(
-        (error) => {
-          message.error(
-            error.response?.data ||
-            error.message ||
-            "Failed to send TimeLog. Please try again."
-          );
-          return false;
-        }
-      );
+      const { data: SendTimelogToSpreadSheets = [] } =
+        todocardHook(messageText);
+
+      // const SendTimelogToSpreadSheets = SendTimelogToSheet(messageText).catch(
+      //   (error) => {
+      //     message.error(
+      //       error.response?.data ||
+      //         error.message ||
+      //         "Failed to send TimeLog. Please try again."
+      //     );
+      //     return false;
+      //   }
+      // );
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .then(() => true)
@@ -372,9 +435,10 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   }}
                   disabled={
                     !(
-                      (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token)
-                      && !user?.admin
-                      && currentDate === formattedDate
+                      (telegramUser?.telegram?.session_id ||
+                        telegramUser?.google?.tokens?.access_token) &&
+                      !user?.admin &&
+                      currentDate === formattedDate
                     )
                   }
                 >
@@ -425,12 +489,18 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     marginBottom: "10px",
                   }}
                 >
-                  <span style={{ fontSize: "16px", fontWeight: "600", marginLeft: "12px" }}>
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      marginLeft: "12px",
+                    }}
+                  >
                     IN PROGRESS
                   </span>
 
                   <Button
-                    className='check2'
+                    className="check2"
                     size="small"
                     onClick={showModal}
                     icon={<PlusOutlined />}
@@ -439,7 +509,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     style={{ fontWeight: "600" }}
                     title="ADD TO DO"
                     open={isAddTodoModalOpen}
-                    onOk={handleAddTodo}
+                    onOk={() => handleAddTodo.mutate()}
                     onCancel={handleCancel}
                     okText="SUBMIT"
                     cancelText="CANCEL"
@@ -517,9 +587,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       <div className="hello">
                                         {task.description.length > 35
                                           ? `${task.description.substring(
-                                            0,
-                                            35
-                                          )}...`
+                                              0,
+                                              35
+                                            )}...`
                                           : task.description}
                                       </div>
                                       <Button
@@ -530,7 +600,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                         }
                                         danger
                                         onClick={() =>
-                                          handleDelete(task.todoId)
+                                          handleDelete.mutate(task.todoId)
                                         }
                                       />
                                     </div>
@@ -555,7 +625,13 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 }}
               >
                 <div style={{ marginBottom: "10px" }}>
-                  <span style={{ fontSize: "16px", fontWeight: "600", marginLeft: "12px" }}>
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      marginLeft: "12px",
+                    }}
+                  >
                     DONE
                   </span>
                 </div>
@@ -616,9 +692,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       <div>
                                         {task.description.length > 35
                                           ? `${task.description.substring(
-                                            0,
-                                            35
-                                          )}...`
+                                              0,
+                                              35
+                                            )}...`
                                           : task.description}
                                       </div>
                                       <Button
@@ -627,7 +703,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                         icon={<DeleteOutlined />}
                                         danger
                                         onClick={() =>
-                                          handleDelete(task.todoId)
+                                          handleDelete.mutate(task.todoId)
                                         }
                                       />
                                     </div>

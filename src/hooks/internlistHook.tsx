@@ -5,7 +5,7 @@ export const getInternsHook = (user) => {
   return useQuery({
     queryKey: ["interns", user?._id],
     queryFn: () => GetInternsByMentorId(user?._id).then((res) => res.data),
-    enabled: !!user?._id,
+    enabled: !!user?.admin,
     staleTime: Infinity,
   });
 };

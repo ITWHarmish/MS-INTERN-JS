@@ -7,9 +7,7 @@ import "../../index.css";
 import { useCallback, useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { useDispatch } from "react-redux";
-import { fetchLeaves } from "../../redux/actions/leaveActions";
+
 import isBetween from "dayjs/plugin/isBetween";
 import "./MonthlySummary.css";
 import { getInternsHook } from "../../hooks/internlistHook";
@@ -17,11 +15,12 @@ import {
   leaveRequestsHook,
   monthlySummaryHook,
 } from "../../hooks/monthlySummaryHook";
+import { RootState } from "../../redux/store";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
   const localizer = dayjsLocalizer(dayjs);
-  const dispatch = useDispatch<AppDispatch>();
+
   const { user } = useSelector((state: RootState) => state.auth);
   const { token } = theme.useToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,7 +39,6 @@ const MonthlySummary = () => {
     width: document.documentElement.clientWidth - 600,
   });
 
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setCalendarDimensions({
@@ -67,44 +65,47 @@ const MonthlySummary = () => {
     currentDate
   );
 
-  const handleNavigate = useCallback(
-    async (date: Date) => {
-      setCurrentDate(date);
+  const handleNavigate = useCallback((date: Date) => {
+    const newDate = new Date(date);
+    const monthNames = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
+    ];
 
-      setCalendarLabel(dayjs(date).format("YYYY"));
-
-      const monthNames = [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC",
-      ];
-      setMonthImage(monthNames[dayjs(date).month()]);
-      setVisibleMonthRange({
-        start: dayjs(date).startOf("month"),
-        end: dayjs(date).endOf("month"),
-      });
-    },
-    [user, internId]
-  );
+    setCurrentDate(newDate);
+    setCalendarLabel(dayjs(newDate).format("YYYY"));
+    setMonthImage(monthNames[dayjs(newDate).month()]);
+    setVisibleMonthRange({
+      start: dayjs(newDate).startOf("month"),
+      end: dayjs(newDate).endOf("month"),
+    });
+  }, []);
 
   useEffect(() => {
     handleNavigate(currentDate);
-  }, [handleNavigate, currentDate]);
-
+  }, []);
+  // Handle window resize
   useEffect(() => {
-    if (!user?.isAdmin) {
-      dispatch(fetchLeaves());
-    }
-  }, [dispatch, user]);
+    const handleResize = () => {
+      setCalendarDimensions({
+        height: document.documentElement.clientHeight - 247,
+        width: document.documentElement.clientWidth - 600,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (leaveRequests && monthlySummary) {
@@ -124,10 +125,11 @@ const MonthlySummary = () => {
         }));
 
       setEventList([...dynamicLeaves, ...dynamicWorkHours]);
-      const Holidays = monthlySummary?.daysArray?.filter((day) => day.holiday);
-      setOfficeHoliday(Holidays || null);
+      setOfficeHoliday(
+        monthlySummary?.daysArray?.filter((day) => day.holiday) || null
+      );
     }
-  }, [leaveRequests]);
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -452,6 +454,7 @@ const MonthlySummary = () => {
                     label: student.fullName,
                   }))}
                   onChange={handleStudentChange}
+                  value={internId}
                 />
               </div>
             )}
