@@ -43,7 +43,7 @@ export const monthlySummaryHook = (user, internId, currentDate) => {
       return GetMonthlySummary(payload);
     },
 
-    enabled: !!user?._id && (user?.admin ? !!internId : true),
+    enabled: !!user?._id || (user?.admin ? !!internId : true),
     staleTime: Infinity,
   });
 };

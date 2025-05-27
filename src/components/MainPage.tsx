@@ -8,14 +8,16 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
-import { fetchTelegram } from "../redux/actions/telegramActions";
-import { TelegramSessionValidation } from "../services/telegramAPI";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { fetchTodos } from "../redux/actions/todosAction";
 import Spinner from "../utils/Spinner";
 import { gsap } from "gsap";
+import {
+  telegramHook,
+  TelegramValidationHook,
+  todohook,
+} from "../hooks/timeLogHook";
 
 const token = Cookies.get("ms_intern_jwt");
 
@@ -29,6 +31,12 @@ const MainPage = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const timelogRef = useRef(null);
   const todoRef = useRef(null);
+
+  const { data: todo = [] } = todohook(user);
+
+  const { data: telegram = [] } = telegramHook(user);
+
+  const { data: TelegramValidation = [] } = TelegramValidationHook(user);
 
   useEffect(() => {
     if (!loading) {
@@ -47,17 +55,12 @@ const MainPage = () => {
 
   useEffect(() => {
     const telegramSessionCheck = async () => {
-      try {
-        await TelegramSessionValidation();
-        dispatch(fetchTelegram());
-      } catch (error) {
-        console.error("Failed to update todo date:", error);
-      } finally {
-        setLoading(false);
-      }
+      await TelegramValidation;
+      telegram;
+      setLoading(false);
     };
     telegramSessionCheck();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
@@ -75,7 +78,7 @@ const MainPage = () => {
             "Content-Type": "application/json",
           },
         });
-        dispatch(fetchTelegram());
+        telegram;
         navigate("/");
       } catch (error) {
         console.error("Error during OAuth2 callback:", error);
@@ -103,16 +106,7 @@ const MainPage = () => {
     if (!currentUserId) return;
 
     const fetchData = async () => {
-      try {
-        await Promise.all([
-          dispatch(fetchTelegram()),
-          dispatch(fetchTodos({ userId: currentUserId })),
-        ]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+      await Promise.all([telegram, todo]);
     };
 
     fetchData();

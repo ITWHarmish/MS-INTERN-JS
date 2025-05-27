@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./shared/Navbar";
-import { GetCurrentUser } from "../services/authAPI";
 import { useEffect } from "react";
 import { setUser } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -9,7 +8,7 @@ import Footer from "./shared/Footer";
 import { ConfigProvider, Layout as Layouts } from "antd";
 import Cookies from "js-cookie";
 import Spinner from "../utils/Spinner";
-import { useQuery } from "@tanstack/react-query";
+import { layoutHook } from "../hooks/timeLogHook";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -17,12 +16,7 @@ const Layout = () => {
   const token = Cookies.get("ms_intern_jwt");
 
   // React Query hook to fetch user info
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["currentUser"],
-    queryFn: () => GetCurrentUser(),
-    enabled: !!token,
-    retry: false,
-  });
+  const { data, isLoading, isError } = layoutHook(token);
 
   // On successful data fetch, store user in Redux
   useEffect(() => {

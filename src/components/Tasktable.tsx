@@ -5,15 +5,15 @@ import {
   AddTimelog,
   DeleteTimelog,
   UpdateTimelog,
-  GetTimelogs,
 } from "../services/timelogAPI";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { useSelector } from "react-redux";
 import type { TableProps } from "antd";
 import { IColumns, TimeLog } from "../types/ITimelog";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RootState } from "../redux/store";
+import { tasktableHook } from "../hooks/timeLogHook";
 
 dayjs.extend(localizedFormat);
 
@@ -31,12 +31,12 @@ const Tasktable = ({ selectedDate, internId }) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const { RangePicker } = TimePicker;
   const userId = user?.admin ? internId : user?._id;
-  const { data: timelogs = [], isLoading } = useQuery({
-    queryKey: ["timeLog", formattedDate, userId],
-    queryFn: () => GetTimelogs(formattedDate, userId),
-    enabled: !!user?._id && (user?.admin ? !!internId : true),
-    staleTime: Infinity,
-  });
+  const { data: timelogs = [], isLoading } = tasktableHook(
+    user,
+    internId,
+    formattedDate,
+    userId
+  );
 
   useEffect(() => {
     let startTime, endTime;

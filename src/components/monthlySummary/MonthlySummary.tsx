@@ -454,7 +454,6 @@ const MonthlySummary = () => {
                     label: student.fullName,
                   }))}
                   onChange={handleStudentChange}
-                  value={internId}
                 />
               </div>
             )}

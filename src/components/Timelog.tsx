@@ -4,8 +4,7 @@ import Tasktable from "./Tasktable";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { getInternsHook } from "../hooks/internlistHook";
-import { useQuery } from "@tanstack/react-query";
-import { GetTimelogs } from "../services/timelogAPI";
+import { timeLogHook } from "../hooks/timeLogHook";
 
 const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -18,13 +17,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ["timelog", formattedDate, user?.admin ? internId : user?._id],
-    queryFn: () =>
-      GetTimelogs(formattedDate, user?.admin ? internId : user?._id),
-    enabled: !!user?._id && (user?.admin ? !!internId : true),
-    staleTime: Infinity,
-  });
+  } = timeLogHook(user, internId, formattedDate);
 
   const totalHours = timelog.reduce((total, timelog) => {
     const hours = typeof timelog?.hours === "number" ? timelog.hours : 0;
