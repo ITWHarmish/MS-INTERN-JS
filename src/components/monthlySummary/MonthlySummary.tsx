@@ -52,10 +52,6 @@ const MonthlySummary = () => {
     currentDate
   );
 
-  // const students = [];
-  // const leaveRequests = [];
-  // const monthlySummary = [] as any;
-
   useEffect(() => {
     const handleResize = () => {
       setCalendarDimensions({
@@ -72,29 +68,35 @@ const MonthlySummary = () => {
   }, []);
 
   const handleNavigate = useCallback((date: Date) => {
-    const newDate = new Date(date);
-    const monthNames = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
-    ];
+    try {
+      const newDate = new Date(date);
+      const monthNames = [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
+      ];
 
-    setCurrentDate(newDate);
-    setCalendarLabel(dayjs(newDate).format("YYYY"));
-    setMonthImage(monthNames[dayjs(newDate).month()]);
-    setVisibleMonthRange({
-      start: dayjs(newDate).startOf("month"),
-      end: dayjs(newDate).endOf("month"),
-    });
+      setCurrentDate(newDate);
+      setCalendarLabel(dayjs(newDate).format("YYYY"));
+      setMonthImage(monthNames[dayjs(newDate).month()]);
+      setVisibleMonthRange({
+        start: dayjs(newDate).startOf("month"),
+        end: dayjs(newDate).endOf("month"),
+      });
+    } catch (error) {
+      console.error("Error while fetching the monthly summary: ", error);
+    } finally {
+      setTimeout(() => setCalendarLoading(false), 500);
+    }
   }, []);
 
   useEffect(() => {
@@ -103,14 +105,17 @@ const MonthlySummary = () => {
   }, []);
 
   useEffect(() => {
-    console.log(" lred");
-    if (leaveRequests && monthlySummary) {
-      const dynamicLeaves = leaveRequests.map((leave) => ({
-        start: new Date(leave.from),
-        end: new Date(leave.to),
-        title: "",
-        type: leave.leaveType,
-      }));
+    if (
+      (leaveRequests && leaveRequests.length > 0) ||
+      (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)
+    ) {
+      const dynamicLeaves =
+        leaveRequests.map((leave) => ({
+          start: new Date(leave.from),
+          end: new Date(leave.to),
+          title: "",
+          type: leave.leaveType,
+        })) || [];
 
       const dynamicWorkHours = (monthlySummary?.daysArray || [])
         .filter((day) => Number(day.totalHours) > 0)
@@ -120,13 +125,15 @@ const MonthlySummary = () => {
           title: `${Number(day.totalHours).toFixed(2)}`,
         }));
 
-      setEventList([...dynamicLeaves, ...dynamicWorkHours]);
-      setOfficeHoliday(
-        monthlySummary?.daysArray?.filter((day) => day.holiday) || null
-      );
-      setTimeout(() => setCalendarLoading(false), 500);
+      const allEvents = [...dynamicLeaves, ...dynamicWorkHours];
+
+      setEventList(allEvents);
     }
-  }, [monthlySummary, leaveRequests]);
+  }, [leaveRequests, monthlySummary]);
+  useEffect(() => {
+    const holiday = monthlySummary?.daysArray?.filter((day) => day.holiday);
+    setOfficeHoliday(holiday);
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
