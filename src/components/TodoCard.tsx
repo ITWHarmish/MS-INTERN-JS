@@ -24,7 +24,7 @@ import dayjs from "dayjs";
 
 import { TodoCardProps } from "../types/ITodo";
 import ModalCard from "../utils/ModalCard";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { todocardHook } from "../hooks/timeLogHook";
 
 const TodoCard: React.FC<TodoCardProps> = ({
@@ -52,6 +52,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
   const [isDayEndModalOpen, setIsDayEndModalOpen] = useState(false);
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const QueryClient = useQueryClient();
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -91,6 +92,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
 
     try {
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
+      QueryClient.invalidateQueries({ queryKey: ["todo"] });
       dispatch(fetchTodos({ userId }));
       message.success("Updated tasks successfully");
     } catch (error) {
@@ -122,10 +124,10 @@ const TodoCard: React.FC<TodoCardProps> = ({
       };
       setNewTask("");
       setIsAddTodoModalOpen(false);
-
       try {
         setLoading(true);
         await AddTodo(todo);
+        QueryClient.invalidateQueries({ queryKey: ["todo"] });
         dispatch(fetchTodos({ userId }));
         message.success("Task added successfully!");
       } catch (error) {
@@ -177,6 +179,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
       setLoading(true);
       try {
         await DeleteTodo(id);
+        QueryClient.invalidateQueries({ queryKey: ["todo"] });
         dispatch(fetchTodos({ userId }));
         message.success("Task deleted successfully!");
       } catch (error) {

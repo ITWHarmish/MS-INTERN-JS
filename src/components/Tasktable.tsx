@@ -190,9 +190,6 @@ const Tasktable = ({ selectedDate, internId }) => {
           ? "TimeLog Updated successfully!"
           : "TimeLog Added successfully!"
       );
-      queryClient.invalidateQueries({
-        queryKey: ["timeLog", formattedDate, userId],
-      });
 
       setFormData({
         startTime: "",
@@ -203,6 +200,9 @@ const Tasktable = ({ selectedDate, internId }) => {
       });
 
       setEditingId(null);
+      queryClient.invalidateQueries({
+        queryKey: ["timeLog", formattedDate, userId],
+      });
     },
     onError: (error) => {
       if (!(error instanceof Error && error.message === "Validation failed")) {
