@@ -16,6 +16,7 @@ import {
   monthlySummaryHook,
 } from "../../hooks/monthlySummaryHook";
 import { RootState } from "../../redux/store";
+import Spinner from "../../utils/Spinner";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
@@ -27,6 +28,7 @@ const MonthlySummary = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [officeHoliday, setOfficeHoliday] = useState(null);
   const [eventList, setEventList] = useState([]);
+  const [calendarLoading, setCalendarLoading] = useState(false);
   const [monthImage, setMonthImage] = useState("JAN");
   const [visibleMonthRange, setVisibleMonthRange] = useState({
     start: dayjs().startOf("month"),
@@ -38,6 +40,21 @@ const MonthlySummary = () => {
     height: document.documentElement.clientHeight - 247,
     width: document.documentElement.clientWidth - 600,
   });
+  const [internId, setInternId] = useState("");
+
+  const { data: students = [] } = getInternsHook(user);
+
+  const { data: leaveRequests = [] } = leaveRequestsHook(user, internId);
+
+  const { data: monthlySummary = [] } = monthlySummaryHook(
+    user,
+    internId,
+    currentDate
+  );
+
+  // const students = [];
+  // const leaveRequests = [];
+  // const monthlySummary = [] as any;
 
   useEffect(() => {
     const handleResize = () => {
@@ -53,17 +70,6 @@ const MonthlySummary = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const [internId, setInternId] = useState("");
-
-  const { data: students = [] } = getInternsHook(user);
-
-  const { data: leaveRequests = [] } = leaveRequestsHook(user, internId);
-
-  const { data: monthlySummary = [] } = monthlySummaryHook(
-    user,
-    internId,
-    currentDate
-  );
 
   const handleNavigate = useCallback((date: Date) => {
     const newDate = new Date(date);
@@ -93,21 +99,11 @@ const MonthlySummary = () => {
 
   useEffect(() => {
     handleNavigate(currentDate);
-  }, []);
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      setCalendarDimensions({
-        height: document.documentElement.clientHeight - 247,
-        width: document.documentElement.clientWidth - 600,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    setCalendarLoading(true);
   }, []);
 
   useEffect(() => {
+    console.log(" lred");
     if (leaveRequests && monthlySummary) {
       const dynamicLeaves = leaveRequests.map((leave) => ({
         start: new Date(leave.from),
@@ -128,8 +124,9 @@ const MonthlySummary = () => {
       setOfficeHoliday(
         monthlySummary?.daysArray?.filter((day) => day.holiday) || null
       );
+      setTimeout(() => setCalendarLoading(false), 500);
     }
-  }, []);
+  }, [monthlySummary, leaveRequests]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -246,9 +243,7 @@ const MonthlySummary = () => {
             height: holiday || isHiddenEvent ? 50 : "auto",
           }}
         >
-          {event.title === "undefined" || event.title === "0"
-            ? ""
-            : event.title}
+          {event.title && event.title !== "0" ? event.title : ""}
         </span>
       </Tooltip>
     );
@@ -273,6 +268,11 @@ const MonthlySummary = () => {
             >
               <div>
                 <div className="containerCalendar">
+                  {calendarLoading && (
+                    <div className="spinner">
+                      <Spinner />
+                    </div>
+                  )}
                   <Calendar
                     localizer={localizer}
                     events={eventList}

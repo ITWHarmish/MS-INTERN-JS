@@ -4,69 +4,72 @@ import { API_END_POINT } from "../utils/constants";
 import { ILeave } from "../types/ILeaves";
 
 const getAuthHeaders = () => {
-    const token = Cookies.get('ms_intern_jwt');
-    return {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-    };
+  const token = Cookies.get("ms_intern_jwt");
+  return {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
 };
 
-
 export const GenerateLeaveEmail = async (payload: ILeave) => {
-    try {
-        const response = await axios.post(`${API_END_POINT}/leaveRequest`, payload, {
-            headers: getAuthHeaders(),
-        }
-        );
-        return response.data;
-    } catch (error) {
-        console.error('Error while generating the Email: ', error);
-        throw error;
-    }
-}
+  try {
+    const response = await axios.post(
+      `${API_END_POINT}/leaveRequest`,
+      payload,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error while generating the Email: ", error);
+    throw error;
+  }
+};
 
 export const SendLeaveToGmail = async (emailContent: string) => {
-    try {
-        const response = await axios.post(`${API_END_POINT}/sendEmail`, emailContent, {
-            headers: getAuthHeaders(),
-        }
-        );
-        return response.data;
-    } catch (error) {
-        console.error('Error while sending Leave Request to mail: ', error);
-        throw error;
-    }
-}
+  try {
+    const response = await axios.post(
+      `${API_END_POINT}/sendEmail`,
+      emailContent,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error while sending Leave Request to mail: ", error);
+    throw error;
+  }
+};
 
 export const ApplyLeave = async (payload: ILeave) => {
-    try {
-        const response = await axios.post(`${API_END_POINT}/applyLeave`, payload, {
-            headers: getAuthHeaders(),
-        }
-        );
-        return response.data;
-    } catch (error) {
-        console.error('Error while applying Leave: ', error);
-        throw error;
-    }
-}
+  try {
+    const response = await axios.post(`${API_END_POINT}/applyLeave`, payload, {
+      headers: getAuthHeaders(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while applying Leave: ", error);
+    throw error;
+  }
+};
 
 interface LeaveRequestParams {
-    userId?: string;
-    month?: number;
-    year?: number;
-  }
+  userId?: string;
+  month?: number;
+  year?: number;
+}
 
 export const GetLeaveRequests = async (params?: LeaveRequestParams) => {
-    try {
-        const response = await axios.get(`${API_END_POINT}/getLeave`, {
-            headers: getAuthHeaders(),
-            params: params,
-        }
-        );
-        return response.data;
-    } catch (error) {
-        console.error('Error while getting the leave requests: ', error);
-        throw error;
-    }
-}
+  try {
+    const response = await axios.get(`${API_END_POINT}/getLeave`, {
+      headers: getAuthHeaders(),
+      params: params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while getting the leave requests: ", error);
+    throw error;
+  }
+};

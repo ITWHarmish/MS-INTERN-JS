@@ -34,9 +34,14 @@ const MainPage = () => {
 
   const { data: todo = [] } = todohook(user);
 
-  const { data: telegram = [] } = telegramHook(user);
+  const { data: telegram = [] } = telegramHook(user, internId);
 
-  const { data: TelegramValidation = [] } = TelegramValidationHook(user);
+  const { data: TelegramValidation = [] } = TelegramValidationHook(
+    user as any,
+    internId
+  );
+
+  // const TelegramValidation = [] as any;
 
   useEffect(() => {
     if (!loading) {

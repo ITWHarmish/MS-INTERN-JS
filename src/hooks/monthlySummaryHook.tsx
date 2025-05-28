@@ -13,7 +13,7 @@ export const leaveRequestsHook = (user: any, internId: string) => {
         throw new Error("No valid user ID available for leave requests");
       }
 
-      return GetLeaveRequests(userId);
+      return GetLeaveRequests();
     },
 
     enabled: !!user?._id && (user?.admin ? !!internId : true),

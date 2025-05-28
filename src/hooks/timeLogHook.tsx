@@ -31,6 +31,7 @@ export const layoutHook = (token) => {
     queryFn: () => GetCurrentUser(),
     enabled: !!token,
     retry: false,
+    staleTime: Infinity,
   });
 };
 
@@ -52,20 +53,20 @@ export const todohook = (user) => {
   });
 };
 
-export const telegramHook = (user) => {
+export const telegramHook = (user, internId) => {
   return useQuery({
     queryKey: ["telegram"],
     queryFn: () => GetTelegram(),
-    enabled: !!user?._id,
+    enabled: !!user?._id && (user?.admin ? !!internId : true),
     staleTime: Infinity,
   });
 };
 
-export const TelegramValidationHook = (user) => {
+export const TelegramValidationHook = (user, internId) => {
   return useQuery({
     queryKey: ["TelegramValidation"],
     queryFn: () => TelegramSessionValidation(),
-    enabled: !!user?._id,
+    enabled: !!user?._id && (user?.admin ? !!internId : true),
     staleTime: Infinity,
   });
 };

@@ -18,6 +18,7 @@ import { tasktableHook } from "../hooks/timeLogHook";
 dayjs.extend(localizedFormat);
 
 const Tasktable = ({ selectedDate, internId }) => {
+  const queryClient = useQueryClient();
   const formattedDate = selectedDate.format("YYYY-MM-DD");
   const [formData, setFormData] = useState({
     startTime: "",
@@ -158,7 +159,7 @@ const Tasktable = ({ selectedDate, internId }) => {
         !formData.date
       ) {
         message.error("All fields are required!");
-        return;
+        throw new Error("Validation failed");
       }
 
       const startTimeObj = dayjs(formData.startTime, "HH:mm");
@@ -167,22 +168,32 @@ const Tasktable = ({ selectedDate, internId }) => {
 
       if (duration > 1) {
         message.error("Time should not be more than 1 hour!");
-        return;
+        throw new Error("Duration exceeds 1 hour");
       }
+
       const payload = {
         ...formData,
-        startTime: dayjs(formData.startTime, "HH:mm").format(),
-        endTime: dayjs(formData.endTime, "HH:mm").format(),
+        startTime: startTimeObj.format(),
+        endTime: endTimeObj.format(),
         hours: Number(duration).toFixed(2),
       };
 
       if (editingId) {
         await UpdateTimelog(editingId, payload);
-        message.success("TimeLog Updated successful!");
       } else {
         await AddTimelog(payload);
-        message.success("TimeLog Added successful!");
       }
+    },
+    onSuccess: () => {
+      message.success(
+        editingId
+          ? "TimeLog Updated successfully!"
+          : "TimeLog Added successfully!"
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["timeLog", formattedDate, userId],
+      });
+
       setFormData({
         startTime: "",
         endTime: "",
@@ -193,8 +204,10 @@ const Tasktable = ({ selectedDate, internId }) => {
 
       setEditingId(null);
     },
-    onError: () => {
-      message.error("Something went wrong! Please try again.");
+    onError: (error) => {
+      if (!(error instanceof Error && error.message === "Validation failed")) {
+        message.error("Something went wrong! Please try again.");
+      }
     },
   });
 
@@ -212,11 +225,13 @@ const Tasktable = ({ selectedDate, internId }) => {
       date: formattedDate,
     });
   };
-  const queryClient = useQueryClient();
+
   const handleDelete = useMutation({
     mutationFn: (id: string) => DeleteTimelog(id),
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ["timelog"] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["timeLog", formattedDate, userId],
+      });
       message.success("TimeLog Deleted successful!");
     },
     onError: (error) => {
