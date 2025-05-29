@@ -1,6 +1,6 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Input, message, Modal, Select, theme } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
 import { useDispatch } from "react-redux";
 import { fetchTodos } from "../redux/actions/todosAction";
-// import { GetTodo } from "../services/todoAPI";
 import { AppDispatch, RootState } from "../redux/store";
 import { updateTodoInState } from "../redux/slices/todoSlice";
 import "../index.css";
@@ -107,6 +106,13 @@ const TodoCard: React.FC<TodoCardProps> = ({
     }
   };
 
+  useEffect(() => {
+    const userId = user?.admin ? internId : user?._id;
+    if (userId) {
+      dispatch(fetchTodos({ userId }));
+    }
+  }, [dispatch, user, internId]);
+
   const handleAddTodo = useMutation({
     mutationFn: async () => {
       if (!newTask.trim()) return;
@@ -139,36 +145,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
     },
   });
 
-  // const handleAddTodo = async () => {
-  //   if (!newTask.trim()) return;
-
-  //   const userId = user?.admin ? internId : user?._id;
-  //   if (!userId) {
-  //     message.error("User ID is missing.");
-  //     return;
-  //   }
-
-  //   const todo = {
-  //     userId: userId,
-  //     description: newTask,
-  //     date: currentDate,
-  //   };
-  //   setNewTask("");
-  //   setIsAddTodoModalOpen(false);
-
-  //   try {
-  //     setLoading(true);
-  //     await AddTodo(todo);
-  //     dispatch(fetchTodos({ userId }));
-  //     message.success("Task added successfully!");
-  //   } catch (error) {
-  //     console.error("Error adding todo:", error);
-  //     message.error("Failed to add the task. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleDelete = useMutation({
     mutationFn: async (id: string) => {
       const userId = user?.admin ? internId : user?._id;
@@ -190,25 +166,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
       }
     },
   });
-
-  // const handleDelete = async (id: string) => {
-  //   const userId = user?.admin ? internId : user?._id;
-  //   if (!userId) {
-  //     message.error("User ID is missing.");
-  //     return;
-  //   }
-  //   setLoading(true);
-  //   try {
-  //     await DeleteTodo(id);
-  //     dispatch(fetchTodos({ userId }));
-  //     message.success("Task deleted successfully!");
-  //   } catch (error) {
-  //     console.error("Error deleting task:", error);
-  //     message.error("Failed to delete the task. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSendTodo = async () => {
     const inProgressTodos = todos.filter(
@@ -313,17 +270,6 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
 
       const { data: SendTimelogToSpreadSheets = [] } =
         todocardHook(messageText);
-
-      // const SendTimelogToSpreadSheets = SendTimelogToSheet(messageText).catch(
-      //   (error) => {
-      //     message.error(
-      //       error.response?.data ||
-      //         error.message ||
-      //         "Failed to send TimeLog. Please try again."
-      //     );
-      //     return false;
-      //   }
-      // );
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .then(() => true)
@@ -664,7 +610,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                               }
                               index={index}
                             >
-                              {(provided) => (
+                              {(provided: any) => (
                                 <div
                                   className="todo-card"
                                   style={{

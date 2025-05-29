@@ -268,17 +268,11 @@ const Navbar = () => {
               gap: "1px",
             }}
             mode="horizontal"
-          >
-            {menuItems.map((item) => (
-              <Menu.Item
-                key={item.key}
-                icon={item.icon}
-                className="nav-menu-item"
-              >
-                {item.label}
-              </Menu.Item>
-            ))}
-          </Menu>
+            items={menuItems.map((item) => ({
+              ...item,
+              className: "nav-menu-item",
+            }))}
+          />
         )}
         <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
           {user &&

@@ -111,8 +111,6 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
-
   <Provider store={store}>
     <ConfigProvider
       theme={{
@@ -131,6 +129,4 @@ createRoot(document.getElementById("root")!).render(
       </QueryClientProvider>
     </ConfigProvider>
   </Provider>
-
-  // </StrictMode>
 );

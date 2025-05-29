@@ -41,8 +41,6 @@ const MainPage = () => {
     internId
   );
 
-  // const TelegramValidation = [] as any;
-
   useEffect(() => {
     if (!loading) {
       gsap.fromTo(
@@ -70,10 +68,8 @@ const MainPage = () => {
   useEffect(() => {
     const handleOAuthCallback = async () => {
       const code = searchParams.get("code");
-      if (!code) {
-        console.error("Authorization code not found.");
-        return;
-      }
+
+      if (!code) return;
 
       try {
         await axios.get(`${API_END_POINT}/oauth2callback`, {
