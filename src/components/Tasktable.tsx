@@ -38,7 +38,10 @@ const Tasktable = ({ selectedDate, internId }) => {
     formattedDate,
     userId
   );
-
+  const timelogsWithKeys = timelogs.map((timelogs) => ({
+    ...timelogs,
+    key: timelogs._id,
+  }));
   useEffect(() => {
     let startTime, endTime;
 
@@ -302,7 +305,7 @@ const Tasktable = ({ selectedDate, internId }) => {
       >
         <Table<IColumns>
           columns={columns}
-          dataSource={timelogs}
+          dataSource={timelogsWithKeys}
           pagination={false}
           bordered
           size="small"

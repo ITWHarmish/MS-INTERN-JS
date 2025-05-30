@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import Spinner from "../utils/Spinner";
 import { gsap } from "gsap";
+
 import {
   telegramHook,
   TelegramValidationHook,
@@ -63,7 +64,7 @@ const MainPage = () => {
       setLoading(false);
     };
     telegramSessionCheck();
-  }, []);
+  }, [telegram, TelegramValidation]);
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
@@ -80,6 +81,7 @@ const MainPage = () => {
           },
         });
         telegram;
+
         navigate("/");
       } catch (error) {
         console.error("Error during OAuth2 callback:", error);
@@ -87,7 +89,7 @@ const MainPage = () => {
     };
 
     handleOAuthCallback();
-  }, [searchParams, navigate, dispatch]);
+  }, [searchParams, navigate, dispatch, telegram]);
 
   useEffect(() => {
     if (user) {
@@ -104,6 +106,7 @@ const MainPage = () => {
     if (!user) return;
 
     const currentUserId = user?.admin ? internId : user._id;
+
     if (!currentUserId) return;
 
     const fetchData = async () => {

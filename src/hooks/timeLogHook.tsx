@@ -55,7 +55,7 @@ export const todohook = (user) => {
 
 export const telegramHook = (user, internId) => {
   return useQuery({
-    queryKey: ["telegram"],
+    queryKey: ["telegram", user?._id, internId],
     queryFn: () => GetTelegram(),
     enabled: !!user?._id && (user?.admin ? !!internId : true),
     staleTime: Infinity,

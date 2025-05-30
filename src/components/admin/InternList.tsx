@@ -18,6 +18,10 @@ const InternList = () => {
   const { data: students = [], isLoading: internsLoading } =
     getInternsHook(user);
 
+  const studentsWithKeys = students.map((student) => ({
+    ...student,
+    key: student._id,
+  }));
   const handleFileClick = (id: string) => {
     navigate(`/profile/${id}`);
   };
@@ -98,7 +102,7 @@ const InternList = () => {
           <div style={{ paddingTop: "10px" }}>
             <Table<IColumnsReports>
               columns={columns}
-              dataSource={students}
+              dataSource={studentsWithKeys}
               pagination={false}
               bordered
               size="small"

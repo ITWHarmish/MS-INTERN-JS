@@ -44,6 +44,7 @@ const Navbar = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [current, setCurrent] = useState(user?.admin ? "hr policy" : "timelog");
   const navbarRef = useRef<HTMLDivElement | null>(null);
+  
 
   useEffect(() => {
     const animateNavbar = () => {
