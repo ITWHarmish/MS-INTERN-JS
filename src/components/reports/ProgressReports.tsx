@@ -7,11 +7,12 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import {
   DeleteProgressReport,
+  GetAllProgressReport,
   UpdateProgressReportStatus,
 } from "../../services/progressReportAPI";
 
 import ModalCard from "../../utils/ModalCard";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { RootState } from "../../redux/store";
 import {
   internsHook,
@@ -22,12 +23,18 @@ import {
 const ProgressReports = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { progressReport } = useSelector((state: RootState) => state.report);
+  // const { progressReport } = useSelector((state: RootState) => state.report);
   const { user } = useSelector((state: RootState) => state.auth);
   const [selectedMentor, setSelectedMentor] = useState<string | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  // const QueryClient = useQueryClient();
+  const { data: allProgressReport = [] } = useQuery({
+    queryKey: ["allchProgressReport"],
+    queryFn: () => GetAllProgressReport(),
+    staleTime: Infinity,
+  });
 
   const { data: mentors = [] } = mentorsHook(user);
 
@@ -42,6 +49,12 @@ const ProgressReports = () => {
     ...studentReports,
     key: studentReports._id,
   }));
+  const allProgressReportwithKeys = allProgressReport.map(
+    (allProgressReport) => ({
+      ...allProgressReport,
+      key: allProgressReport._id,
+    })
+  );
 
   const statusUpdateMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
@@ -258,9 +271,7 @@ const ProgressReports = () => {
           <Table<IColumnsReports>
             columns={columns}
             dataSource={
-              user?.admin && studentReportswithKeys
-                ? studentReportswithKeys
-                : progressReport
+              user?.admin ? studentReportswithKeys : allProgressReportwithKeys
             }
             pagination={false}
             bordered

@@ -64,7 +64,7 @@ body {
 .ant-card .ant-card-body {
   padding: 10px;
   border-radius: 0 0 16px 16px;
-  overflow-wrap: anywhere;
+  /* overflow-wrap: anywhere; */
 }
 
 .full-page-spin {
@@ -812,6 +812,12 @@ th.ant-table-cell:not(:last-child)::after {
 
 .monthlysummary {
   animation: slideInRight 0.6s ease-out forwards;
+}
+.todoRef {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+.timelogRef {
+  animation: slideInLeft 0.8s ease-out forwards;
 }
 .custom-card-team-intro {
   animation: slideInLeft 0.6s ease-out forwards;

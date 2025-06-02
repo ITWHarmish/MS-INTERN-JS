@@ -58,6 +58,13 @@ const TodoCard: React.FC<TodoCardProps> = ({
     holderRender: (children) => children,
   });
 
+  const getItemStyle = (draggableStyle) => ({
+    marginBottom: "24px",
+    background: "#3c3c3c46",
+    backdropFilter: "blur(12px)",
+    ...draggableStyle,
+  });
+
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
@@ -327,7 +334,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
 
   return (
     <>
-      <div style={{ paddingTop: "0px", paddingRight: "0px" }}>
+      <div style={{}}>
         <DragDropContext onDragEnd={onDragEnd}>
           <Card
             className="custom-card"
@@ -529,6 +536,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                      provided.draggableProps.style
+                                    )}
                                   >
                                     <div
                                       style={{

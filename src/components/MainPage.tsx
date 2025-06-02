@@ -131,7 +131,8 @@ const MainPage = () => {
         >
           <Col md={18}>
             <div
-              ref={timelogRef}
+              className="timelogRef"
+              // ref={timelogRef}
               style={{
                 marginRight: "4px",
                 position: "relative",
@@ -147,7 +148,9 @@ const MainPage = () => {
             </div>
           </Col>
           <Col md={6}>
-            <div ref={todoRef}>
+            <div
+            // className="todoRef"
+            >
               <TodoCard
                 selectedDate={selectedDate}
                 setLoading={setLoading}
