@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import Login from "./components/auth/Login.tsx";
 import Profile from "./components/profile/Profile.tsx";
-import { ConfigProvider } from "antd";
+import { App, ConfigProvider } from "antd";
 import FillUpForm from "./components/profile/FillUpForm.tsx";
 import MonthlySummary from "./components/monthlySummary/MonthlySummary.tsx";
 import HrPolicies from "./components/hrPolicies/HrPolicies.tsx";
@@ -111,22 +111,24 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <Provider store={store}>
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#474787",
-          borderRadius: 16,
-          fontFamily: "Rubik",
-          colorPrimaryBg: "#ebf2ed",
-          colorBgLayout: "White",
-        },
-      }}
-    >
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={true} />
-      </QueryClientProvider>
-    </ConfigProvider>
-  </Provider>
+  <App>
+    <Provider store={store}>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#474787",
+            borderRadius: 16,
+            fontFamily: "Rubik",
+            colorPrimaryBg: "#ebf2ed",
+            colorBgLayout: "White",
+          },
+        }}
+      >
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={true} />
+        </QueryClientProvider>
+      </ConfigProvider>
+    </Provider>
+  </App>
 );

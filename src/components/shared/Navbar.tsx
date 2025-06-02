@@ -34,6 +34,9 @@ import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
 import gsap from "gsap";
+import { useQueryClient } from "@tanstack/react-query";
+import { ConfigProvider } from "antd";
+
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { telegramUser } = useSelector(
@@ -44,7 +47,12 @@ const Navbar = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [current, setCurrent] = useState(user?.admin ? "hr policy" : "timelog");
   const navbarRef = useRef<HTMLDivElement | null>(null);
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  ConfigProvider.config({
+    holderRender: (children) => children,
+  });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const animateNavbar = () => {
@@ -82,11 +90,24 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const checkGoogleToken = async () => {
-      await VerifyRevokedToken();
+    const checkAuthStatus = async () => {
+      if (user) {
+        if (user.admin) return;
+
+        try {
+          await VerifyRevokedToken();
+
+          if (!telegramUser) {
+            dispatch(fetchTelegram());
+          }
+        } catch (error) {
+          console.error("Error checking auth status:", error);
+        }
+      }
     };
-    checkGoogleToken();
-  }, []);
+
+    checkAuthStatus();
+  }, [user, telegramUser, dispatch]);
 
   const fullName = user?.fullName;
 
@@ -102,8 +123,6 @@ const Navbar = () => {
 
   const initials = getInitials(fullName);
 
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const handleCancel = () => {
     setIsModalOpen(false);
     setIsOtpStep(false);
@@ -127,12 +146,22 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    await LogoutApi();
-    dispatch(setUser(null));
-    dispatch(clearTelegramData());
-    Cookies.remove("ms_intern_jwt");
-    navigate("/login");
-    message.success("Logged out successfully!");
+    try {
+      await LogoutApi();
+
+      queryClient.removeQueries();
+
+      dispatch(setUser(null));
+      dispatch(clearTelegramData());
+
+      Cookies.remove("ms_intern_jwt");
+
+      navigate("/login");
+      message.success("Logged out successfully!");
+    } catch (error) {
+      console.error("Logout error:", error);
+      message.error("Failed to logout. Please try again.");
+    }
   };
 
   const menuItems = [
@@ -219,6 +248,8 @@ const Navbar = () => {
       const phoneWithCountryCode = `+91${values.phone}`;
       setPhoneNumber(phoneWithCountryCode);
       await LoginApiTelegram(phoneWithCountryCode);
+      await queryClient.invalidateQueries({ queryKey: ["telegram"] });
+      await queryClient.refetchQueries({ queryKey: ["telegram"] });
       dispatch(fetchTelegram());
     } catch (error) {
       console.error("Error while sending phone number:", error);
@@ -229,6 +260,9 @@ const Navbar = () => {
     try {
       await SubmitApiTelegram({ phone: phoneNumber, code: values.code });
       message.success("Logged in successfully!");
+      await queryClient.invalidateQueries({ queryKey: ["telegram"] });
+      await queryClient.refetchQueries({ queryKey: ["telegram"] });
+
       handleCancel();
     } catch (error) {
       message.error(

@@ -60,7 +60,8 @@ const MainPage = () => {
   useEffect(() => {
     const telegramSessionCheck = async () => {
       await TelegramValidation;
-      telegram;
+      await telegram;
+
       setLoading(false);
     };
     telegramSessionCheck();

@@ -6,7 +6,7 @@ import {
   Droppable,
   Draggable,
   DropResult,
-} from "react-beautiful-dnd";
+} from "@hello-pangea/dnd";
 
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
@@ -25,6 +25,7 @@ import { TodoCardProps } from "../types/ITodo";
 import ModalCard from "../utils/ModalCard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { todocardHook } from "../hooks/timeLogHook";
+import { ConfigProvider } from "antd";
 
 const TodoCard: React.FC<TodoCardProps> = ({
   setLoading,
@@ -33,6 +34,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { todos } = useSelector((state: RootState) => state.todo);
+
   const { telegramUser } = useSelector(
     (state: RootState) => state.telegramAuth
   );
@@ -52,6 +54,9 @@ const TodoCard: React.FC<TodoCardProps> = ({
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const QueryClient = useQueryClient();
+  ConfigProvider.config({
+    holderRender: (children) => children,
+  });
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -92,7 +97,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
     try {
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
       QueryClient.invalidateQueries({ queryKey: ["todo"] });
-      dispatch(fetchTodos({ userId }));
+      // dispatch(fetchTodos({ userId }));
       message.success("Updated tasks successfully");
     } catch (error) {
       dispatch(
@@ -134,7 +139,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
         setLoading(true);
         await AddTodo(todo);
         QueryClient.invalidateQueries({ queryKey: ["todo"] });
-        dispatch(fetchTodos({ userId }));
+        // dispatch(fetchTodos({ userId }));
         message.success("Task added successfully!");
       } catch (error) {
         console.error("Error adding todo:", error);
@@ -156,7 +161,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
       try {
         await DeleteTodo(id);
         QueryClient.invalidateQueries({ queryKey: ["todo"] });
-        dispatch(fetchTodos({ userId }));
+        // dispatch(fetchTodos({ userId }));
         message.success("Task deleted successfully!");
       } catch (error) {
         console.error("Error deleting task:", error);

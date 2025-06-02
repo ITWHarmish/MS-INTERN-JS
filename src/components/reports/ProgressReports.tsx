@@ -38,6 +38,11 @@ const ProgressReports = () => {
     user
   );
 
+  const studentReportswithKeys = studentReports.map((studentReports) => ({
+    ...studentReports,
+    key: studentReports._id,
+  }));
+
   const statusUpdateMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
       UpdateProgressReportStatus(id, { status }),
@@ -253,7 +258,9 @@ const ProgressReports = () => {
           <Table<IColumnsReports>
             columns={columns}
             dataSource={
-              user?.admin && selectedStudent ? studentReports : progressReport
+              user?.admin && studentReportswithKeys
+                ? studentReportswithKeys
+                : progressReport
             }
             pagination={false}
             bordered

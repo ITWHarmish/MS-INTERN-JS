@@ -10,7 +10,7 @@ export const mentorsHook = (user) => {
     queryKey: ["mentors"],
     queryFn: GetMentorList,
     select: (res) => res.data,
-    enabled: !!user?.admin,
+    enabled: !!user?.admin || !!user?.id,
     staleTime: Infinity,
   });
 };
@@ -24,7 +24,7 @@ export const internsHook = (user, selectedMentor) => {
         : user?._id
         ? GetInternsByMentorId(user._id).then((res) => res.data)
         : [],
-    enabled: !!user?.admin,
+    enabled: !!user?.admin || !!user?.id,
     staleTime: Infinity,
   });
 };
@@ -34,7 +34,7 @@ export const internsReportHook = (selectedStudent, user) => {
     queryKey: ["studentReports", selectedStudent || user?._id],
     queryFn: () =>
       GetInternReport(selectedStudent || user?._id).then((res) => res.data),
-    enabled: !!user?.admin,
+    enabled: !!user?.admin || !!user?.id,
     staleTime: Infinity,
   });
 };

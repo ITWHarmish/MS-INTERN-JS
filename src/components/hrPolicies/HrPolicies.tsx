@@ -5,9 +5,10 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Policy from "./Policy";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { IPolicy } from "../../types/IPolicy";
 import ModalCard from "../../utils/ModalCard";
+import { ConfigProvider } from "antd";
 
 import {
   deletePilicyHook,
@@ -39,6 +40,9 @@ const HrPolicies = () => {
   const [deletePolicyId, setDeletePolicyId] = useState<string | null>(null);
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.admin;
+  ConfigProvider.config({
+    holderRender: (children) => children,
+  });
 
   const { data: policies = [], isLoading } = policiesHook();
 
