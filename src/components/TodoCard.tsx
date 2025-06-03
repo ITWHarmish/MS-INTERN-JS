@@ -347,42 +347,6 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
             }}
             title="TO DO"
             extra={
-              // <div style={{ display: "flex", gap: "3px", alignItems: "center", justifyContent: "center" }}>
-              //   {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
-              //     <>
-              //       <Button onClick={() => setIsDayStartModalOpen(true)} type="primary">
-              //         Day Start Status
-              //       </Button>
-              //       <ModalCard
-              //         title="Are you sure, Do you want to send the day start status?"
-              //         ModalOpen={isDayStartModalOpen}
-              //         setModalOpen={setIsDayStartModalOpen}
-              //         onOk={handleSendTodo}
-              //       />
-              //     </>
-              //   ) : (
-              //     <Button disabled type="primary">
-              //       Day Start Status
-              //     </Button>
-              //   )}
-              //   {(telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token) && currentDate === formattedDate ? (
-              //     <>
-              //       <Button onClick={() => setIsDayEndModalOpen(true)} type="primary">
-              //         Day End Status
-              //       </Button>
-              //       <ModalCard
-              //         title="Are you sure, Do you want to send the day-end status?"
-              //         ModalOpen={isDayEndModalOpen}
-              //         setModalOpen={setIsDayEndModalOpen}
-              //         onOk={handleSendDayEndTodo}
-              //       />
-              //     </>
-              //   ) : (
-              //     <Button disabled type="primary">
-              //       Day End Status
-              //     </Button>
-              //   )}
-              // </div>
               <>
                 <Select
                   style={{ width: 160 }}

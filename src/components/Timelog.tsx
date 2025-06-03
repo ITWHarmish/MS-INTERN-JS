@@ -26,8 +26,8 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
   const handleDateChange = (date) => {
     if (date) {
-      const formatted = date.format("YYYY-MM-DD");
-      setSelectedDate(dayjs(formatted));
+      const formattedDate = date.format("YYYY-MM-DD");
+      setSelectedDate(dayjs(formattedDate));
     }
   };
 

@@ -4,6 +4,7 @@ import {
   GetInternsByMentorId,
   GetMentorList,
 } from "../services/adminAPI";
+import { GetAllProgressReport } from "../services/progressReportAPI";
 
 export const mentorsHook = (user) => {
   return useQuery({
@@ -35,6 +36,14 @@ export const internsReportHook = (selectedStudent, user) => {
     queryFn: () =>
       GetInternReport(selectedStudent || user?._id).then((res) => res.data),
     enabled: !!user?.admin || !!user?.id,
+    staleTime: Infinity,
+  });
+};
+
+export const progressReportHook = () => {
+  return useQuery({
+    queryKey: ["allchProgressReport"],
+    queryFn: () => GetAllProgressReport(),
     staleTime: Infinity,
   });
 };

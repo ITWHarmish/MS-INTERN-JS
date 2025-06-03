@@ -148,9 +148,7 @@ const MainPage = () => {
             </div>
           </Col>
           <Col md={6}>
-            <div
-            // className="todoRef"
-            >
+            <div>
               <TodoCard
                 selectedDate={selectedDate}
                 setLoading={setLoading}

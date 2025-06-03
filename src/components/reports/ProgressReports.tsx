@@ -4,21 +4,22 @@ import type { TableProps } from "antd";
 import { IColumnsReports } from "../../types/IReport";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DeleteProgressReport,
-  GetAllProgressReport,
   UpdateProgressReportStatus,
 } from "../../services/progressReportAPI";
 
 import ModalCard from "../../utils/ModalCard";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RootState } from "../../redux/store";
 import {
   internsHook,
   internsReportHook,
   mentorsHook,
+  progressReportHook,
 } from "../../hooks/progressReportsHook";
+import { ConfigProvider } from "antd";
 
 const ProgressReports = () => {
   const navigate = useNavigate();
@@ -29,12 +30,12 @@ const ProgressReports = () => {
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  // const QueryClient = useQueryClient();
-  const { data: allProgressReport = [] } = useQuery({
-    queryKey: ["allchProgressReport"],
-    queryFn: () => GetAllProgressReport(),
-    staleTime: Infinity,
+  ConfigProvider.config({
+    holderRender: (children) => children,
   });
+
+  // const QueryClient = useQueryClient();
+  const { data: allProgressReport = [] } = progressReportHook();
 
   const { data: mentors = [] } = mentorsHook(user);
 
@@ -55,12 +56,19 @@ const ProgressReports = () => {
       key: allProgressReport._id,
     })
   );
+  useEffect(() => {
+    if (user?._id) {
+      queryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
+    }
+    queryClient.setQueryData(["studentReports"], studentReportswithKeys);
+  }, []);
 
   const statusUpdateMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
       UpdateProgressReportStatus(id, { status }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["studentReports"] });
+      queryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
       message.success("Status updated successfully!");
     },
     onError: (error) => {
@@ -73,6 +81,7 @@ const ProgressReports = () => {
     mutationFn: (id: string) => DeleteProgressReport(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["studentReports"] });
+      queryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
       message.success("Report deleted successfully!");
       setModalOpen(false);
     },

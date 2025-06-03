@@ -17,10 +17,12 @@ import {
 } from "../../hooks/monthlySummaryHook";
 import { RootState } from "../../redux/store";
 import Spinner from "../../utils/Spinner";
+import { useQueryClient } from "@tanstack/react-query";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
   const localizer = dayjsLocalizer(dayjs);
+  const QueryClient = useQueryClient();
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { token } = theme.useToken();

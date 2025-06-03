@@ -24,22 +24,36 @@ import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import Spinner from "../../utils/Spinner";
 import "./ProgressReport.css";
 
+interface FormValues {
+  studentName: string;
+  enrollmentNo: string;
+  course: string;
+  division?: string;
+  projectTitle?: string;
+  duration: [dayjs.Dayjs, dayjs.Dayjs];
+}
+
 const ReportUserDetail = () => {
   const { RangePicker } = DatePicker;
   const { Step } = Steps;
   const { reportId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormValues>();
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const { user } = useSelector((state: RootState) => state.auth);
   const { progressReport } = useSelector((state: RootState) => state.report);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchData = async () => {
       try {
-        if (user?.admin) {
+        if (!user) {
+          navigate("/login");
+          return;
+        }
+        if (user.admin || user) {
           const res = await GetProgressReport(reportId);
           if (res) {
             form.setFieldsValue({
@@ -50,14 +64,14 @@ const ReportUserDetail = () => {
               projectTitle: res.projectTitle,
               duration: res.duration
                 ? [dayjs(res.duration.from), dayjs(res.duration.to)]
-                : [],
+                : [dayjs(), dayjs().add(1, "month")],
             });
           }
         } else {
           const report = progressReport.find(
             (report) => report._id === reportId
           );
-          if (report) {
+          if (report && isMounted) {
             form.setFieldsValue({
               studentName: report.studentName,
               enrollmentNo: report.enrollmentNo,
@@ -66,38 +80,64 @@ const ReportUserDetail = () => {
               projectTitle: report.projectTitle,
               duration: report.duration
                 ? [dayjs(report.duration.from), dayjs(report.duration.to)]
-                : [],
+                : [dayjs(), dayjs().add(1, "month")],
             });
           }
         }
       } catch (error) {
         console.error("error While Fetching", error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-  }, [reportId, progressReport, form, user?.admin]);
 
-  const handleSubmit = async (values) => {
-    const formatDate = values.duration.map((date) =>
-      dayjs(date).format("YYYY-MM-DD")
-    );
+    return () => {
+      isMounted = false;
+    };
+  }, [reportId, progressReport, form, user, user?.admin]);
 
+  const handleSubmit = async (values: FormValues) => {
     try {
       setLoading(true);
-      let response;
 
-      if (user?.admin) {
-        if (reportId) {
-          navigate(`/reporttable/${reportId}`);
-          handleNext();
-        } else {
-          message.error("Report ID not found.");
-        }
+      if (!values.duration || values.duration.length !== 2) {
+        message.error("Please select a valid date range");
         return;
       }
+
+      const formatDate = values.duration.map((date) =>
+        dayjs(date).format("YYYY-MM-DD")
+      );
+
+      if (user?.admin) {
+        if (!reportId) {
+          message.error("Report ID not found");
+          return;
+        }
+
+        await UpdateUserDetailsProgressReport(reportId, {
+          ...values,
+          duration: {
+            from: formatDate[0],
+            to: formatDate[1],
+          },
+        });
+
+        message.success("Successfully updated report");
+        dispatch(fetchProgressReport());
+        navigate(`/reporttable/${reportId}`);
+        handleNext();
+        return;
+      }
+
+      // Regular user flow
+      if (!user?.internshipDetails?.mentor) {
+        message.error("Mentor information not found");
+        return;
+      }
+
       const payload = {
         ...values,
         mentorFullName: user.internshipDetails.mentor.fullName,
@@ -108,13 +148,14 @@ const ReportUserDetail = () => {
         },
       };
 
+      let response;
       if (reportId) {
         await UpdateUserDetailsProgressReport(reportId, payload);
-        message.success("Successfully Updated User Report Details");
+        message.success("Successfully updated report");
         response = reportId;
       } else {
         const res = await AddUserReportDetails(payload);
-        message.success("Successfully added User Report Details");
+        message.success("Successfully created new report");
         response = res.report._id;
       }
 
@@ -125,13 +166,12 @@ const ReportUserDetail = () => {
         handleNext();
       }
     } catch (error) {
-      console.error("Error While Updating the User Reports:", error);
-      message.error("Failed to process User Report Details");
+      console.error("Error processing report:", error);
+      message.error("Failed to process report");
     } finally {
       setLoading(false);
     }
   };
-
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
   };

@@ -36,6 +36,7 @@ import { VerifyRevokedToken } from "../../services/googleApi";
 import gsap from "gsap";
 import { useQueryClient } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
+import Spinner from "../../utils/Spinner";
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -49,9 +50,11 @@ const Navbar = () => {
   const navbarRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   ConfigProvider.config({
     holderRender: (children) => children,
   });
+
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -96,12 +99,15 @@ const Navbar = () => {
 
         try {
           await VerifyRevokedToken();
+          setLoading(true);
 
           if (!telegramUser) {
             dispatch(fetchTelegram());
           }
         } catch (error) {
           console.error("Error checking auth status:", error);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -309,127 +315,131 @@ const Navbar = () => {
             }))}
           />
         )}
-        <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-          {user &&
-            !user?.admin &&
-            (telegramUser?.google?.tokens?.access_token ? (
-              <Button
-                style={{
-                  fontFamily: "Rubik",
-                  color: "white",
-                  background: "transparent",
-                  display: "none",
-                }}
-                className="btn"
-                disabled
-                type="default"
-              >
-                <span style={{ color: "grey" }}></span>
-              </Button>
-            ) : (
-              <Button
-                style={{ fontFamily: "Rubik" }}
-                className="btn"
-                onClick={googleLogin}
-                type="default"
-              >
-                <img src="/svg/flat-color-icons_google.svg" alt="" />
-              </Button>
-            ))}
-          {telegramUser?.telegram?.session_id ? (
-            <Button style={{ fontFamily: "Rubik", display: "none" }} disabled>
-              <span style={{ color: "grey" }}>TELEGRAM CONNECTED</span>
-            </Button>
-          ) : (
-            <>
-              {user && !user?.admin && (
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+            {user &&
+              !user?.admin &&
+              (telegramUser?.google?.tokens?.access_token ? (
                 <Button
                   style={{
                     fontFamily: "Rubik",
-                    color: "#49494B",
-                    marginRight: "12px",
+                    color: "white",
+                    background: "transparent",
+                    display: "none",
                   }}
-                  onClick={showModal}
+                  className="btn"
+                  disabled
                   type="default"
                 >
-                  <img src="/svg/telegram.png" alt="telegram" />
+                  <span style={{ color: "grey" }}></span>
                 </Button>
-              )}
-              <Modal
-                title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
-                open={isModalOpen}
-                footer={null}
-                onCancel={handleCancel}
-                width={450}
-              >
-                <Form
-                  onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
-                  layout="vertical"
+              ) : (
+                <Button
+                  style={{ fontFamily: "Rubik" }}
+                  className="btn"
+                  onClick={googleLogin}
+                  type="default"
                 >
-                  {!isOtpStep && (
-                    <Form.Item
-                      label="Phone Number"
-                      name="phone"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your phone number!",
-                        },
-                        {
-                          pattern: /^[0-9]{10}$/,
-                          message: "Phone number must be 10 digits.",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Enter your phone number" />
-                    </Form.Item>
-                  )}
-                  {isOtpStep && (
-                    <Form.Item
-                      label="Code (For OTP See the Telegram Chat) "
-                      name="code"
-                      rules={[
-                        { required: true, message: "Please enter the code!" },
-                        {
-                          pattern: /^[0-9]{5}$/,
-                          message: "Code must be 5 digits.",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Enter the code" />
-                    </Form.Item>
-                  )}
-                  <Form.Item
-                    style={{ marginBottom: "10px", textAlign: "right" }}
+                  <img src="/svg/flat-color-icons_google.svg" alt="" />
+                </Button>
+              ))}
+            {telegramUser?.telegram?.session_id ? (
+              <Button style={{ fontFamily: "Rubik", display: "none" }} disabled>
+                <span style={{ color: "grey" }}>TELEGRAM CONNECTED</span>
+              </Button>
+            ) : (
+              <>
+                {user && !user?.admin && (
+                  <Button
+                    style={{
+                      fontFamily: "Rubik",
+                      color: "#49494B",
+                      marginRight: "12px",
+                    }}
+                    onClick={showModal}
+                    type="default"
                   >
-                    <Button type="primary" htmlType="submit">
-                      {isOtpStep ? "Submit OTP" : "Send Code"}
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Modal>
-            </>
-          )}
-          {user && (
-            <Popover
-              style={{ marginLeft: "20px" }}
-              content={popoverContent}
-              trigger="click"
-            >
-              <span>
-                <Avatar
-                  src={telegramUser?.google?.profile?.picture || undefined}
-                  style={{ marginRight: "20px", cursor: "pointer" }}
-                  icon={
-                    !telegramUser?.google?.profile?.picture
-                      ? initials
-                      : undefined
-                  }
-                />
-              </span>
-            </Popover>
-          )}
-        </div>
+                    <img src="/svg/telegram.png" alt="telegram" />
+                  </Button>
+                )}
+                <Modal
+                  title={isOtpStep ? "Enter OTP" : "Connect Telegram"}
+                  open={isModalOpen}
+                  footer={null}
+                  onCancel={handleCancel}
+                  width={450}
+                >
+                  <Form
+                    onFinish={isOtpStep ? handleOtpSubmit : handleLogin}
+                    layout="vertical"
+                  >
+                    {!isOtpStep && (
+                      <Form.Item
+                        label="Phone Number"
+                        name="phone"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter your phone number!",
+                          },
+                          {
+                            pattern: /^[0-9]{10}$/,
+                            message: "Phone number must be 10 digits.",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="Enter your phone number" />
+                      </Form.Item>
+                    )}
+                    {isOtpStep && (
+                      <Form.Item
+                        label="Code (For OTP See the Telegram Chat) "
+                        name="code"
+                        rules={[
+                          { required: true, message: "Please enter the code!" },
+                          {
+                            pattern: /^[0-9]{5}$/,
+                            message: "Code must be 5 digits.",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="Enter the code" />
+                      </Form.Item>
+                    )}
+                    <Form.Item
+                      style={{ marginBottom: "10px", textAlign: "right" }}
+                    >
+                      <Button type="primary" htmlType="submit">
+                        {isOtpStep ? "Submit OTP" : "Send Code"}
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Modal>
+              </>
+            )}
+            {user && (
+              <Popover
+                style={{ marginLeft: "20px" }}
+                content={popoverContent}
+                trigger="click"
+              >
+                <span>
+                  <Avatar
+                    src={telegramUser?.google?.profile?.picture || undefined}
+                    style={{ marginRight: "20px", cursor: "pointer" }}
+                    icon={
+                      !telegramUser?.google?.profile?.picture
+                        ? initials
+                        : undefined
+                    }
+                  />
+                </span>
+              </Popover>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
