@@ -44,6 +44,7 @@ export const progressReportHook = () => {
   return useQuery({
     queryKey: ["allchProgressReport"],
     queryFn: () => GetAllProgressReport(),
+
     staleTime: Infinity,
   });
 };

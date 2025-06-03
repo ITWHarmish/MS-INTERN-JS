@@ -119,7 +119,7 @@ const Leaves = ({ visible, onClose }) => {
         await SendLeaveToGmail(JSON.stringify({ emailContent: emailPreview }));
         await ApplyLeave(payload);
         dispatch(fetchLeaves());
-        QueryClient.invalidateQueries({ queryKey: ["leaves"] });
+
         message.success("Leave Application Sent Successful!");
         if (message.success) {
           setDateRange([dayjs(), dayjs()]);
@@ -128,18 +128,26 @@ const Leaves = ({ visible, onClose }) => {
           setSendMail(true);
           setReason("");
           setEmailPreview("");
+          QueryClient.invalidateQueries({
+            queryKey: ["leaveRequests", user?._id],
+          });
           onClose();
         }
       } else if (!sendMail) {
         await ApplyLeave(payload);
-        dispatch(fetchLeaves());
-        QueryClient.invalidateQueries({ queryKey: ["leaves"] });
+
+        dispatch(fetchLeaves()),
+          QueryClient.invalidateQueries({
+            queryKey: ["leaveRequests", user?._id],
+          });
+
         message.success("Leave Application Apply Successful!");
         if (message.success) {
           setDateRange([dayjs(), dayjs()]);
           setNumDays(1);
           setLeaveType(null);
           setSendMail(true);
+
           onClose();
         }
       }

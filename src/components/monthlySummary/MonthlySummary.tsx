@@ -107,6 +107,14 @@ const MonthlySummary = () => {
   }, []);
 
   useEffect(() => {
+    if (!user?.admin) {
+      QueryClient.invalidateQueries({
+        queryKey: ["leaveRequests", user?._id],
+      });
+    }
+  }, [QueryClient, user]);
+
+  useEffect(() => {
     if (
       (leaveRequests && leaveRequests.length > 0) ||
       (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)
@@ -143,6 +151,7 @@ const MonthlySummary = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    QueryClient.invalidateQueries({ queryKey: ["leaves"] });
   };
 
   const dayProp = (date) => {

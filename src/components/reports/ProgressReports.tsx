@@ -57,11 +57,8 @@ const ProgressReports = () => {
     })
   );
   useEffect(() => {
-    if (user?._id) {
-      queryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
-    }
     queryClient.setQueryData(["studentReports"], studentReportswithKeys);
-  }, []);
+  }, [studentReportswithKeys, queryClient, user?._id]);
 
   const statusUpdateMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
