@@ -15,10 +15,8 @@ const Layout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const token = Cookies.get("ms_intern_jwt");
 
-  // React Query hook to fetch user info
   const { data, isLoading, isError } = layoutHook(token);
 
-  // On successful data fetch, store user in Redux
   useEffect(() => {
     if (!token) {
       navigate("/login");

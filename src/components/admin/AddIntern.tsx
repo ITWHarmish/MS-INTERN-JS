@@ -18,7 +18,6 @@ import { IProfile } from "../../types/ILogin";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AddIntern = ({ space, visible, onClose }) => {
-  // const [loading, setLoading] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
   const [isAdmin, setIsAdmin] = useState(false);
   const queryClient = useQueryClient();

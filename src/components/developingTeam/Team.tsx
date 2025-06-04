@@ -48,13 +48,6 @@ const data = [
       "As a UI/UX mentor, I guided the design process of a time log system UI, executed by a budding designer under my supervision. The outcome showcases a clean, intuitive interface that highlights both creative effort and thoughtful mentorship.",
     image: "/avatar/urjit-img.png",
   },
-  {
-    name: "DAKSH PATEL",
-    role: "REACT DEVELOPER",
-    description:
-      "As a React developer, I built a time log system UI using responsive, reusable components. I used React Query for efficient data management and added animations to enhance user experience. The result was a clean, intuitive interface with strong focus on performance and usability.",
-    image: "/avatar/daksh-img1.png",
-  },
 ];
 
 const Team = () => {

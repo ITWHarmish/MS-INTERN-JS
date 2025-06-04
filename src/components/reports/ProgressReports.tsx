@@ -24,7 +24,7 @@ import { ConfigProvider } from "antd";
 const ProgressReports = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  // const { progressReport } = useSelector((state: RootState) => state.report);
+
   const { user } = useSelector((state: RootState) => state.auth);
   const [selectedMentor, setSelectedMentor] = useState<string | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
@@ -34,7 +34,6 @@ const ProgressReports = () => {
     holderRender: (children) => children,
   });
 
-  // const QueryClient = useQueryClient();
   const { data: allProgressReport = [] } = progressReportHook();
 
   const { data: mentors = [] } = mentorsHook(user);

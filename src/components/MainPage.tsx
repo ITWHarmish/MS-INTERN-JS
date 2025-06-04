@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import "../index.css";
 import Timelog from "./Timelog";
 import TodoCard from "./TodoCard";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
@@ -12,7 +12,6 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import Spinner from "../utils/Spinner";
-import { gsap } from "gsap";
 
 import {
   telegramHook,
@@ -30,8 +29,6 @@ const MainPage = () => {
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth);
-  const timelogRef = useRef(null);
-  const todoRef = useRef(null);
 
   const { data: todo = [] } = todohook(user);
 
@@ -41,21 +38,6 @@ const MainPage = () => {
     user as any,
     internId
   );
-
-  useEffect(() => {
-    if (!loading) {
-      gsap.fromTo(
-        timelogRef.current,
-        { x: -100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.4 }
-      );
-      gsap.fromTo(
-        todoRef.current,
-        { x: 100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.8 }
-      );
-    }
-  }, [loading]);
 
   useEffect(() => {
     const telegramSessionCheck = async () => {
@@ -132,7 +114,6 @@ const MainPage = () => {
           <Col md={18}>
             <div
               className="timelogRef"
-              // ref={timelogRef}
               style={{
                 marginRight: "4px",
                 position: "relative",

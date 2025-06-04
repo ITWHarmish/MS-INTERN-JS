@@ -33,7 +33,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("internship");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  console.log("loading:", loading); // Log unused variable
+
   const [selectedUser, setSelectedUser] = useState(user);
   const [attendanceSummary, setAttendanceSummary] = useState<{
     totalLeaves?: number;

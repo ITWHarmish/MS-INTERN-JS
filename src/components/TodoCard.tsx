@@ -104,7 +104,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
     try {
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
       QueryClient.invalidateQueries({ queryKey: ["todo"] });
-      // dispatch(fetchTodos({ userId }));
+
       message.success("Updated tasks successfully");
     } catch (error) {
       dispatch(
@@ -146,7 +146,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
         setLoading(true);
         await AddTodo(todo);
         QueryClient.invalidateQueries({ queryKey: ["todo"] });
-        // dispatch(fetchTodos({ userId }));
+
         message.success("Task added successfully!");
       } catch (error) {
         console.error("Error adding todo:", error);
@@ -168,7 +168,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
       try {
         await DeleteTodo(id);
         QueryClient.invalidateQueries({ queryKey: ["todo"] });
-        // dispatch(fetchTodos({ userId }));
+
         message.success("Task deleted successfully!");
       } catch (error) {
         console.error("Error deleting task:", error);

@@ -28,7 +28,6 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-// import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const ReportTable = () => {
   const { RangePicker } = DatePicker;

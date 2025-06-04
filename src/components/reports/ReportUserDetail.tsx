@@ -132,7 +132,6 @@ const ReportUserDetail = () => {
         return;
       }
 
-      // Regular user flow
       if (!user?.internshipDetails?.mentor) {
         message.error("Mentor information not found");
         return;
