@@ -44,7 +44,7 @@ const Tasktable = ({ selectedDate, internId }) => {
     data: timelogs = [],
     isLoading,
     refetch,
-  } = timeLogHook(user, formattedDate, internId);
+  } = timeLogHook(user, formattedDate);
 
   const timelogsWithKeys = timelogs.map((timelogs) => ({
     ...timelogs,

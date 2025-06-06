@@ -26,7 +26,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
   const formattedDate = selectedDate.format("YYYY-MM-DD");
 
-  const { data: timelogs = [] } = timeLogHook(user, formattedDate, internId);
+  const { data: timelogs = [] } = timeLogHook(user, formattedDate);
   const { data: students = [] } = getInternHook(user);
   //   const fetchInterns = async () => {
   //     if (!user || !user._id) {

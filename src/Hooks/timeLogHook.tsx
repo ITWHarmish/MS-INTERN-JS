@@ -7,12 +7,11 @@ import {
   TelegramSessionValidation,
 } from "../services/telegramAPI";
 
-export const timeLogHook = (user, internId, formattedDate) => {
+export const timeLogHook = (user, formattedDate) => {
   return useQuery({
-    queryKey: ["timeLog", formattedDate, user?.admin ? internId : user?._id],
-    queryFn: () =>
-      GetTimelogs(formattedDate, user?.admin ? internId : user?._id),
-    enabled: !!user?._id && (user?.admin ? !!internId : true),
+    queryKey: ["timeLog", formattedDate, user?._id],
+    queryFn: () => GetTimelogs(formattedDate, user?._id),
+    enabled: !!user?._id || user?.admin,
     staleTime: Infinity,
   });
 };
