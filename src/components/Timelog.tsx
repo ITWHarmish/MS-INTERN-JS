@@ -57,7 +57,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
   const totalHours = timelogs.reduce((total, timelog) => {
     QueryClient.invalidateQueries({
-      queryKey: ["timelogs", formattedDate, user?._id],
+      queryKey: ["timelog", formattedDate, user?._id],
     });
     const hours = typeof timelog?.hours === "number" ? timelog.hours : 0;
     return total + hours;

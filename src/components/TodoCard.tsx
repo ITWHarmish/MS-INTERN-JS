@@ -1,19 +1,29 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
-import { Button, Card, Input, message, Modal, Select, theme } from "antd";
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Input,
+  message,
+  Modal,
+  Select,
+  theme,
+} from "antd";
 import { useState } from "react";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
-} from "react-beautiful-dnd";
+} from "@hello-pangea/dnd";
 
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
 import { useDispatch } from "react-redux";
-import { fetchTodos } from "../redux/actions/todosAction";
-import { AppDispatch, RootState } from "../redux/store";
+// import { fetchTodos } from "../redux/actions/todosAction";
+import { AppDispatch } from "../redux/store";
+import { RootState } from "../redux/store";
 import { updateTodoInState } from "../redux/slices/todoSlice";
 import "../index.css";
 import {
@@ -24,19 +34,33 @@ import dayjs from "dayjs";
 import { SendTimelogToSheet } from "../services/timelogAPI";
 import { TodoCardProps } from "../types/ITodo";
 import ModalCard from "../utils/ModalCard";
+import { timeLogHook, todohook } from "../Hooks/timeLogHook";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId }) => {
+const TodoCard: React.FC<TodoCardProps> = ({
+  setLoading,
+  selectedDate,
+  internId,
+}) => {
+  const QueryClient = useQueryClient();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { todos } = useSelector((state: RootState) => state.todo);
+  // const { todos } = useSelector((state: RootState) => state.todo);
   const { telegramUser } = useSelector(
     (state: RootState) => state.telegramAuth
   );
-  const { timelogs } = useSelector((state: RootState) => state.timelog);
+  // const { timelogs } = useSelector((state: RootState) => state.timelog);
   const { token } = theme.useToken();
 
   const currentDate = dayjs(Date.now()).format("YYYY-MM-DD");
   const formattedDate = selectedDate.format("YYYY-MM-DD");
+
+  const { data: timelogs = [] } = timeLogHook(user, formattedDate, internId);
+  const { data: todos = [], refetch } = todohook(user);
+
   const totalHours = timelogs.reduce((total, timelog) => {
+    QueryClient.invalidateQueries({
+      queryKey: ["timelogs", formattedDate, user?._id],
+    });
     const hours = typeof timelog?.hours === "number" ? timelog.hours : 0;
     return total + hours;
   }, 0);
@@ -46,6 +70,9 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId 
   const [isDayEndModalOpen, setIsDayEndModalOpen] = useState(false);
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  ConfigProvider.config({
+    holderRender: (children) => children,
+  });
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -84,8 +111,14 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId 
     }
 
     try {
-      await UpdateTodo(updatedTask.todoId, updatedTask.status);
-      dispatch(fetchTodos({ userId }));
+      setLoading(true);
+      await UpdateTodo(updatedTask.todoId, updatedTask.status).then(() =>
+        refetch()
+      );
+      // dispatch(fetchTodos({ userId }));
+      QueryClient.invalidateQueries({
+        queryKey: ["todos", user?._id],
+      });
       message.success("Updated tasks successfully");
     } catch (error) {
       dispatch(
@@ -97,56 +130,123 @@ const TodoCard: React.FC<TodoCardProps> = ({ setLoading, selectedDate, internId 
       message.error("Failed to update task. Please try again.");
       console.error("Error updating task status:", error);
     }
+
+    setLoading(false);
   };
 
-  const handleAddTodo = async () => {
-    if (!newTask.trim()) return;
-
-    const userId = user?.admin ? internId : user?._id;
-    if (!userId) {
-      message.error("User ID is missing.");
-      return;
-    }
-
-    const todo = {
-      userId: userId,
-      description: newTask,
-      date: currentDate,
-    };
-    setNewTask("");
-    setIsAddTodoModalOpen(false);
-
-    try {
+  const handleAddTodo = useMutation({
+    mutationFn: async () => {
+      const userId = user?.admin ? internId : user?._id;
+      if (!userId) {
+        message.error("User ID is missing.");
+        return;
+      }
+      const todo = {
+        userId: userId,
+        description: newTask,
+        date: formattedDate,
+      };
+      setNewTask("");
+      setIsAddTodoModalOpen(false);
+      return await AddTodo(todo);
+    },
+    onSuccess: () => {
       setLoading(true);
-      await AddTodo(todo);
-      dispatch(fetchTodos({ userId }));
+      // dispatch(fetchTodos({ userId }));
+      QueryClient.invalidateQueries({
+        queryKey: ["todos", user?._id],
+      });
+      refetch();
       message.success("Task added successfully!");
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Error adding todo:", error);
       message.error("Failed to add the task. Please try again.");
-    } finally {
+    },
+    onSettled: () => {
       setLoading(false);
-    }
-  };
+    },
+  });
 
-  const handleDelete = async (id: string) => {
-    const userId = user?.admin ? internId : user?._id;
-    if (!userId) {
-      message.error("User ID is missing.");
-      return;
-    }
-    setLoading(true);
-    try {
-      await DeleteTodo(id);
-      dispatch(fetchTodos({ userId }));
+  // const handleAddTodo = async () => {
+  //   if (!newTask.trim()) return;
+
+  //   const userId = user?.admin ? internId : user?._id;
+  //   if (!userId) {
+  //     message.error("User ID is missing.");
+  //     return;
+  //   }
+
+  //   const todo = {
+  //     userId: userId,
+  //     description: newTask,
+  //     date: currentDate,
+  //   };
+  //   setNewTask("");
+  //   setIsAddTodoModalOpen(false);
+
+  //   try {
+  //     setLoading(true);
+  //     await AddTodo(todo);
+  //     // dispatch(fetchTodos({ userId }));
+  //     QueryClient.invalidateQueries({
+  //       queryKey: ["todos", user?._id],
+  //     });
+  //     refetch();
+  //     message.success("Task added successfully!");
+  //   } catch (error) {
+  //     console.error("Error adding todo:", error);
+  //     message.error("Failed to add the task. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleDelete = useMutation({
+    mutationFn: async (id: string) => {
+      const userId = user?.admin ? internId : user?._id;
+      if (!userId) {
+        message.error("User ID is missing.");
+        return;
+      }
+      return await DeleteTodo(id);
+    },
+    onSuccess: () => {
+      // dispatch(fetchTodos({ userId }));
+      QueryClient.invalidateQueries({
+        queryKey: ["todos", user?._id],
+      });
+      refetch();
       message.success("Task deleted successfully!");
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Error deleting task:", error);
       message.error("Failed to delete the task. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+  });
+
+  // const handleDelete = async (id: string) => {
+  //   const userId = user?.admin ? internId : user?._id;
+  //   if (!userId) {
+  //     message.error("User ID is missing.");
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   try {
+  //     await DeleteTodo(id);
+  //     // dispatch(fetchTodos({ userId }));
+  //     QueryClient.invalidateQueries({
+  //       queryKey: ["todos", user?._id],
+  //     });
+  //     refetch();
+  //     message.success("Task deleted successfully!");
+  //   } catch (error) {
+  //     console.error("Error deleting task:", error);
+  //     message.error("Failed to delete the task. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleSendTodo = async () => {
     const inProgressTodos = todos.filter(
@@ -235,13 +335,14 @@ ${description.map((task) => `• ${task}`).join("\n")}
       return;
     }
     const formattedTasks = `𝗗𝗮𝘆 𝗲𝗻𝗱 𝘀𝘁𝗮𝘁𝘂𝘀:
-${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${inProgressTodos.length > 0
+${doneTodos.map((task) => `• ${task.description} - done `).join("\n")} ${
+      inProgressTodos.length > 0
         ? `
 ${inProgressTodos
-          .map((task) => `• ${task.description} - In Progress `)
-          .join("\n")}`
+  .map((task) => `• ${task.description} - In Progress `)
+  .join("\n")}`
         : ""
-      }
+    }
   
 ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
@@ -252,8 +353,8 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
         (error) => {
           message.error(
             error.response?.data ||
-            error.message ||
-            "Failed to send TimeLog. Please try again."
+              error.message ||
+              "Failed to send TimeLog. Please try again."
           );
           return false;
         }
@@ -372,9 +473,10 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                   }}
                   disabled={
                     !(
-                      (telegramUser?.telegram?.session_id || telegramUser?.google?.tokens?.access_token)
-                      && !user?.admin
-                      && currentDate === formattedDate
+                      (telegramUser?.telegram?.session_id ||
+                        telegramUser?.google?.tokens?.access_token) &&
+                      !user?.admin &&
+                      currentDate === formattedDate
                     )
                   }
                 >
@@ -425,12 +527,18 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     marginBottom: "10px",
                   }}
                 >
-                  <span style={{ fontSize: "16px", fontWeight: "600", marginLeft: "12px" }}>
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      marginLeft: "12px",
+                    }}
+                  >
                     IN PROGRESS
                   </span>
 
                   <Button
-                    className='check2'
+                    className="check2"
                     size="small"
                     onClick={showModal}
                     icon={<PlusOutlined />}
@@ -439,7 +547,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                     style={{ fontWeight: "600" }}
                     title="ADD TO DO"
                     open={isAddTodoModalOpen}
-                    onOk={handleAddTodo}
+                    onOk={() => handleAddTodo.mutate()}
                     onCancel={handleCancel}
                     okText="SUBMIT"
                     cancelText="CANCEL"
@@ -517,9 +625,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       <div className="hello">
                                         {task.description.length > 35
                                           ? `${task.description.substring(
-                                            0,
-                                            35
-                                          )}...`
+                                              0,
+                                              35
+                                            )}...`
                                           : task.description}
                                       </div>
                                       <Button
@@ -530,7 +638,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                         }
                                         danger
                                         onClick={() =>
-                                          handleDelete(task.todoId)
+                                          handleDelete.mutate(task.todoId)
                                         }
                                       />
                                     </div>
@@ -555,7 +663,13 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                 }}
               >
                 <div style={{ marginBottom: "10px" }}>
-                  <span style={{ fontSize: "16px", fontWeight: "600", marginLeft: "12px" }}>
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      marginLeft: "12px",
+                    }}
+                  >
                     DONE
                   </span>
                 </div>
@@ -616,9 +730,9 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                       <div>
                                         {task.description.length > 35
                                           ? `${task.description.substring(
-                                            0,
-                                            35
-                                          )}...`
+                                              0,
+                                              35
+                                            )}...`
                                           : task.description}
                                       </div>
                                       <Button
@@ -627,7 +741,7 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
                                         icon={<DeleteOutlined />}
                                         danger
                                         onClick={() =>
-                                          handleDelete(task.todoId)
+                                          handleDelete.mutate(task.todoId)
                                         }
                                       />
                                     </div>

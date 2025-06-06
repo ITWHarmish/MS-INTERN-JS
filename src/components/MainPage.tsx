@@ -4,50 +4,61 @@ import Timelog from "./Timelog";
 import TodoCard from "./TodoCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store";
+// import { useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
-import { fetchTelegram } from "../redux/actions/telegramActions";
-import { TelegramSessionValidation } from "../services/telegramAPI";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { fetchTodos } from "../redux/actions/todosAction";
 import Spinner from "../utils/Spinner";
+
+import {
+  telegramHook,
+  TelegramValidationHook,
+  todohook,
+} from "../Hooks/timeLogHook";
+import { useQueryClient } from "@tanstack/react-query";
 
 const token = Cookies.get("ms_intern_jwt");
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(true);
   const [internId, setInternId] = useState("");
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth);
 
+  const { data: todo = [] } = todohook(user);
+
+  const { data: telegram = [] } = telegramHook(user);
+
+  const { data: TelegramValidation = [] } = TelegramValidationHook(
+    user,
+    internId
+  );
+
+  const QueryClient = useQueryClient();
+
   useEffect(() => {
     const telegramSessionCheck = async () => {
-      try {
-        await TelegramSessionValidation();
-        dispatch(fetchTelegram());
-      } catch (error) {
-        console.error("Failed to update todo date:", error);
-      } finally {
-        setLoading(false);
-      }
+      // await TelegramValidation;
+
+      // await telegram;
+      QueryClient.invalidateQueries({ queryKey: ["telegram"] });
+
+      setLoading(false);
     };
     telegramSessionCheck();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
       const code = searchParams.get("code");
-      if (!code) {
-        console.error("Authorization code not found.");
-        return;
-      }
+
+      if (!code) return;
 
       try {
         await axios.get(`${API_END_POINT}/oauth2callback`, {
@@ -57,7 +68,8 @@ const MainPage = () => {
             "Content-Type": "application/json",
           },
         });
-        dispatch(fetchTelegram());
+        QueryClient.invalidateQueries({ queryKey: ["telegram", user._id] });
+
         navigate("/");
       } catch (error) {
         console.error("Error during OAuth2 callback:", error);
@@ -65,7 +77,7 @@ const MainPage = () => {
     };
 
     handleOAuthCallback();
-  }, [searchParams, navigate, dispatch]);
+  }, [searchParams, navigate, user, QueryClient]);
 
   useEffect(() => {
     if (user) {
@@ -82,23 +94,18 @@ const MainPage = () => {
     if (!user) return;
 
     const currentUserId = user?.admin ? internId : user._id;
+
     if (!currentUserId) return;
 
     const fetchData = async () => {
-      try {
-        await Promise.all([
-          dispatch(fetchTelegram()),
-          dispatch(fetchTodos({ userId: currentUserId })),
-        ]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+      await Promise.all([
+        // QueryClient.invalidateQueries({ queryKey: ["todo"] }),
+        QueryClient.invalidateQueries({ queryKey: ["telegram", user._id] }),
+      ]);
     };
 
     fetchData();
-  }, [user, internId, dispatch]);
+  }, [user, internId]);
 
   return (
     <>
@@ -114,6 +121,7 @@ const MainPage = () => {
         >
           <Col md={18}>
             <div
+              className="timelogRef"
               style={{
                 marginRight: "4px",
                 position: "relative",

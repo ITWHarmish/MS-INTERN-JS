@@ -312,7 +312,7 @@ const Tasktable = ({ selectedDate, internId }) => {
     mutationFn: (id: string) => DeleteTimelog(id),
     onSuccess: () => {
       QueryClient.invalidateQueries({
-        queryKey: ["timelogs", formattedDate, userId],
+        queryKey: ["timeLog", formattedDate, userId],
       });
       refetch();
       message.success("TimeLog Deleted successful!");
