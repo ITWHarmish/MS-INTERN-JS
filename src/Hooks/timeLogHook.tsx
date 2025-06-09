@@ -7,10 +7,11 @@ import {
   TelegramSessionValidation,
 } from "../services/telegramAPI";
 
-export const timeLogHook = (user, formattedDate) => {
+export const timeLogHook = (user, formattedDate, internId) => {
   return useQuery({
-    queryKey: ["timeLog", formattedDate, user?._id],
-    queryFn: () => GetTimelogs(formattedDate, user?._id),
+    queryKey: ["timelog", formattedDate, user?.admin ? internId : user?._id],
+    queryFn: () =>
+      GetTimelogs(formattedDate, user?.admin ? internId : user?._id),
     enabled: !!user?._id || user?.admin,
     staleTime: Infinity,
   });
@@ -29,7 +30,6 @@ export const layoutHook = (token) => {
     queryKey: ["currentUser"],
     queryFn: () => GetCurrentUser(),
     enabled: !!token,
-    retry: false,
     staleTime: Infinity,
   });
 };
@@ -43,10 +43,15 @@ export const tasktableHook = (user, internId, formattedDate, userId) => {
   });
 };
 
-export const todohook = (user) => {
+export const todohook = (user, internId) => {
+  const userId = user?.admin ? internId : user?._id;
   return useQuery({
-    queryKey: ["todo"],
-    queryFn: () => GetTodo(user),
+    queryKey: ["todo", user?._id],
+    queryFn: () => {
+      if (userId) {
+        return GetTodo(userId);
+      }
+    },
     enabled: !!user?._id || user?.admin,
     staleTime: Infinity,
   });
@@ -55,17 +60,21 @@ export const todohook = (user) => {
 export const telegramHook = (user) => {
   return useQuery({
     queryKey: ["telegram", user?._id],
-    queryFn: () => GetTelegram(),
-    enabled: !!user?._id && (user?.admin ? false : true),
+    queryFn: () => {
+      if (!user.admin) {
+        return GetTelegram();
+      }
+    },
+    enabled: !!user?._id || user?.admin,
     staleTime: Infinity,
   });
 };
 
-export const TelegramValidationHook = (user, internId) => {
+export const TelegramValidationHook = (user) => {
   return useQuery({
     queryKey: ["TelegramValidation"],
     queryFn: () => TelegramSessionValidation(),
-    enabled: !!user?._id && (user?.admin ? !!internId : true),
+    enabled: !!user?._id,
     staleTime: Infinity,
   });
 };

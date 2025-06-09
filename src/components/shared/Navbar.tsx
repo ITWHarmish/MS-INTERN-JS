@@ -26,7 +26,7 @@ import {
 } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { fetchTelegram } from "../../redux/actions/telegramActions";
+// import { fetchTelegram } from "../../redux/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
 import { clearTelegramData } from "../../redux/slices/telegramSlice";
@@ -34,17 +34,16 @@ import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
 import gsap from "gsap";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 import Spinner from "../../utils/Spinner";
 import { telegramHook } from "../../Hooks/timeLogHook";
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  //   const { telegramUser } = useSelector(
-  //     (state: RootState) => state.telegramAuth
-
-  //   );
+  // const { telegramUser } = useSelector(
+  //   (state: RootState) => state.telegramAuth
+  // );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOtpStep, setIsOtpStep] = useState(false);
@@ -59,7 +58,9 @@ const Navbar = () => {
   });
 
   const queryClient = useQueryClient();
-  const { data: telegramUser = [] } = telegramHook(user);
+
+  const { data: telegramUser = [] } = user ? telegramHook(user) : { data: [] };
+
   console.log(telegramUser, "telegramUser");
 
   useEffect(() => {
@@ -107,7 +108,8 @@ const Navbar = () => {
           setLoading(true);
 
           if (!telegramUser) {
-            dispatch(fetchTelegram());
+            // dispatch(fetchTelegram());
+            queryClient.clear();
           }
         } catch (error) {
           console.error("Error checking auth status:", error);
@@ -156,24 +158,45 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await LogoutApi();
+  const handleLogout = useMutation({
+    mutationFn: () => LogoutApi(),
 
-      queryClient.removeQueries();
-
+    onSuccess: () => {
       dispatch(setUser(null));
-      dispatch(clearTelegramData());
-
+      // dispatch(clearTelegramData());
+      queryClient.removeQueries({ queryKey: ["telegram", user?._id] });
+      queryClient.removeQueries({ queryKey: ["currentUser"] });
+      queryClient.clear();
       Cookies.remove("ms_intern_jwt");
-
       navigate("/login");
       message.success("Logged out successfully!");
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Logout error:", error);
       message.error("Failed to logout. Please try again.");
-    }
-  };
+    },
+  });
+
+  // async () => {
+  //   try {
+  //     await LogoutApi();
+  //     queryClient.removeQueries({ queryKey: ["telegram", user?._id] });
+  //     queryClient.removeQueries({ queryKey: ["currentUser"] });
+
+  // dispatch(setUser(null));
+  // dispatch(clearTelegramData());
+
+  //     Cookies.remove("ms_intern_jwt");
+
+  //     navigate("/login");
+  //     message.success("Logged out successfully!");
+  //   } catch (error) {
+  //     console.error("Logout error:", error);
+  //     message.error("Failed to logout. Please try again.");
+  //   } finally {
+  //     queryClient.clear();
+  //   }
+  // };
 
   const menuItems = [
     {
@@ -236,7 +259,11 @@ const Navbar = () => {
             </span>
           </a>
         )}
-        <a style={{ color: "white" }} onClick={handleLogout} type="text">
+        <a
+          style={{ color: "white" }}
+          onClick={() => handleLogout.mutate()}
+          type="text"
+        >
           <span
             style={{
               display: "flex",

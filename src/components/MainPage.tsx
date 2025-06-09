@@ -31,14 +31,12 @@ const MainPage = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth);
 
-  const { data: todo = [] } = todohook(user);
+  const { data: todo = [] } = todohook(user, internId);
 
   const { data: telegram = [] } = telegramHook(user);
-
-  const { data: TelegramValidation = [] } = TelegramValidationHook(
-    user,
-    internId
-  );
+  if (!user?.admin) {
+    const { data: TelegramValidation = [] } = TelegramValidationHook(user);
+  }
 
   const QueryClient = useQueryClient();
 
@@ -47,10 +45,13 @@ const MainPage = () => {
       // await TelegramValidation;
 
       // await telegram;
-      QueryClient.invalidateQueries({ queryKey: ["telegram"] });
+      QueryClient.invalidateQueries({
+        queryKey: ["telegram", user?._id, internId],
+      });
 
       setLoading(false);
     };
+
     telegramSessionCheck();
   }, []);
 
@@ -68,7 +69,7 @@ const MainPage = () => {
             "Content-Type": "application/json",
           },
         });
-        QueryClient.invalidateQueries({ queryKey: ["telegram", user._id] });
+        QueryClient.invalidateQueries({ queryKey: ["telegram"] });
 
         navigate("/");
       } catch (error) {
@@ -99,8 +100,10 @@ const MainPage = () => {
 
     const fetchData = async () => {
       await Promise.all([
-        // QueryClient.invalidateQueries({ queryKey: ["todo"] }),
-        QueryClient.invalidateQueries({ queryKey: ["telegram", user._id] }),
+        QueryClient.invalidateQueries({ queryKey: ["todo"] }),
+        QueryClient.invalidateQueries({
+          queryKey: ["telegram", user?._id, internId],
+        }),
       ]);
     };
 

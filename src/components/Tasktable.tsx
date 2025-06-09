@@ -44,30 +44,51 @@ const Tasktable = ({ selectedDate, internId }) => {
     data: timelogs = [],
     isLoading,
     refetch,
-  } = timeLogHook(user, formattedDate);
+  } = timeLogHook(user, formattedDate, internId);
 
   const timelogsWithKeys = timelogs.map((timelogs) => ({
     ...timelogs,
     key: timelogs._id,
   }));
-  useEffect(() => {
-    let startTime, endTime;
+  if (user?.admin) {
+    useEffect(() => {
+      let startTime, endTime;
 
-    if (timelogs.length > 0) {
-      const lastEntryEndTime = dayjs(timelogs[timelogs.length - 1].endTime);
-      startTime = lastEntryEndTime;
-      endTime = lastEntryEndTime.add(1, "hour");
-    } else {
-      startTime = dayjs("09:00", "HH:mm");
-      endTime = dayjs("10:00", "HH:mm");
-    }
+      if (timelogs.length > 0) {
+        const lastEntryEndTime = dayjs(timelogs[timelogs.length - 1].endTime);
+        startTime = lastEntryEndTime;
+        endTime = lastEntryEndTime.add(1, "hour");
+      } else {
+        startTime = dayjs("09:00", "HH:mm");
+        endTime = dayjs("10:00", "HH:mm");
+      }
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      startTime: startTime.format("HH:mm"),
-      endTime: endTime.format("HH:mm"),
-    }));
-  }, [timelogs]);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        startTime: startTime.format("HH:mm"),
+        endTime: endTime.format("HH:mm"),
+      }));
+    }, [timelogs]);
+  } else {
+    useEffect(() => {
+      let startTime, endTime;
+
+      if (timelogs.length > 0) {
+        const lastEntryEndTime = dayjs(timelogs[timelogs.length - 1].endTime);
+        startTime = lastEntryEndTime;
+        endTime = lastEntryEndTime.add(1, "hour");
+      } else {
+        startTime = dayjs("09:00", "HH:mm");
+        endTime = dayjs("10:00", "HH:mm");
+      }
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        startTime: startTime.format("HH:mm"),
+        endTime: endTime.format("HH:mm"),
+      }));
+    }, []);
+  }
 
   const columns: TableProps<IColumns>["columns"] = [
     {

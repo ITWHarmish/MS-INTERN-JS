@@ -26,7 +26,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
   const formattedDate = selectedDate.format("YYYY-MM-DD");
 
-  const { data: timelogs = [] } = timeLogHook(user, formattedDate);
+  const { data: timelogs = [] } = timeLogHook(user, formattedDate, internId);
   const { data: students = [] } = getInternHook(user);
   //   const fetchInterns = async () => {
   //     if (!user || !user._id) {
@@ -57,7 +57,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
   const totalHours = timelogs.reduce((total, timelog) => {
     QueryClient.invalidateQueries({
-      queryKey: ["timelog", formattedDate, user?._id],
+      queryKey: ["timeLog", formattedDate, user?._id],
     });
     const hours = typeof timelog?.hours === "number" ? timelog.hours : 0;
     return total + hours;
