@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
-import { Button, Card, message } from "antd";
+import { Button, Card } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import {
-  DeletePolicy,
-  GetPolicies,
-  UpdatePoliciesOrder,
-} from "../../services/hrPolicyAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import Policy from "./Policy";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { IPolicy } from "../../types/IPolicy";
 import ModalCard from "../../utils/ModalCard";
+import { ConfigProvider } from "antd";
+
+import {
+  deletePilicyHook,
+  editHook,
+  policiesHook,
+  updatePoliciesOrderHook,
+} from "../../Hooks/hrPoliciesHook";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -30,37 +32,27 @@ const getItemStyle = (draggableStyle) => ({
 });
 
 const HrPolicies = () => {
-  const { policies } = useSelector((state: RootState) => state.policy);
-  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [orderedPolicies, setOrderedPolicies] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePolicyId, setDeletePolicyId] = useState<string | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
-
   const isAdmin = user?.admin;
+  ConfigProvider.config({
+    holderRender: (children) => children,
+  });
 
-  useEffect(() => {
-    const fetchPolicyData = async () => {
-      setLoading(true);
-      try {
-        await GetPolicies();
-        dispatch(fetchPolicies());
-      } catch {
-        console.error("Failed to fetch policies");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPolicyData();
-  }, [dispatch]);
+  const { data: policies = [], isLoading } = policiesHook();
 
   useEffect(() => {
     setOrderedPolicies([...policies]);
   }, [policies]);
+
+  const deleteMutation = deletePilicyHook();
+
+  const UpdateOrderMutation = updatePoliciesOrderHook();
 
   const handleDelete = (id) => {
     setDeletePolicyId(id);
@@ -68,9 +60,8 @@ const HrPolicies = () => {
   };
 
   const confirmDelete = async () => {
-    if (deletePolicyId && (await DeletePolicy(deletePolicyId))) {
-      dispatch(fetchPolicies());
-      message.success("Policy Deleted Successfully");
+    if (deletePolicyId) {
+      deleteMutation.mutate(deletePolicyId);
     }
     setDeleteModalOpen(false);
   };
@@ -81,11 +72,7 @@ const HrPolicies = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (policy) => {
-    setIsEditMode(true);
-    setSelectedPolicy(policy);
-    setIsModalOpen(true);
-  };
+  const handleEdit = editHook(setIsEditMode, setSelectedPolicy, setIsModalOpen);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -106,14 +93,7 @@ const HrPolicies = () => {
       policyId: policy._id,
       priority: index,
     }));
-
-    try {
-      await UpdatePoliciesOrder(payload);
-      dispatch(fetchPolicies());
-      message.success("Policies Updated Successfully!");
-    } catch (error) {
-      console.error("Failed to update policy order.", error);
-    }
+    UpdateOrderMutation.mutate(payload);
   };
 
   return (
@@ -139,18 +119,21 @@ const HrPolicies = () => {
       )}
       <div
         className="ScrollInProgress"
-        style={{ height: "calc(100vh - 130px)" }}
+        style={{ height: "calc(100vh - 190px)" }}
       >
         <div style={{ padding: "16px" }}>
           <Card
+            className="hrpolicies"
             style={{
               marginBottom: "20px",
               padding: "20px",
               position: "relative",
-              height: "calc(100vh - 155px)",
+              height: "calc(100vh - 240px)",
+              overflowX: "hidden",
+              scrollbarWidth: "none",
             }}
           >
-            {loading ? (
+            {isLoading ? (
               <Spinner />
             ) : isAdmin ? (
               <DragDropContext onDragEnd={handleDragEnd}>
@@ -184,7 +167,7 @@ const HrPolicies = () => {
                                     shape="circle"
                                     icon={<EditOutlined />}
                                     size="small"
-                                    onClick={() => handleEdit(policy)}
+                                    onClick={() => handleEdit.mutate(policy)}
                                   />
                                   <Button
                                     shape="circle"
