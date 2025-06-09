@@ -87,7 +87,6 @@ const ReportTable = () => {
         console.error("Error fetching report:", error);
       } finally {
         setLoading(false);
-        refetch();
       }
     };
 
@@ -196,8 +195,7 @@ const ReportTable = () => {
         message.error("Failed to delete the task. Please try again.");
       } finally {
         setLoading(false);
-        QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
-        refetch();
+        QueryClient.removeQueries({ queryKey: ["allchProgressReport"] });
       }
     },
   });
@@ -250,7 +248,7 @@ const ReportTable = () => {
       } finally {
         setLoading(false);
         setEditingTask(null);
-        QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
+        QueryClient.resetQueries({ queryKey: ["allchProgressReport"] });
         refetch();
       }
     } else {
@@ -271,7 +269,7 @@ const ReportTable = () => {
         console.error("Error While Adding task: ", error);
       } finally {
         setLoading(false);
-        QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
+        QueryClient.resetQueries({ queryKey: ["allchProgressReport"] });
         refetch();
       }
     }
