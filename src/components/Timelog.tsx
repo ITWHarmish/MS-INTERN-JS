@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
 // import { infinity } from "ldrs";
-import { getInternHook } from "../Hooks/internListhook";
+import { getInternsHook } from "../Hooks/internListhook";
 import { timeLogHook } from "../Hooks/timeLogHook";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -27,7 +27,7 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
   const formattedDate = selectedDate.format("YYYY-MM-DD");
 
   const { data: timelogs = [] } = timeLogHook(user, formattedDate, internId);
-  const { data: students = [] } = getInternHook(user);
+  const { data: students = [] } = getInternsHook(user);
   //   const fetchInterns = async () => {
   //     if (!user || !user._id) {
   //       console.warn("User or Mentor ID is missing, skipping API call");

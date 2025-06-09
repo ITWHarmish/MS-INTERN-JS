@@ -29,7 +29,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 // import { fetchTelegram } from "../../redux/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
-import { clearTelegramData } from "../../redux/slices/telegramSlice";
+// import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
@@ -60,8 +60,6 @@ const Navbar = () => {
   const queryClient = useQueryClient();
 
   const { data: telegramUser = [] } = user ? telegramHook(user) : { data: [] };
-
-  console.log(telegramUser, "telegramUser");
 
   useEffect(() => {
     const animateNavbar = () => {
@@ -164,8 +162,8 @@ const Navbar = () => {
     onSuccess: () => {
       dispatch(setUser(null));
       // dispatch(clearTelegramData());
-      queryClient.removeQueries({ queryKey: ["telegram", user?._id] });
-      queryClient.removeQueries({ queryKey: ["currentUser"] });
+      // queryClient.removeQueries({ queryKey: ["telegram"] });
+      // queryClient.removeQueries({ queryKey: ["currentUser"] });
       queryClient.clear();
       Cookies.remove("ms_intern_jwt");
       navigate("/login");
@@ -298,7 +296,7 @@ const Navbar = () => {
     try {
       await SubmitApiTelegram({ phone: phoneNumber, code: values.code });
       message.success("Logged in successfully!");
-      queryClient.invalidateQueries({ queryKey: ["telegram", user._id] });
+      queryClient.invalidateQueries({ queryKey: ["telegram"] });
 
       handleCancel();
     } catch (error) {

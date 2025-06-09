@@ -45,9 +45,9 @@ const MainPage = () => {
       // await TelegramValidation;
 
       // await telegram;
-      QueryClient.invalidateQueries({
-        queryKey: ["telegram", user?._id, internId],
-      });
+      // QueryClient.invalidateQueries({
+      //   queryKey: ["telegram"],
+      // });
 
       setLoading(false);
     };
@@ -91,24 +91,26 @@ const MainPage = () => {
     }
   }, [user, navigate]);
 
-  useEffect(() => {
-    if (!user) return;
+  if (user?.admin) {
+    useEffect(() => {
+      if (!user) return;
 
-    const currentUserId = user?.admin ? internId : user._id;
+      const currentUserId = user?.admin ? internId : user._id;
 
-    if (!currentUserId) return;
+      if (!currentUserId) return;
 
-    const fetchData = async () => {
-      await Promise.all([
-        QueryClient.invalidateQueries({ queryKey: ["todo"] }),
-        QueryClient.invalidateQueries({
-          queryKey: ["telegram", user?._id, internId],
-        }),
-      ]);
-    };
+      const fetchData = async () => {
+        await Promise.all([
+          QueryClient.invalidateQueries({ queryKey: ["todo"] }),
+          QueryClient.invalidateQueries({
+            queryKey: ["telegram"],
+          }),
+        ]);
+      };
 
-    fetchData();
-  }, [user, internId]);
+      fetchData();
+    }, [user, internId, QueryClient]);
+  }
 
   return (
     <>

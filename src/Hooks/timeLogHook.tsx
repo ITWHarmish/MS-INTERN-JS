@@ -46,7 +46,7 @@ export const tasktableHook = (user, internId, formattedDate, userId) => {
 export const todohook = (user, internId) => {
   const userId = user?.admin ? internId : user?._id;
   return useQuery({
-    queryKey: ["todo", user?._id],
+    queryKey: ["todo"],
     queryFn: () => {
       if (userId) {
         return GetTodo(userId);
@@ -59,7 +59,7 @@ export const todohook = (user, internId) => {
 
 export const telegramHook = (user) => {
   return useQuery({
-    queryKey: ["telegram", user?._id],
+    queryKey: ["telegram"],
     queryFn: () => {
       if (!user.admin) {
         return GetTelegram();
