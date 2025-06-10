@@ -22,6 +22,7 @@ import TermsAndConditions from "./components/privacyPolicy/TermsAndConditions.ts
 import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {

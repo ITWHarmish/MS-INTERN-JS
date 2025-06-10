@@ -36,6 +36,20 @@ interface FormValues {
 }
 
 const ReportUserDetail = () => {
+  const originalError = console.error;
+
+  useEffect(() => {
+    console.error = (...args) => {
+      if (args[0]?.includes("Instance created by `useForm` is not connected")) {
+        return;
+      }
+      originalError.apply(console, args);
+    };
+
+    return () => {
+      console.error = originalError;
+    };
+  }, []);
   const { RangePicker } = DatePicker;
   const { Step } = Steps;
   const { reportId } = useParams();

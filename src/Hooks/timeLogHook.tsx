@@ -48,9 +48,9 @@ export const todohook = (user, internId) => {
   return useQuery({
     queryKey: ["todo"],
     queryFn: () => {
-      if (userId) {
-        return GetTodo(userId);
-      }
+      // if (userId) {
+      return GetTodo(userId);
+      // }
     },
     enabled: !!user?._id || user?.admin,
     staleTime: Infinity,
@@ -61,9 +61,9 @@ export const telegramHook = (user) => {
   return useQuery({
     queryKey: ["telegram"],
     queryFn: () => {
-      if (!user.admin) {
-        return GetTelegram();
-      }
+      // if (!user.admin) {
+      return GetTelegram();
+      // }
     },
     enabled: !!user?._id || user?.admin,
     staleTime: Infinity,

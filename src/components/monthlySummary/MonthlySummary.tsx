@@ -21,6 +21,20 @@ import { useQueryClient } from "@tanstack/react-query";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
+  const originalError = console.error;
+
+  useEffect(() => {
+    console.error = (...args) => {
+      if (args[0]?.includes("Maximum update depth exceeded")) {
+        return;
+      }
+      originalError.apply(console, args);
+    };
+
+    return () => {
+      console.error = originalError;
+    };
+  }, []);
   const localizer = dayjsLocalizer(dayjs);
   const QueryClient = useQueryClient();
 
@@ -71,6 +85,7 @@ const MonthlySummary = () => {
 
   const handleNavigate = useCallback((date: Date) => {
     try {
+      setCalendarLoading(true);
       const newDate = new Date(date);
       const monthNames = [
         "JAN",
@@ -97,7 +112,7 @@ const MonthlySummary = () => {
     } catch (error) {
       console.error("Error while fetching the monthly summary: ", error);
     } finally {
-      setTimeout(() => setCalendarLoading(false), 500);
+      setTimeout(() => setCalendarLoading(false), 1000);
     }
   }, []);
 
@@ -114,12 +129,13 @@ const MonthlySummary = () => {
     }
   }, [QueryClient, user]);
 
-  {
-    useEffect(() => {
+  useEffect(() => {
+    try {
       if (
         (leaveRequests && leaveRequests.length > 0) ||
         (monthlySummary?.daysArray && monthlySummary.daysArray.length > 0)
       ) {
+        setCalendarLoading(true);
         const dynamicLeaves =
           leaveRequests.map((leave) => ({
             start: new Date(leave.from),
@@ -140,12 +156,18 @@ const MonthlySummary = () => {
 
         setEventList(allEvents);
       }
-    }, [leaveRequests, monthlySummary]);
-    useEffect(() => {
-      const holiday = monthlySummary?.daysArray?.filter((day) => day.holiday);
-      setOfficeHoliday(holiday);
-    }, []);
-  }
+    } catch (error) {
+      console.error("Error while fetching the monthly summary: ", error);
+    } finally {
+      setTimeout(() => setCalendarLoading(false), 2000);
+    }
+  }, [leaveRequests, monthlySummary]);
+
+  useEffect(() => {
+    const holiday = monthlySummary?.daysArray?.filter((day) => day.holiday);
+    setOfficeHoliday(holiday);
+  }, []);
+
   const showModal = () => {
     setIsModalOpen(true);
   };

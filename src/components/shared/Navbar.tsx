@@ -26,7 +26,7 @@ import {
 } from "../../services/telegramAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-// import { fetchTelegram } from "../../redux/actions/telegramActions";
+import { fetchTelegram } from "../../redux/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
 // import { clearTelegramData } from "../../redux/slices/telegramSlice";
@@ -37,13 +37,13 @@ import gsap from "gsap";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 import Spinner from "../../utils/Spinner";
-import { telegramHook } from "../../Hooks/timeLogHook";
+// import { telegramHook } from "../../Hooks/timeLogHook";
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  // const { telegramUser } = useSelector(
-  //   (state: RootState) => state.telegramAuth
-  // );
+  const { telegramUser } = useSelector(
+    (state: RootState) => state.telegramAuth
+  );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOtpStep, setIsOtpStep] = useState(false);
@@ -59,7 +59,7 @@ const Navbar = () => {
 
   const queryClient = useQueryClient();
 
-  const { data: telegramUser = [] } = user ? telegramHook(user) : { data: [] };
+  // const { data: telegramUser = [] } = user ? telegramHook(user) : { data: [] };
 
   useEffect(() => {
     const animateNavbar = () => {
@@ -106,7 +106,7 @@ const Navbar = () => {
           setLoading(true);
 
           if (!telegramUser) {
-            // dispatch(fetchTelegram());
+            dispatch(fetchTelegram());
             queryClient.clear();
           }
         } catch (error) {
