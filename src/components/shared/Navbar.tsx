@@ -29,7 +29,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { fetchTelegram } from "../../redux/actions/telegramActions";
 import { LogoutApi } from "../../services/authAPI";
 import { setUser } from "../../redux/slices/authSlice";
-// import { clearTelegramData } from "../../redux/slices/telegramSlice";
+import { clearTelegramData } from "../../redux/slices/telegramSlice";
 import { API_END_POINT } from "../../utils/constants";
 import Cookies from "js-cookie";
 import { VerifyRevokedToken } from "../../services/googleApi";
@@ -161,7 +161,7 @@ const Navbar = () => {
 
     onSuccess: () => {
       dispatch(setUser(null));
-      // dispatch(clearTelegramData());
+      dispatch(clearTelegramData());
       // queryClient.removeQueries({ queryKey: ["telegram"] });
       // queryClient.removeQueries({ queryKey: ["currentUser"] });
       queryClient.clear();

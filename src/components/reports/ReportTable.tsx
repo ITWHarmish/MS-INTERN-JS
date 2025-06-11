@@ -23,7 +23,7 @@ import {
   UpdateTaskToProgressReport,
 } from "../../services/progressReportAPI";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 // import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import { useSelector } from "react-redux";
@@ -36,7 +36,7 @@ const ReportTable = () => {
   const { Step } = Steps;
   const { reportId } = useParams();
   const [form] = Form.useForm();
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
   //   const { progressReport } = useSelector((state: RootState) => state.report);
@@ -67,7 +67,7 @@ const ReportTable = () => {
     };
 
     getRegularity();
-  }, [user?.admin, reportId, dispatch]);
+  }, [user?.admin, reportId]);
 
   useEffect(() => {
     const fetchReport = async () => {

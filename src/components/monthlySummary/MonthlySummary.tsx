@@ -4,7 +4,7 @@ import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import "../../index.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useSelector } from "react-redux";
 
@@ -21,20 +21,20 @@ import { useQueryClient } from "@tanstack/react-query";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
-  const originalError = console.error;
+  // const originalError = console.error;
 
-  useEffect(() => {
-    console.error = (...args) => {
-      if (args[0]?.includes("Maximum update depth exceeded")) {
-        return;
-      }
-      originalError.apply(console, args);
-    };
+  // useEffect(() => {
+  //   console.error = (...args) => {
+  //     if (args[0]?.includes("Maximum update depth exceeded")) {
+  //       return;
+  //     }
+  //     originalError.apply(console, args);
+  //   };
 
-    return () => {
-      console.error = originalError;
-    };
-  }, []);
+  //   return () => {
+  //     console.error = originalError;
+  //   };
+  // }, []);
   const localizer = dayjsLocalizer(dayjs);
   const QueryClient = useQueryClient();
 
@@ -128,7 +128,14 @@ const MonthlySummary = () => {
       });
     }
   }, [QueryClient, user]);
-
+  const stableLeaveRequests = useMemo(
+    () => leaveRequests,
+    [JSON.stringify(leaveRequests)]
+  );
+  const stableMonthlySummary = useMemo(
+    () => monthlySummary,
+    [JSON.stringify(monthlySummary)]
+  );
   useEffect(() => {
     try {
       if (
@@ -161,7 +168,7 @@ const MonthlySummary = () => {
     } finally {
       setTimeout(() => setCalendarLoading(false), 2000);
     }
-  }, [leaveRequests, monthlySummary]);
+  }, [stableLeaveRequests, stableMonthlySummary]);
 
   useEffect(() => {
     const holiday = monthlySummary?.daysArray?.filter((day) => day.holiday);

@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Input, message, Select, Table, TimePicker } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AddTimelog,
   DeleteTimelog,
@@ -50,7 +50,7 @@ const Tasktable = ({ selectedDate, internId }) => {
     ...timelogs,
     key: timelogs._id,
   }));
-
+  const stableTimeLog = useMemo(() => timelogs, [JSON.stringify(timelogs)]);
   useEffect(() => {
     let startTime, endTime;
 
@@ -68,7 +68,7 @@ const Tasktable = ({ selectedDate, internId }) => {
       startTime: startTime.format("HH:mm"),
       endTime: endTime.format("HH:mm"),
     }));
-  }, [timelogs]);
+  }, [stableTimeLog]);
 
   const columns: TableProps<IColumns>["columns"] = [
     {

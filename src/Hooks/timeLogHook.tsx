@@ -34,11 +34,11 @@ export const layoutHook = (token) => {
   });
 };
 
-export const tasktableHook = (user, internId, formattedDate, userId) => {
+export const tasktableHook = (user, formattedDate, userId) => {
   return useQuery({
     queryKey: ["timeLog", formattedDate, userId],
     queryFn: () => GetTimelogs(formattedDate, userId),
-    enabled: !!user?._id && (user?.admin ? !!internId : true),
+    enabled: !!user?._id || user?.admin,
     staleTime: Infinity,
   });
 };
