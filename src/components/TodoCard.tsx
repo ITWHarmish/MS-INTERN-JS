@@ -10,10 +10,8 @@ import {
 
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
-// import { useDispatch } from "react-redux";
-// import { fetchTodos } from "../redux/actions/todosAction";
+
 import { RootState } from "../redux/store";
-// import { updateTodoInState } from "../redux/slices/todoSlice";
 import "../index.css";
 import {
   SendTodosToChat,
@@ -39,12 +37,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
   internId,
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
-  // const { todos } = useSelector((state: RootState) => state.todo);
 
-  // const { telegramUser } = useSelector(
-  //   (state: RootState) => state.telegramAuth
-  // );
-  // const { timelogs } = useSelector((state: RootState) => state.timelog);
   const { token } = theme.useToken();
 
   const [newTask, setNewTask] = useState("");
@@ -97,11 +90,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
 
     destinationList.splice(destination.index, 0, updatedTask);
 
-    // updateTodoInState({
-    //   id: updatedTask.todoId,
-    //   updatedData: { status: updatedTask.status },
-    // });
-
     const userId = user?.admin ? internId : user?._id;
     if (!userId) {
       message.error("User ID is missing.");
@@ -113,11 +101,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
       QueryClient.invalidateQueries({ queryKey: ["todo"] });
     } catch (error) {
-      // updateTodoInState({
-      //   id: movedTask.todoId,
-      //   updatedData: { status: movedTask.status },
-      // })
-
       message.error("Failed to update task. Please try again.");
       console.error("Error updating task status:", error);
     } finally {
@@ -126,13 +109,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
       }, 500);
     }
   };
-
-  // useEffect(() => {
-  //   const userId = user?.admin ? internId : user?._id;
-  //   if (userId) {
-  //     // dispatch(fetchTodos({ userId }));
-  //   }
-  // }, [dispatch, user, internId]);
 
   const handleAddTodo = useMutation({
     mutationFn: async () => {

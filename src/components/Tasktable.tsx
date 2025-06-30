@@ -8,10 +8,7 @@ import {
 } from "../services/timelogAPI";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-// import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-// import { fetchTimelogs } from "../redux/actions/timelogActions";
-// import { AppDispatch  } from "../redux/store";
 import { RootState } from "../redux/store";
 import type { TableProps } from "antd";
 import { IColumns, TimeLog } from "../types/ITimelog";
@@ -23,7 +20,6 @@ dayjs.extend(localizedFormat);
 
 const Tasktable = ({ selectedDate, internId }) => {
   const formattedDate = selectedDate.format("YYYY-MM-DD");
-  //   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     startTime: "",
     endTime: "",
@@ -31,11 +27,9 @@ const Tasktable = ({ selectedDate, internId }) => {
     description: "",
     date: formattedDate,
   });
-  // const { timelogs } = useSelector((state: RootState) => state.timelog)
   const { user } = useSelector((state: RootState) => state.auth);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // const dispatch = useDispatch<AppDispatch>();
   const { RangePicker } = TimePicker;
   const userId = user?.admin ? internId : user?._id;
 
@@ -223,78 +217,6 @@ const Tasktable = ({ selectedDate, internId }) => {
     },
   });
 
-  //   const handleSubmit = async () => {
-  //     if (
-  //       !formData.startTime ||
-  //       !formData.endTime ||
-  //       !formData.category ||
-  //       !formData.description ||
-  //       !formData.date
-  //     ) {
-  //       message.error("All fields are required!");
-  //       return;
-  //     }
-
-  //     const startTimeObj = dayjs(formData.startTime, "HH:mm");
-  //     const endTimeObj = dayjs(formData.endTime, "HH:mm");
-  //     const duration = endTimeObj.diff(startTimeObj, "minutes") / 60;
-
-  //     if (duration > 1) {
-  //       message.error("Time should not be more than 1 hour!");
-  //       return;
-  //     }
-  //     const payload = {
-  //       ...formData,
-  //       startTime: dayjs(formData.startTime, "HH:mm").format(),
-  //       endTime: dayjs(formData.endTime, "HH:mm").format(),
-  //       hours: Number(duration).toFixed(2),
-  //     };
-  //     setLoading(true);
-  //     if (editingId) {
-  //       try {
-  //         await UpdateTimelog(editingId, payload);
-  //         // dispatch(fetchTimelogs({ date: formattedDate, userId }));
-  //         QueryClient.invalidateQueries({
-  //           queryKey: [
-  //             "timelogs",
-  //             formattedDate,
-  //             user?.admin ? internId : user?._id,
-  //           ],
-  //         });
-  //         message.success("TimeLog Updated successful!");
-  //       } catch (error) {
-  //         console.error("Error While Updating the time log:", error);
-  //         message.error("Updated Failed! Please try again.");
-  //       }
-  //     } else {
-  //       try {
-  //         await AddTimelog(payload);
-  //         // dispatch(fetchTimelogs({ date: formattedDate, userId }));
-  //         QueryClient.invalidateQueries({
-  //           queryKey: [
-  //             "timelogs",
-  //             formattedDate,
-  //             user?.admin ? internId : user?._id,
-  //           ],
-  //         });
-  //         message.success("TimeLog Added successful!");
-  //       } catch (error) {
-  //         console.error("Error While Submitting the time log:", error);
-  //         message.error("Submiision Failed! Please try again.");
-  //       }
-  //     }
-  //     setLoading(false);
-  //     setFormData({
-  //       startTime: "",
-  //       endTime: "",
-  //       category: "coding",
-  //       description: "",
-  //       date: formattedDate,
-  //     });
-
-  //     setEditingId(null);
-  //   };
-
   const handleEdit = (record: TimeLog) => {
     setEditingId(record._id);
 
@@ -324,34 +246,6 @@ const Tasktable = ({ selectedDate, internId }) => {
       console.error("Error While Deleting the time log:");
     },
   });
-
-  //   const handleDelete = async (record) => {
-  //     try {
-  //       setLoading(true);
-  //       await DeleteTimelog(record);
-  //       //   dispatch(fetchTimelogs({ date: formattedDate, userId }));
-  //       QueryClient.invalidateQueries({
-  //         queryKey: [
-  //           "timelogs",
-  //           formattedDate,
-  //           user?.admin ? internId : user?._id,
-  //         ],
-  //       });
-  //       QueryClient.refetchQueries({
-  //         queryKey: [
-  //           "timelogs",
-  //           formattedDate,
-  //           user?.admin ? internId : user?._id,
-  //         ],
-  //       });
-  //       message.success("TimeLog Deleted successful!");
-  //     } catch (error) {
-  //       message.error("Delete Failed! Please try again.");
-  //       console.error("Error While Deleting the time log:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
 
   useEffect(() => {
     setFormData((prev) => ({ ...prev, date: formattedDate }));
@@ -438,27 +332,6 @@ const Tasktable = ({ selectedDate, internId }) => {
           />
         </div>
       )}
-      <div>
-        {/* <div
-                    className={`calculate-hours-card ${showCard ? 'show-card' : ''
-                        }`}
-                >
-                    <Button
-                        type="primary"
-                        icon={showCard ? <WechatWorkOutlined style={{ fontSize: "22px" }} className="check" /> : <WechatWorkOutlined style={{ fontSize: "22px" }} className="check" />}
-                        className="arrow-toggle"
-                        onClick={() => setShowCard(!showCard)}
-                        size='large'
-                        style={{ borderRadius: "40px" }}
-                    />
-                    <iframe
-                        src={import.meta.env.VITE_REACT_APP_CHAT_BASE_URL}
-                        width="100%"
-                        style={{ minHeight: "450px" }}
-                        frameBorder="0"
-                    ></iframe>
-                </div> */}
-      </div>
     </div>
   );
 };

@@ -3,10 +3,7 @@ import Spinner from "../../utils/Spinner";
 import { useEffect, useState } from "react";
 import QuillEditor from "../../utils/QuillEditor";
 import { CreatePolicy, UpdatePolicy } from "../../services/hrPolicyAPI";
-// import { useDispatch } from "react-redux";
-// import { AppDispatch } from "../../redux/store";
 import { useQueryClient } from "@tanstack/react-query";
-// import { fetchPolicies } from "../../redux/actions/hrPolicyActions";
 
 const toolBarOptions = [
   [{ header: [1, 2, false] }],

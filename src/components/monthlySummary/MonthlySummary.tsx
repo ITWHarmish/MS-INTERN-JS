@@ -21,20 +21,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 dayjs.extend(isBetween);
 const MonthlySummary = () => {
-  // const originalError = console.error;
-
-  // useEffect(() => {
-  //   console.error = (...args) => {
-  //     if (args[0]?.includes("Maximum update depth exceeded")) {
-  //       return;
-  //     }
-  //     originalError.apply(console, args);
-  //   };
-
-  //   return () => {
-  //     console.error = originalError;
-  //   };
-  // }, []);
   const localizer = dayjsLocalizer(dayjs);
   const QueryClient = useQueryClient();
 

@@ -10,21 +10,17 @@ import {
   Steps,
 } from "antd";
 import { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-// import { AppDispatch } from "../../redux/store";
 import {
   AddSelfEvaluation,
   GetProgressReport,
   GetRemark,
 } from "../../services/progressReportAPI";
-// import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import Spinner from "../../utils/Spinner";
 import { useQueryClient } from "@tanstack/react-query";
 
 const ReportEvaluation = () => {
   const { Step } = Steps;
-  //   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);

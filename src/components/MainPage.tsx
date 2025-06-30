@@ -4,7 +4,6 @@ import Timelog from "./Timelog";
 import TodoCard from "./TodoCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-// import { useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import axios from "axios";
 import { API_END_POINT } from "../utils/constants";
@@ -42,13 +41,6 @@ const MainPage = () => {
 
   useEffect(() => {
     const telegramSessionCheck = async () => {
-      // await TelegramValidation;
-
-      // await telegram;
-      // QueryClient.invalidateQueries({
-      //   queryKey: ["telegram"],
-      // });
-
       setLoading(false);
     };
 
