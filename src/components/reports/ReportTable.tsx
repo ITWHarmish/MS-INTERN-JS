@@ -24,7 +24,8 @@ import {
 } from "../../services/progressReportAPI";
 import { useEffect, useState } from "react";
 // import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+// import { AppDispatch } from "../../redux/store";
+import { RootState } from "../../redux/store";
 // import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -49,24 +50,25 @@ const ReportTable = () => {
   const { data: progressReport = [], refetch } = progressReportHook();
 
   useEffect(() => {
-    if (!user?.admin) return;
-    const getRegularity = async () => {
-      try {
-        await GetRegularity(reportId);
-        await GetPunctuality(reportId);
-        // await dispatch(fetchProgressReport());
-        QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
+    if (user?.id) {
+      const getRegularity = async () => {
+        try {
+          await GetRegularity(reportId);
+          await GetPunctuality(reportId);
+          // await dispatch(fetchProgressReport());
+          QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
 
-        // refetch();
-      } catch (error) {
-        console.error(
-          "error while fetching the regularity and punctuality: ",
-          error
-        );
-      }
-    };
+          // refetch();
+        } catch (error) {
+          console.error(
+            "error while fetching the regularity and punctuality: ",
+            error
+          );
+        }
+      };
 
-    getRegularity();
+      getRegularity();
+    }
   }, [user?.admin, reportId]);
 
   useEffect(() => {

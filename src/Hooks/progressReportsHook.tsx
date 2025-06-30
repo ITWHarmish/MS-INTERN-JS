@@ -52,9 +52,11 @@ export const progressReportHook = () => {
   });
 };
 
-export const GetProgressReportHook = (id) => {
+export const GetProgressReportHook = (id, user) => {
   return useQuery({
     queryKey: ["progressReport", id],
     queryFn: () => GetProgressReport(id),
+    staleTime: Infinity,
+    enabled: !!user?.admin,
   });
 };

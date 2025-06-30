@@ -18,7 +18,8 @@ import {
   UpdateUserDetailsProgressReport,
 } from "../../services/progressReportAPI";
 import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+// import { AppDispatch } from "../../redux/store";
+import { RootState } from "../../redux/store";
 // import { useDispatch } from "react-redux";
 // import { fetchProgressReport } from "../../redux/actions/progressReportActions";
 import Spinner from "../../utils/Spinner";
@@ -62,6 +63,7 @@ const ReportUserDetail = () => {
   //   const { progressReport } = useSelector((state: RootState) => state.report);
 
   const { data: progressReport = [] } = progressReportHook();
+
   const QueryClient = useQueryClient();
 
   useEffect(() => {
@@ -72,7 +74,7 @@ const ReportUserDetail = () => {
           navigate("/login");
           return;
         }
-        if (user.admin || user) {
+        if (user.admin && reportId) {
           const res = await GetProgressReport(reportId);
           if (res) {
             form.setFieldsValue({
