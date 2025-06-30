@@ -17,6 +17,7 @@ import type { TableProps } from "antd";
 import { IColumns, TimeLog } from "../types/ITimelog";
 import { timeLogHook } from "../Hooks/timeLogHook";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Spinner from "../utils/Spinner";
 
 dayjs.extend(localizedFormat);
 
@@ -407,32 +408,36 @@ const Tasktable = ({ selectedDate, internId }) => {
           SUBMIT
         </Button>
       </div>
-      <div
-        style={{
-          paddingTop: "10px",
-        }}
-      >
-        <Table<IColumns>
-          columns={columns}
-          dataSource={timelogsWithKeys}
-          pagination={false}
-          bordered
-          size="small"
-          loading={isLoading}
-          sticky={true}
-          locale={{ emptyText: <></> }}
-          className="ScrollInProgress"
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <div
           style={{
-            height: "calc(100vh - 280px)",
-            position: "absolute",
-            overflowY: "auto",
-            overflowX: "hidden",
-            left: "10px",
-            right: "0",
-            paddingRight: "10px",
+            paddingTop: "10px",
           }}
-        />
-      </div>
+        >
+          <Table<IColumns>
+            columns={columns}
+            dataSource={timelogsWithKeys}
+            pagination={false}
+            bordered
+            size="small"
+            loading={isLoading}
+            sticky={true}
+            locale={{ emptyText: <></> }}
+            className="ScrollInProgress"
+            style={{
+              height: "calc(100vh - 280px)",
+              position: "absolute",
+              overflowY: "auto",
+              overflowX: "hidden",
+              left: "10px",
+              right: "0",
+              paddingRight: "10px",
+            }}
+          />
+        </div>
+      )}
       <div>
         {/* <div
                     className={`calculate-hours-card ${showCard ? 'show-card' : ''

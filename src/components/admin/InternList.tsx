@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import AddIntern from "./AddIntern";
 import { getInternsHook, spaceListHook } from "../../Hooks/internListhook";
+import Spinner from "../../utils/Spinner";
 
 const InternList = () => {
   const navigate = useNavigate();
@@ -99,27 +100,31 @@ const InternList = () => {
             </>
           }
         >
-          <div style={{ paddingTop: "10px" }}>
-            <Table<IColumnsReports>
-              columns={columns}
-              dataSource={studentsWithKeys}
-              pagination={false}
-              bordered
-              size="small"
-              loading={internsLoading || spaceLoading}
-              sticky={true}
-              className="ScrollInProgress"
-              style={{
-                height: "calc(65vh - 88px)",
-                position: "absolute",
-                overflowY: "auto",
-                overflowX: "hidden",
-                left: "10px",
-                right: "0",
-                paddingRight: "10px",
-              }}
-            />
-          </div>
+          {internsLoading || spaceLoading ? (
+            <Spinner />
+          ) : (
+            <div style={{ paddingTop: "10px" }}>
+              <Table<IColumnsReports>
+                columns={columns}
+                dataSource={studentsWithKeys}
+                pagination={false}
+                loading={internsLoading || spaceLoading}
+                bordered
+                size="small"
+                sticky={true}
+                className="ScrollInProgress"
+                style={{
+                  height: "calc(65vh - 88px)",
+                  position: "absolute",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  left: "10px",
+                  right: "0",
+                  paddingRight: "10px",
+                }}
+              />
+            </div>
+          )}
         </Card>
       </div>
     </>
