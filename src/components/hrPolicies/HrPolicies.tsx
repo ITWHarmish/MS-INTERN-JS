@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Card } from "antd";
 import Spinner from "../../utils/Spinner";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -45,10 +45,10 @@ const HrPolicies = () => {
   });
 
   const { data: policies = [], isLoading } = policiesHook();
-
+  const stablepolicies = useMemo(() => policies, [JSON.stringify(policies)]);
   useEffect(() => {
     setOrderedPolicies([...policies]);
-  }, [policies]);
+  }, [stablepolicies]);
 
   const deleteMutation = deletePilicyHook();
 
