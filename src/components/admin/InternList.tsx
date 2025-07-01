@@ -48,6 +48,7 @@ const InternList = () => {
       title: "Full Name",
       dataIndex: "fullName",
       key: "fullName",
+      align: "center",
       render: (fullName, record: { _id: string }) => (
         <a
           onClick={() => handleFileClick(record._id)}
