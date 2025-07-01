@@ -66,6 +66,37 @@ const InternList = () => {
       dataIndex: "email",
       key: "email",
       align: "center",
+      render: (email, record: { _id: string }) => (
+        <a
+          onClick={() => handleFileClick(record._id)}
+          style={{
+            color: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline",
+          }}
+        >
+          {email}
+        </a>
+      ),
+    },
+
+    {
+      title: "Joining Date",
+      dataIndex: "joiningDate",
+      key: "joiningDate",
+      align: "center",
+      render: (_, record) =>
+        record.internsDetails?.joiningDate?.slice(0, 10) || "-",
+    },
+    {
+      title: "Duration",
+      dataIndex: "duration",
+      key: "duration",
+      align: "center",
+      render: (_, record) =>
+        record.internsDetails?.duration
+          ? `${record.internsDetails.duration} months`
+          : "-",
     },
     {
       title: "Action",
