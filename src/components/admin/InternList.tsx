@@ -8,6 +8,7 @@ import { useState } from "react";
 import AddIntern from "./AddIntern";
 import { getInternsHook, spaceListHook } from "../../Hooks/internListhook";
 import Spinner from "../../utils/Spinner";
+import "./InternList.css";
 
 const InternList = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const InternList = () => {
       dataIndex: "fullName",
       key: "fullName",
       align: "center",
+
       render: (fullName, record: { _id: string }) => (
         <a
           onClick={() => handleFileClick(record._id)}
@@ -67,6 +69,7 @@ const InternList = () => {
       dataIndex: "email",
       key: "email",
       align: "center",
+
       render: (email, record: { _id: string }) => (
         <a
           onClick={() => handleFileClick(record._id)}
@@ -74,6 +77,7 @@ const InternList = () => {
             color: "inherit",
             cursor: "pointer",
             textDecoration: "underline",
+            textAlign: "left",
           }}
         >
           {email}
@@ -104,6 +108,7 @@ const InternList = () => {
       dataIndex: "action",
       key: "action",
       align: "center",
+
       render: (_, record: { _id: string }) => <Switch />,
     },
   ];
