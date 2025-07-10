@@ -38,13 +38,15 @@ const ProgressReports = () => {
 
   const { data: mentors = [] } = mentorsHook(user);
 
-  const { data: students = [] } = internsHook(user, selectedMentor);
+  const { data: students = [], refetch } = internsHook(user, selectedMentor);
 
   const { data: studentReports = [] } = internsReportHook(
     selectedStudent,
     user
   );
-
+  if (user?.admin) {
+    refetch();
+  }
   const studentReportswithKeys = studentReports.map((studentReports) => ({
     ...studentReports,
     key: studentReports._id,
@@ -126,7 +128,7 @@ const ProgressReports = () => {
             <Select
               style={{ width: "25%" }}
               defaultValue={record.status}
-              onChange={(value) => handleStatusChange(record._id, value)}
+              onChange={(value) => handleStatusChange(record._id, value as any)}
               options={[
                 { value: "pending", label: "Pending" },
                 { value: "in preview", label: "In Preview" },
@@ -163,7 +165,7 @@ const ProgressReports = () => {
             onClick={() => {
               handleEdit(record);
             }}
-            disabled={user?.admin ? false : record?.status === "approved"}
+            disabled={user?.admin ? false : record?.status === true}
           />
           <Button
             danger
@@ -212,6 +214,7 @@ const ProgressReports = () => {
 
   const handleMentorChange = (mentorId: string) => {
     setSelectedMentor(mentorId);
+
     setSelectedStudent(null);
   };
 
@@ -250,10 +253,12 @@ const ProgressReports = () => {
                   showSearch
                   style={{ marginLeft: "15px" }}
                   placeholder="Select Student"
-                  options={students?.map((student) => ({
-                    value: student._id,
-                    label: student.fullName,
-                  }))}
+                  options={students
+                    ?.filter((student) => student.status === true)
+                    ?.map((student) => ({
+                      value: student._id,
+                      label: student.fullName,
+                    }))}
                   onChange={handleStudentChange}
                   filterOption={(input, option: any) =>
                     option?.label.toLowerCase().includes(input.toLowerCase())

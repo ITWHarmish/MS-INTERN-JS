@@ -483,10 +483,12 @@ const MonthlySummary = () => {
                   showSearch
                   style={{ marginLeft: "15px" }}
                   placeholder="Select Student"
-                  options={students.map((student) => ({
-                    value: student._id,
-                    label: student.fullName,
-                  }))}
+                  options={students
+                    ?.filter((student) => student.status === true)
+                    ?.map((student) => ({
+                      value: student._id,
+                      label: student.fullName,
+                    }))}
                   onChange={handleStudentChange}
                   filterOption={(input, option: any) =>
                     option?.label.toLowerCase().includes(input.toLowerCase())
