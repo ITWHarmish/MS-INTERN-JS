@@ -1,12 +1,8 @@
 import { Card, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 import Tasktable from "./Tasktable";
-// import { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
-// import { AppDispatch, RootState } from "../redux/store";
-// import { fetchTimelogs } from "../redux/actions/timelogActions";
+
 import { useSelector } from "react-redux";
-// import { GetInternsByMentorId } from "../services/adminAPI";
 import { RootState } from "../redux/store";
 
 // import { infinity } from "ldrs";
@@ -15,12 +11,7 @@ import { timeLogHook } from "../Hooks/timeLogHook";
 import { useQueryClient } from "@tanstack/react-query";
 
 const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
-  //   const dispatch = useDispatch<AppDispatch>();
-  // const { timelogs } = useSelector((state: RootState) => state.timelog);
   const { user } = useSelector((state: RootState) => state.auth);
-  //   const [students, setStudents] = useState<{ _id: string; fullName: string }[]>(
-  //     []
-  //   );
 
   const QueryClient = useQueryClient();
 
@@ -28,25 +19,6 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
 
   const { data: timelogs = [] } = timeLogHook(user, formattedDate, internId);
   const { data: students = [] } = getInternsHook(user);
-  //   const fetchInterns = async () => {
-  //     if (!user || !user._id) {
-  //       console.warn("User or Mentor ID is missing, skipping API call");
-  //       return;
-  //     }
-  //     try {
-  //       if (user && user.admin) {
-  //         const res = await GetInternsByMentorId(user._id);
-  //         setStudents(res.data || []);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error Intern List:", error);
-  //       message.error("Failed to fetch Intern List.");
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchInterns();
-  //   }, [user]);
 
   const handleDateChange = (date) => {
     if (date) {
@@ -62,18 +34,6 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
     const hours = typeof timelog?.hours === "number" ? timelog.hours : 0;
     return total + hours;
   }, 0);
-
-  //   useEffect(() => {
-  //     const formattedDate = selectedDate.format("YYYY-MM-DD");
-  //     if (selectedDate) {
-  //       dispatch(
-  //         fetchTimelogs({
-  //           date: formattedDate,
-  //           userId: user?.admin ? internId : user?._id,
-  //         })
-  //       );
-  //     }
-  //   }, [dispatch, selectedDate, internId, user?._id, user?.admin]);
 
   const handleStudentChange = (value) => {
     setInternId(value);
@@ -104,6 +64,9 @@ const Timelog = ({ selectedDate, setSelectedDate, setInternId, internId }) => {
                     label: student.fullName,
                   }))}
                   onChange={handleStudentChange}
+                  filterOption={(input, option: any) =>
+                    option?.label.toLowerCase().includes(input.toLowerCase())
+                  }
                 />
               </div>
             )}

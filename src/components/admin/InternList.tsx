@@ -1,4 +1,4 @@
-import { Table, Card, Button, Switch } from "antd";
+import { Table, Card, Button, Switch, message } from "antd";
 import type { TableProps } from "antd";
 import { IColumnsReports } from "../../types/IReport";
 import { useNavigate } from "react-router-dom";
@@ -7,21 +7,29 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import AddIntern from "./AddIntern";
 import { getInternsHook, spaceListHook } from "../../Hooks/internListhook";
+import Spinner from "../../utils/Spinner";
+import "./InternList.css";
+import { IntenDisable } from "../../services/adminAPI";
 
 const InternList = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [switchLoading, setSwitchLoading] = useState<string | null>(null);
 
   const { data: space = [], isLoading: spaceLoading } = spaceListHook(user);
 
-  const { data: students = [], isLoading: internsLoading } =
-    getInternsHook(user);
+  const {
+    data: students = [],
+    isLoading: internsLoading,
+    refetch,
+  } = getInternsHook(user);
 
   const studentsWithKeys = students.map((student) => ({
     ...student,
     key: student._id,
   }));
+
   const handleFileClick = (id: string) => {
     navigate(`/profile/${id}`);
   };
@@ -32,6 +40,27 @@ const InternList = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const handleStatusChange = async (
+    internId: string,
+    currentStatus: boolean
+  ) => {
+    setSwitchLoading(internId);
+    try {
+      await IntenDisable(internId);
+      if (currentStatus) {
+        message.success("Intern has been disabled successfully");
+      } else {
+        message.success("Intern has been enabled successfully");
+      }
+    } catch (error) {
+      console.error("Error updating intern status:", error);
+      message.error("Failed to update intern status");
+    } finally {
+      setSwitchLoading(null);
+      refetch();
+    }
   };
 
   const columns: TableProps<IColumnsReports>["columns"] = [
@@ -47,6 +76,8 @@ const InternList = () => {
       title: "Full Name",
       dataIndex: "fullName",
       key: "fullName",
+      align: "center",
+
       render: (fullName, record: { _id: string }) => (
         <a
           onClick={() => handleFileClick(record._id)}
@@ -65,13 +96,52 @@ const InternList = () => {
       dataIndex: "email",
       key: "email",
       align: "center",
+
+      render: (email, record: { _id: string }) => (
+        <a
+          onClick={() => handleFileClick(record._id)}
+          style={{
+            color: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline",
+            textAlign: "left",
+          }}
+        >
+          {email}
+        </a>
+      ),
+    },
+
+    {
+      title: "Joining Date",
+      dataIndex: "joiningDate",
+      key: "joiningDate",
+      align: "center",
+      render: (_, record) =>
+        record.internsDetails?.joiningDate?.slice(0, 10) || "-",
     },
     {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
+      title: "Duration",
+      dataIndex: "duration",
+      key: "duration",
       align: "center",
-      render: (_, record: { _id: string }) => <Switch />,
+      render: (_, record) =>
+        record.internsDetails?.duration
+          ? `${record.internsDetails.duration} months`
+          : "-",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      align: "center",
+      render: (_, record: { _id: string; status: boolean }) => (
+        <Switch
+          checked={record.status}
+          loading={switchLoading === record._id}
+          onChange={() => handleStatusChange(record._id, record.status)}
+        />
+      ),
     },
   ];
 
@@ -99,27 +169,31 @@ const InternList = () => {
             </>
           }
         >
-          <div style={{ paddingTop: "10px" }}>
-            <Table<IColumnsReports>
-              columns={columns}
-              dataSource={studentsWithKeys}
-              pagination={false}
-              bordered
-              size="small"
-              loading={internsLoading || spaceLoading}
-              sticky={true}
-              className="ScrollInProgress"
-              style={{
-                height: "calc(65vh - 88px)",
-                position: "absolute",
-                overflowY: "auto",
-                overflowX: "hidden",
-                left: "10px",
-                right: "0",
-                paddingRight: "10px",
-              }}
-            />
-          </div>
+          {internsLoading || spaceLoading ? (
+            <Spinner />
+          ) : (
+            <div style={{ paddingTop: "10px" }}>
+              <Table<IColumnsReports>
+                columns={columns}
+                dataSource={studentsWithKeys}
+                pagination={false}
+                loading={internsLoading || spaceLoading}
+                bordered
+                size="small"
+                sticky={true}
+                className="ScrollInProgress"
+                style={{
+                  height: "calc(65vh - 88px)",
+                  position: "absolute",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  left: "10px",
+                  right: "0",
+                  paddingRight: "10px",
+                }}
+              />
+            </div>
+          )}
         </Card>
       </div>
     </>

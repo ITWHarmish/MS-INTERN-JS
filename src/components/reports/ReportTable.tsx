@@ -23,9 +23,7 @@ import {
   UpdateTaskToProgressReport,
 } from "../../services/progressReportAPI";
 import { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-// import { fetchProgressReport } from "../../redux/actions/progressReportActions";
+import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -36,10 +34,8 @@ const ReportTable = () => {
   const { Step } = Steps;
   const { reportId } = useParams();
   const [form] = Form.useForm();
-  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
-  //   const { progressReport } = useSelector((state: RootState) => state.report);
   const [loading, setLoading] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [currentReport, setCurrentReport] = useState<IProgressReport | null>(
@@ -49,24 +45,22 @@ const ReportTable = () => {
   const { data: progressReport = [], refetch } = progressReportHook();
 
   useEffect(() => {
-    if (!user?.admin) return;
-    const getRegularity = async () => {
-      try {
-        await GetRegularity(reportId);
-        await GetPunctuality(reportId);
-        // await dispatch(fetchProgressReport());
-        QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
+    if (user?.id) {
+      const getRegularity = async () => {
+        try {
+          await GetRegularity(reportId);
+          await GetPunctuality(reportId);
+          QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
+        } catch (error) {
+          console.error(
+            "error while fetching the regularity and punctuality: ",
+            error
+          );
+        }
+      };
 
-        // refetch();
-      } catch (error) {
-        console.error(
-          "error while fetching the regularity and punctuality: ",
-          error
-        );
-      }
-    };
-
-    getRegularity();
+      getRegularity();
+    }
   }, [user?.admin, reportId]);
 
   useEffect(() => {
@@ -199,21 +193,6 @@ const ReportTable = () => {
       }
     },
   });
-  // const handleDelete = async (id: string) => {
-  //   try {
-  //     setLoading(true);
-  //     await DeleteTaskToProgressReport(id, reportId);
-  //     QueryClient.refetchQueries({ queryKey: ["allchProgressReport"] });
-  //     //   refetch();
-  //     //   dispatch(fetchProgressReport());
-  //     message.success("Task deleted successfully!");
-  //   } catch (error) {
-  //     console.error("error deleting task", error);
-  //     message.error("Failed to delete the task. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmit = async (values) => {
     const { dateRange, ...restValues } = values;
@@ -260,7 +239,6 @@ const ReportTable = () => {
         setLoading(true);
         await AddTaskToProgressReport(payload);
 
-        // refetch();
         message.success("Successfully added Task");
 
         form.resetFields();

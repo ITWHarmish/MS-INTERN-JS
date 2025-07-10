@@ -18,9 +18,7 @@ import {
   UpdateUserDetailsProgressReport,
 } from "../../services/progressReportAPI";
 import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-// import { useDispatch } from "react-redux";
-// import { fetchProgressReport } from "../../redux/actions/progressReportActions";
+import { RootState } from "../../redux/store";
 import Spinner from "../../utils/Spinner";
 import "./ProgressReport.css";
 import { progressReportHook } from "../../Hooks/progressReportsHook";
@@ -36,32 +34,17 @@ interface FormValues {
 }
 
 const ReportUserDetail = () => {
-  // const originalError = console.error;
-
-  // useEffect(() => {
-  //   console.error = (...args) => {
-  //     if (args[0]?.includes("Instance created by `useForm` is not connected")) {
-  //       return;
-  //     }
-  //     originalError.apply(console, args);
-  //   };
-
-  //   return () => {
-  //     console.error = originalError;
-  //   };
-  // }, []);
   const { RangePicker } = DatePicker;
   const { Step } = Steps;
   const { reportId } = useParams();
-  //   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormValues>();
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const { user } = useSelector((state: RootState) => state.auth);
-  //   const { progressReport } = useSelector((state: RootState) => state.report);
 
   const { data: progressReport = [] } = progressReportHook();
+
   const QueryClient = useQueryClient();
 
   useEffect(() => {
@@ -72,7 +55,7 @@ const ReportUserDetail = () => {
           navigate("/login");
           return;
         }
-        if (user.admin || user) {
+        if (user.admin && reportId) {
           const res = await GetProgressReport(reportId);
           if (res) {
             form.setFieldsValue({
@@ -178,7 +161,6 @@ const ReportUserDetail = () => {
         response = res.report._id;
       }
 
-      //   dispatch(fetchProgressReport());
       QueryClient.invalidateQueries({ queryKey: ["allchProgressReport"] });
 
       if (response) {

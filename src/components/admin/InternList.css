@@ -1,0 +1,8 @@
+.ant-table-thead th {
+  text-align: left !important;
+}
+
+/* Left-align all data cells */
+.ant-table-tbody td {
+  text-align: left !important;
+}

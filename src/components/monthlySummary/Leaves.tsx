@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { RootState } from "../../redux/store";
 import Spinner from "../../utils/Spinner";
 import QuillEditor from "../../utils/QuillEditor";
 import {
@@ -19,8 +19,6 @@ import {
   SendLeaveToGmail,
 } from "../../services/leaveAPI";
 import { ILeave } from "../../types/ILeaves";
-// import { useDispatch } from "react-redux";
-// import { fetchLeaves } from "../../redux/actions/leaveActions";
 import { useQueryClient } from "@tanstack/react-query";
 
 const toolBarOptions = [
@@ -118,7 +116,6 @@ const Leaves = ({ visible, onClose }) => {
       if (sendMail) {
         await SendLeaveToGmail(JSON.stringify({ emailContent: emailPreview }));
         await ApplyLeave(payload);
-        // dispatch(fetchLeaves());
         QueryClient.invalidateQueries({
           queryKey: ["leaveRequests", user?._id],
         });
@@ -139,7 +136,6 @@ const Leaves = ({ visible, onClose }) => {
       } else if (!sendMail) {
         await ApplyLeave(payload);
 
-        // dispatch(fetchLeaves()),
         QueryClient.invalidateQueries({
           queryKey: ["leaveRequests", user?._id],
         });

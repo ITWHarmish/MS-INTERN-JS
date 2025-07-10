@@ -37,7 +37,6 @@ import gsap from "gsap";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 import Spinner from "../../utils/Spinner";
-// import { telegramHook } from "../../Hooks/timeLogHook";
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -58,8 +57,6 @@ const Navbar = () => {
   });
 
   const queryClient = useQueryClient();
-
-  // const { data: telegramUser = [] } = user ? telegramHook(user) : { data: [] };
 
   useEffect(() => {
     const animateNavbar = () => {
@@ -162,8 +159,6 @@ const Navbar = () => {
     onSuccess: () => {
       dispatch(setUser(null));
       dispatch(clearTelegramData());
-      // queryClient.removeQueries({ queryKey: ["telegram"] });
-      // queryClient.removeQueries({ queryKey: ["currentUser"] });
       queryClient.clear();
       Cookies.remove("ms_intern_jwt");
       navigate("/login");
@@ -174,27 +169,6 @@ const Navbar = () => {
       message.error("Failed to logout. Please try again.");
     },
   });
-
-  // async () => {
-  //   try {
-  //     await LogoutApi();
-  //     queryClient.removeQueries({ queryKey: ["telegram", user?._id] });
-  //     queryClient.removeQueries({ queryKey: ["currentUser"] });
-
-  // dispatch(setUser(null));
-  // dispatch(clearTelegramData());
-
-  //     Cookies.remove("ms_intern_jwt");
-
-  //     navigate("/login");
-  //     message.success("Logged out successfully!");
-  //   } catch (error) {
-  //     console.error("Logout error:", error);
-  //     message.error("Failed to logout. Please try again.");
-  //   } finally {
-  //     queryClient.clear();
-  //   }
-  // };
 
   const menuItems = [
     {
@@ -286,7 +260,6 @@ const Navbar = () => {
       await LoginApiTelegram(phoneWithCountryCode);
       await queryClient.invalidateQueries({ queryKey: ["telegram"] });
       await queryClient.refetchQueries({ queryKey: ["telegram"] });
-      //   dispatch(fetchTelegram());
     } catch (error) {
       console.error("Error while sending phone number:", error);
       message.error("Failed to send code. Please try again.");

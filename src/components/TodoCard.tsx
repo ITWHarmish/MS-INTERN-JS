@@ -10,10 +10,8 @@ import {
 
 import { useSelector } from "react-redux";
 import { AddTodo, DeleteTodo, UpdateTodo } from "../services/todoAPI";
-// import { useDispatch } from "react-redux";
-// import { fetchTodos } from "../redux/actions/todosAction";
+
 import { RootState } from "../redux/store";
-// import { updateTodoInState } from "../redux/slices/todoSlice";
 import "../index.css";
 import {
   SendTodosToChat,
@@ -31,6 +29,7 @@ import {
   todohook,
 } from "../Hooks/timeLogHook";
 import { ConfigProvider } from "antd";
+import Spinner from "../utils/Spinner";
 
 const TodoCard: React.FC<TodoCardProps> = ({
   setLoading,
@@ -38,18 +37,14 @@ const TodoCard: React.FC<TodoCardProps> = ({
   internId,
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
-  // const { todos } = useSelector((state: RootState) => state.todo);
 
-  // const { telegramUser } = useSelector(
-  //   (state: RootState) => state.telegramAuth
-  // );
-  // const { timelogs } = useSelector((state: RootState) => state.timelog);
   const { token } = theme.useToken();
 
   const [newTask, setNewTask] = useState("");
   const [isDayStartModalOpen, setIsDayStartModalOpen] = useState(false);
   const [isDayEndModalOpen, setIsDayEndModalOpen] = useState(false);
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // const dispatch = useDispatch<AppDispatch>();
   const QueryClient = useQueryClient();
   ConfigProvider.config({
@@ -95,11 +90,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
 
     destinationList.splice(destination.index, 0, updatedTask);
 
-    // updateTodoInState({
-    //   id: updatedTask.todoId,
-    //   updatedData: { status: updatedTask.status },
-    // });
-
     const userId = user?.admin ? internId : user?._id;
     if (!userId) {
       message.error("User ID is missing.");
@@ -107,27 +97,18 @@ const TodoCard: React.FC<TodoCardProps> = ({
     }
 
     try {
+      setIsLoading(true);
       await UpdateTodo(updatedTask.todoId, updatedTask.status);
       QueryClient.invalidateQueries({ queryKey: ["todo"] });
-
-      message.success("Updated tasks successfully");
     } catch (error) {
-      // updateTodoInState({
-      //   id: movedTask.todoId,
-      //   updatedData: { status: movedTask.status },
-      // })
-
       message.error("Failed to update task. Please try again.");
       console.error("Error updating task status:", error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
   };
-
-  // useEffect(() => {
-  //   const userId = user?.admin ? internId : user?._id;
-  //   if (userId) {
-  //     // dispatch(fetchTodos({ userId }));
-  //   }
-  // }, [dispatch, user, internId]);
 
   const handleAddTodo = useMutation({
     mutationFn: async () => {
@@ -391,266 +372,271 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
               </>
             }
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "5px",
-              }}
-            >
+            {" "}
+            {isLoading ? (
+              <Spinner />
+            ) : (
               <div
-                className="ScrollInProgress"
                 style={{
-                  flex: 1,
-                  minHeight: "calc(31vh)",
-                  position: "relative",
-                  width: "100%",
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.386)",
-                  marginBottom: "5px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "5px",
                 }}
               >
                 <div
+                  className="ScrollInProgress"
                   style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "10px",
+                    flex: 1,
+                    minHeight: "calc(31vh)",
+                    position: "relative",
+                    width: "100%",
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.386)",
+                    marginBottom: "5px",
                   }}
                 >
-                  <span
+                  <div
                     style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      marginLeft: "12px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "10px",
                     }}
                   >
-                    IN PROGRESS
-                  </span>
-
-                  <Button
-                    className="check2"
-                    size="small"
-                    onClick={showModal}
-                    icon={<PlusOutlined />}
-                  ></Button>
-                  <Modal
-                    style={{ fontWeight: "600" }}
-                    title="ADD TO DO"
-                    open={isAddTodoModalOpen}
-                    onOk={() => handleAddTodo.mutate()}
-                    onCancel={handleCancel}
-                    okText="SUBMIT"
-                    cancelText="CANCEL"
-                  >
-                    <p
+                    <span
                       style={{
-                        display: "flex",
-                        gap: "12px",
-                        padding: "12px",
-                        fontWeight: "normal",
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        marginLeft: "12px",
                       }}
                     >
-                      <TextArea
-                        rows={7}
-                        placeholder="DESCRIPTION"
-                        value={newTask}
-                        onChange={(e) => setNewTask(e.target.value)}
-                      />
-                    </p>
-                  </Modal>
-                </div>
-                <Droppable droppableId="inProgress">
-                  {(provided) => (
-                    <>
-                      <div
-                        className="ScrollInProgress"
+                      IN PROGRESS
+                    </span>
+
+                    <Button
+                      className="check2"
+                      size="small"
+                      onClick={showModal}
+                      icon={<PlusOutlined />}
+                    ></Button>
+                    <Modal
+                      style={{ fontWeight: "600" }}
+                      title="ADD TO DO"
+                      open={isAddTodoModalOpen}
+                      onOk={() => handleAddTodo.mutate()}
+                      onCancel={handleCancel}
+                      okText="SUBMIT"
+                      cancelText="CANCEL"
+                    >
+                      <p
                         style={{
-                          height: "calc(65vh - 40.5vh)",
-                          width: "100%",
-                          overflowY: "auto",
-                          overflowX: "hidden",
-                          position: "absolute",
-                          right: "0",
+                          display: "flex",
+                          gap: "12px",
+                          padding: "12px",
+                          fontWeight: "normal",
                         }}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
                       >
-                        {todos
-                          .filter((task) => task.status === "inProgress")
-                          .map((task, index) => (
-                            <Draggable
-                              key={task._id || task.todoId || index}
-                              draggableId={String(
-                                task._id || task.todoId || index
-                              )}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <div
-                                  className="todo-card"
-                                  style={{
-                                    marginBottom: "10px",
-                                    marginRight: "10px",
-                                    marginLeft: "10px",
-                                  }}
-                                >
-                                  <Card
-                                    className={
-                                      token.colorBgLayout === "White"
-                                        ? ""
-                                        : "BgCard"
-                                    }
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={getItemStyle(
-                                      provided.draggableProps.style
-                                    )}
-                                  >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        gap: "15px",
-                                        minHeight: "8vh",
-                                      }}
-                                    >
-                                      <div className="hello">
-                                        {task.description.length > 35
-                                          ? `${task.description.substring(
-                                              0,
-                                              35
-                                            )}...`
-                                          : task.description}
-                                      </div>
-                                      <Button
-                                        size="small"
-                                        shape="circle"
-                                        icon={
-                                          <DeleteOutlined className="check" />
-                                        }
-                                        danger
-                                        onClick={() =>
-                                          handleDelete.mutate(task.todoId)
-                                        }
-                                      />
-                                    </div>
-                                  </Card>
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    </>
-                  )}
-                </Droppable>
-              </div>
-              <div
-                className=""
-                style={{
-                  flex: 1,
-                  minHeight: "30vh",
-                  position: "relative",
-                  width: "100%",
-                }}
-              >
-                <div style={{ marginBottom: "10px" }}>
-                  <span
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      marginLeft: "12px",
-                    }}
-                  >
-                    DONE
-                  </span>
-                </div>
-                <div>
-                  <Droppable droppableId="done">
+                        <TextArea
+                          rows={7}
+                          placeholder="DESCRIPTION"
+                          value={newTask}
+                          onChange={(e) => setNewTask(e.target.value)}
+                        />
+                      </p>
+                    </Modal>
+                  </div>
+                  <Droppable droppableId="inProgress">
                     {(provided) => (
-                      <div
-                        className="ScrollInProgress"
-                        style={{
-                          height: "calc(65vh - 250px)",
-                          overflowY: "auto",
-                          overflowX: "hidden",
-                          position: "absolute",
-                          right: "0",
-                          width: "100%",
-                        }}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {todos
-                          .filter((task) => task.status === "done")
-                          .map((task, index) => (
-                            <Draggable
-                              key={task._id || `done-${index}`}
-                              draggableId={
-                                task._id ? String(task._id) : `done-${index}`
-                              }
-                              index={index}
-                            >
-                              {(provided: any) => (
-                                <div
-                                  className="todo-card"
-                                  style={{
-                                    marginBottom: "10px",
-                                    marginRight: "10px",
-                                    marginLeft: "10px",
-                                  }}
-                                >
-                                  <Card
-                                    className={
-                                      token.colorBgLayout === "White"
-                                        ? ""
-                                        : "BgCard"
-                                    }
-                                    type="inner"
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
+                      <>
+                        <div
+                          className="ScrollInProgress"
+                          style={{
+                            height: "calc(65vh - 40.5vh)",
+                            width: "100%",
+                            overflowY: "auto",
+                            overflowX: "hidden",
+                            position: "absolute",
+                            right: "0",
+                          }}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {todos
+                            .filter((task) => task.status === "inProgress")
+                            .map((task, index) => (
+                              <Draggable
+                                key={task._id || task.todoId || index}
+                                draggableId={String(
+                                  task._id || task.todoId || index
+                                )}
+                                index={index}
+                              >
+                                {(provided) => (
+                                  <div
+                                    className="todo-card"
+                                    style={{
+                                      marginBottom: "10px",
+                                      marginRight: "10px",
+                                      marginLeft: "10px",
+                                    }}
                                   >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        gap: "15px",
-                                        minHeight: "8vh",
-                                      }}
+                                    <Card
+                                      className={
+                                        token.colorBgLayout === "White"
+                                          ? ""
+                                          : "BgCard"
+                                      }
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      style={getItemStyle(
+                                        provided.draggableProps.style
+                                      )}
                                     >
-                                      <div>
-                                        {task.description.length > 35
-                                          ? `${task.description.substring(
-                                              0,
-                                              35
-                                            )}...`
-                                          : task.description}
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          gap: "15px",
+                                          minHeight: "8vh",
+                                        }}
+                                      >
+                                        <div className="hello">
+                                          {task.description.length > 35
+                                            ? `${task.description.substring(
+                                                0,
+                                                35
+                                              )}...`
+                                            : task.description}
+                                        </div>
+                                        <Button
+                                          size="small"
+                                          shape="circle"
+                                          icon={
+                                            <DeleteOutlined className="check" />
+                                          }
+                                          danger
+                                          onClick={() =>
+                                            handleDelete.mutate(task.todoId)
+                                          }
+                                        />
                                       </div>
-                                      <Button
-                                        size="small"
-                                        shape="circle"
-                                        icon={<DeleteOutlined />}
-                                        danger
-                                        onClick={() =>
-                                          handleDelete.mutate(task.todoId)
-                                        }
-                                      />
-                                    </div>
-                                  </Card>
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
+                                    </Card>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                          {provided.placeholder}
+                        </div>
+                      </>
                     )}
                   </Droppable>
                 </div>
+                <div
+                  className=""
+                  style={{
+                    flex: 1,
+                    minHeight: "30vh",
+                    position: "relative",
+                    width: "100%",
+                  }}
+                >
+                  <div style={{ marginBottom: "10px" }}>
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        marginLeft: "12px",
+                      }}
+                    >
+                      DONE
+                    </span>
+                  </div>
+                  <div>
+                    <Droppable droppableId="done">
+                      {(provided) => (
+                        <div
+                          className="ScrollInProgress"
+                          style={{
+                            height: "calc(65vh - 250px)",
+                            overflowY: "auto",
+                            overflowX: "hidden",
+                            position: "absolute",
+                            right: "0",
+                            width: "100%",
+                          }}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {todos
+                            .filter((task) => task.status === "done")
+                            .map((task, index) => (
+                              <Draggable
+                                key={task._id || `done-${index}`}
+                                draggableId={
+                                  task._id ? String(task._id) : `done-${index}`
+                                }
+                                index={index}
+                              >
+                                {(provided: any) => (
+                                  <div
+                                    className="todo-card"
+                                    style={{
+                                      marginBottom: "10px",
+                                      marginRight: "10px",
+                                      marginLeft: "10px",
+                                    }}
+                                  >
+                                    <Card
+                                      className={
+                                        token.colorBgLayout === "White"
+                                          ? ""
+                                          : "BgCard"
+                                      }
+                                      type="inner"
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                    >
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          gap: "15px",
+                                          minHeight: "8vh",
+                                        }}
+                                      >
+                                        <div>
+                                          {task.description.length > 35
+                                            ? `${task.description.substring(
+                                                0,
+                                                35
+                                              )}...`
+                                            : task.description}
+                                        </div>
+                                        <Button
+                                          size="small"
+                                          shape="circle"
+                                          icon={<DeleteOutlined />}
+                                          danger
+                                          onClick={() =>
+                                            handleDelete.mutate(task.todoId)
+                                          }
+                                        />
+                                      </div>
+                                    </Card>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </Card>
         </DragDropContext>
       </div>

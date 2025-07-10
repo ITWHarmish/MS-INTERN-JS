@@ -238,7 +238,9 @@ const ProgressReports = () => {
                     value: mentor._id,
                     label: mentor.fullName,
                   }))}
-                  onChange={handleMentorChange}
+                  onChange={user?.admin ? handleMentorChange : undefined}
+                  defaultValue={user?._id}
+                  value={user?._id}
                   filterOption={(input, option: any) =>
                     option?.label.toLowerCase().includes(input.toLowerCase())
                   }
@@ -252,7 +254,6 @@ const ProgressReports = () => {
                     value: student._id,
                     label: student.fullName,
                   }))}
-                  disabled={!selectedMentor}
                   onChange={handleStudentChange}
                   filterOption={(input, option: any) =>
                     option?.label.toLowerCase().includes(input.toLowerCase())
