@@ -2,7 +2,7 @@ export interface IColumnsReports {
   key?: string;
   _id?: string;
   tasks?: Task[];
-  status?: string;
+  status?: boolean;
   assignedDate?: string;
   expectedCompletionDate?: string;
   actualCompletionDate?: string;
@@ -11,6 +11,7 @@ export interface IColumnsReports {
     joiningDate: string;
     duration: number;
   };
+  isActive?: boolean;
 }
 
 export interface IProgressReport {

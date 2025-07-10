@@ -3,57 +3,77 @@ import { API_END_POINT } from "../utils/constants";
 import Cookies from "js-cookie";
 
 const getAuthHeaders = () => {
-    const token = Cookies.get('ms_intern_jwt');
-    return {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-    };
+  const token = Cookies.get("ms_intern_jwt");
+  return {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
 };
 
 export const GetMentorList = async () => {
-    try {
-        const res = await axios.get(`${API_END_POINT}/getMentorList`, {
-            headers: getAuthHeaders(),
-        })
-        return res.data
-    } catch (error) {
-        console.error('Error While Fetching Mentor List:', error);
-        throw error;
-    }
-}
+  try {
+    const res = await axios.get(`${API_END_POINT}/getMentorList`, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error While Fetching Mentor List:", error);
+    throw error;
+  }
+};
 
 export const GetInternsByMentorId = async (mentorId: string) => {
-    try {
-        const res = await axios.get(`${API_END_POINT}/getInterns/${mentorId}`, {
-            headers: getAuthHeaders(),
-        })
-        return res.data
-    } catch (error) {
-        console.error('Error While Fetching Intern List:', error);
-        throw error;
-    }
-}
+  try {
+    const res = await axios.get(`${API_END_POINT}/getInterns/${mentorId}`, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error While Fetching Intern List:", error);
+    throw error;
+  }
+};
 
 export const GetInternReport = async (internId: string) => {
-    try {
-        const res = await axios.get(`${API_END_POINT}/getInternReport/${internId}`, {
-            headers: getAuthHeaders(),
-        })
-        return res.data
-    } catch (error) {
-        console.error('Error While Fetching Intern Report List:', error);
-        throw error;
-    }
-}
+  try {
+    const res = await axios.get(
+      `${API_END_POINT}/getInternReport/${internId}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error While Fetching Intern Report List:", error);
+    throw error;
+  }
+};
 
 export const GetSpaceId = async () => {
-    try {
-        const res = await axios.get(`${API_END_POINT}/getSpaces`, {
-            headers: getAuthHeaders(),
-        })
-        return res.data
-    } catch (error) {
-        console.error('Error While Fetching Space Id and Name:', error);
-        throw error;
-    }
-}
+  try {
+    const res = await axios.get(`${API_END_POINT}/getSpaces`, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error While Fetching Space Id and Name:", error);
+    throw error;
+  }
+};
+
+export const IntenDisable = async (internId: string) => {
+  try {
+    const token = Cookies.get("ms_intern_jwt");
+
+    const response = await fetch(`${API_END_POINT}/internState/${internId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating intern status:", error);
+    throw new Error("Failed to update intern status");
+  }
+};
