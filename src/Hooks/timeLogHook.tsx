@@ -21,6 +21,7 @@ export const todocardHook = (messageText) => {
   return useQuery({
     queryKey: ["SendTimelogToSpreadSheets"],
     queryFn: () => SendTimelogToSheet(messageText),
+    staleTime: Infinity,
   });
 };
 

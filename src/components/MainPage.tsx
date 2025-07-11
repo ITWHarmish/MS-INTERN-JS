@@ -30,11 +30,11 @@ const MainPage = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs(Date.now()));
   const { user } = useSelector((state: RootState) => state.auth);
 
-  const { data: todo = [] } = todohook(user, internId);
+  const {} = todohook(user, internId);
 
-  const { data: telegram = [] } = telegramHook(user);
+  const {} = telegramHook(user);
   if (!user?.admin) {
-    const { data: TelegramValidation = [] } = TelegramValidationHook(user);
+    const {} = TelegramValidationHook(user);
   }
 
   const QueryClient = useQueryClient();

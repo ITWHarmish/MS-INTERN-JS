@@ -65,7 +65,7 @@ export const IntenDisable = async (internId: string) => {
   try {
     const token = Cookies.get("ms_intern_jwt");
 
-    const response = await fetch(`${API_END_POINT}/internState/${internId}`, {
+    await fetch(`${API_END_POINT}/internState/${internId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

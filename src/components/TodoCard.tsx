@@ -240,6 +240,7 @@ ${description.map((task) => `• ${task}`).join("\n")}
     ]);
 
     const messageText = [...text];
+    console.log(messageText);
 
     const doneTodos = todos.filter((task) => task.status === "done");
     const inProgressTodos = todos.filter(
