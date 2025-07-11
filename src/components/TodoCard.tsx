@@ -39,6 +39,7 @@ const TodoCard: React.FC<TodoCardProps> = ({
   const { user } = useSelector((state: RootState) => state.auth);
 
   const { token } = theme.useToken();
+  const { data: SendTimelogToSpreadSheets = [] } = todocardHook(user);
 
   const [newTask, setNewTask] = useState("");
   const [isDayStartModalOpen, setIsDayStartModalOpen] = useState(false);
@@ -264,9 +265,6 @@ ${user?.fullName}: ${totalHours.toFixed(2)} hours`;
     try {
       setIsDayEndModalOpen(false);
       setLoading(true);
-
-      const { data: SendTimelogToSpreadSheets = [] } =
-        todocardHook(messageText);
 
       const sendToChat = SendTodosToChat({ task: formattedTasks, phone: phone })
         .then(() => true)

@@ -1,4 +1,5 @@
 import {
+  CalendarOutlined,
   FieldTimeOutlined,
   FilePptOutlined,
   FileTextOutlined,
@@ -18,6 +19,7 @@ import {
   message,
   Space,
 } from "antd";
+
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -178,7 +180,7 @@ const Navbar = () => {
     },
     {
       key: "monthly summary",
-      icon: <FieldTimeOutlined />,
+      icon: <CalendarOutlined />,
       label: <Link to="/monthlySummary">MONTHLY SUMMARY</Link>,
     },
     {
@@ -270,12 +272,15 @@ const Navbar = () => {
       await SubmitApiTelegram({ phone: phoneNumber, code: values.code });
       message.success("Logged in successfully!");
       queryClient.invalidateQueries({ queryKey: ["telegram"] });
+      dispatch(fetchTelegram());
 
       handleCancel();
     } catch (error) {
       message.error(
         error.response?.data?.error || "Invalid code. Please try again."
       );
+    } finally {
+      queryClient.refetchQueries({ queryKey: ["telegram"] });
     }
   };
 

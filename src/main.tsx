@@ -22,8 +22,6 @@ import TermsAndConditions from "./components/privacyPolicy/TermsAndConditions.ts
 import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Sharing from "./components/sharing/sharing.tsx";
-import BlogDetails from "./components/sharing/blogDetails.tsx";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -94,18 +92,6 @@ const router = createBrowserRouter([
       {
         path: "/developing/team",
         element: <Team />,
-      },
-      {
-        path: "/sharing",
-        element: <Sharing />,
-      },
-      {
-        path: "/blogDetails/:blogId",
-        element: <BlogDetails />,
-      },
-      {
-        path: "/blogDetails",
-        element: <BlogDetails />,
       },
     ],
   },
