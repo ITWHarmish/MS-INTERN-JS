@@ -19,7 +19,6 @@
 
 .rbc-off-range {
     color: #ffffff !important;
-    /* margin: 4px 4px 0px 0px; */
 }
 
 .rbc-header+.rbc-header {
@@ -28,8 +27,6 @@
 }
 
 .rbc-day-bg {
-    /* background-color: #ffffff !important;
-    color: black !important; */
     margin: 0px 4px 4px 4px !important;
     border-radius: 12px !important;
 }
@@ -44,17 +41,11 @@
 
 .rbc-header {
     border-bottom: none !important;
-    /* border-right: 1px solid #ddd !important; */
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     border-right: #ffffff !important;
     font-weight: normal;
-}
-
-.rbc-row-content {
-    /* margin-right: 10px !important; */
-    /* height: 100px; */
 }
 
 .month-up-nav {
@@ -64,7 +55,6 @@
     bottom: 190px;
     right: 55px;
     top: 63%;
-    /* margin-right: 20.5vw; */
 }
 
 .month-down-nav {
@@ -74,7 +64,6 @@
     bottom: 190px;
     right: 55px;
     top: 69.5%;
-    /* color: #092856; */
 }
 
 .year-down-nav {
@@ -93,7 +82,6 @@
     bottom: 190px;
     right: 60px;
     top: 76.5%;
-    /* margin-right: 20.5vw; */
 }
 
 .year-nav {
@@ -126,8 +114,6 @@
     width: 50.5vw;
     height: calc(100vh - 200px);
     top: 120px;
-    /* transform: scale(0.9); */
-    /* margin-top: 90px; */
     margin-right: 90px;
     background: #49494B;
     /* your overlay color */

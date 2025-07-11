@@ -5,17 +5,6 @@
     overflow: hidden;
 }
 
-/* 
-.main-image {
-    position: fixed;
-    margin-top: 20px;
-    background: linear-gradient(45deg, rgba(255, 0, 0, 0.3), rgba(0, 0, 255, 0.3));
-    max-width: 900px;
-    height: calc(100vh - 150px);
-    z-index: 2;
-    pointer-events: none;
-} */
-
 
 .overlay {
     position: absolute;
@@ -23,8 +12,6 @@
     right: 0;
     width: 31.5vw;
     height: calc(100vh - 0px);
-    /* transform: scale(0.9); */
-    /* margin-top: 20px; */
     margin-right: 20px;
     background: #49494B; /* your overlay color */
     mix-blend-mode: overlay;
@@ -61,11 +48,3 @@
   .custom-card-img4 {
     background: url('/card_3.png') no-repeat center center/cover;
   }
-
-  /* .ant-typography strong {
-    font-weight: 400;
-  } */
-   
-  /* .ant-typography{
-    font-weight: 100;
-  } */

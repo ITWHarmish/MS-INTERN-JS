@@ -206,7 +206,6 @@ const Profile = () => {
                 }}
               >
                 <div style={{ display: "flex", gap: "2rem", paddingBottom: "4px" }}>
-                  {/* Internship tab */}
                   <div
                     onClick={() => setActiveTab("internship")}
                     style={{

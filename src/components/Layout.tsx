@@ -30,10 +30,11 @@ const Layout = () => {
       } catch (error) {
         console.error("Invalid token:", error);
         navigate("/login");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
-    setLoading(false);
   }, [navigate, dispatch, token]);
 
   return (
@@ -42,7 +43,14 @@ const Layout = () => {
         <Spinner />
       ) : (
         <Layouts className="layout">
-          <div style={{ minHeight: "100vh", display: "flex",  flexDirection: "column", justifyContent:"space-between" }}>
+          <div
+            style={{
+              minHeight: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <Navbar />
             <Outlet />
             <Footer />
